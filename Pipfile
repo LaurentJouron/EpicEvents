@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 psycopg2 = "*"
 pytest = "*"
+passlib = "*"
+sqlalchemy = "*"
+typer = "*"
 
 [dev-packages]
 
