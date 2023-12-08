@@ -1,5 +1,4 @@
-# models.py
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
@@ -7,16 +6,14 @@ from passlib.hash import bcrypt
 Base = declarative_base()
 
 
-class Person(Base):
-    __tablename__ = "person"
+class Employee(Base):
+    __tablename__ = "employee"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    role = Column(String, nullable=False)
     phone_number = Column(Integer, unique=True, nullable=False)
     password_hash = Column(String, nullable=False)
-    logged_in = Column(Boolean)
 
     def __init__(self, username, email, phone_number, password):
         self.username = username

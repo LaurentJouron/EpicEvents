@@ -1,4 +1,4 @@
-from controllers.person_controller import PersonController
+from controllers.employee_controller import EmployeeController
 from utils.bases.controllers import BaseController
 from utils.contants import CONFIRMATION_MENU
 
@@ -9,10 +9,12 @@ view = HomeView()
 
 class HomeController(BaseController):
     def run(self):
+        view.welcome()
+        view.follow_instructions()
         while True:
             choice = view.display_menu(view.home_menu)
             if choice == "1":
-                return PersonController()
+                return EmployeeController()
 
             elif choice == "2":
                 return ...

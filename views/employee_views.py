@@ -1,8 +1,8 @@
 from utils.bases.menus import BaseMenu
 
 
-class PersonView(BaseMenu):
-    person_menu: dict = {
+class EmployeeView(BaseMenu):
+    employee_menu: dict = {
         "1": "Signup",
         "2": "Modify",
         "3": "Delete",
@@ -15,37 +15,39 @@ class PersonView(BaseMenu):
         username = f"{first_name} {last_name}"
         return username
 
-    def get_person_data(self):
+    def get_employee_data(self):
         username = self.__get_username()
-        role = self._get_string("Enter the role: ").capitalize()
         phone_number = self._get_int("Enter the phone number: ")
-
+        password = self._get_string("Enter you password: ")
         return {
             "username": username,
-            "role": role,
             "phone_number": phone_number,
+            "password_hash": password,
         }
 
-    def get_one_person(self):
+    def get_one_employee(self):
         username = self.__get_username()
         return username
 
-    def display_person(self, person):
-        print(f"Username: {person.username}")
-        print(f"Role: {person.role}")
-        print(f"Email: {person.email}")
-        print(f"Phone Number: {person.phone_number}")
+    def display_employee(self, employee):
+        print(f"Username: {employee.username}")
+        print(f"Email: {employee.email}")
+        print(f"Phone Number: {employee.phone_number}")
 
-    def display_persons(self, persons):
-        for person in persons:
-            self.display_person(person)
+    def display_employees(self, employees):
+        for employee in employees:
+            self.display_employee(employee)
             print("\n" + "=" * 30 + "\n")
+
+    def display_menu(self, menu_dict):
+        self._display_menu(menu_dict=menu_dict)
+        return self._response_menu(menu_dict=menu_dict)
 
     def not_found(self):
         print("Person not found.")
 
     def delete_succefully(self):
-        print("Person deleted successfully.")
+        print("Employee deleted successfully.")
 
     def updated_succefully(self):
-        print("Person updated successfully.")
+        print("Employee updated successfully.")
