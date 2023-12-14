@@ -1,10 +1,58 @@
+from epicevents.database import Session
 from click import DateTime
 from sqlalchemy import String, ForeignKey, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from EpicEvents.database import Model
+from epicevents.database import Model
 from .contract import Contract
 from .event import Event
+
+
+class ClientManager:
+    def create_client(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def update_client(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_client_by_id(self, id):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_client_by_compagny_name(self, compagny_name):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_client_by_fullname(self, fullname):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_client_by_email(self, email):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_client_by_phone(self, phone):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_all_client(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_by_specific_client(self):
+        with Session() as session:
+            with session.begin():
+                ...
 
 
 class Client(Model):
@@ -22,16 +70,20 @@ class Client(Model):
     updating_date: Mapped[Date] = mapped_column(DateTime)
     address: Mapped[Text] = mapped_column(Text)
 
-    # commercial_id = mapped_column(ForeignKey("employee.id"))
-    # commercial = relationship("employee", back_populates="clients")
+    commercial_id: Mapped[int] = mapped_column(
+        ForeignKey("employee.id"), ondelete="CASCADE"
+    )
+    commercial = relationship("employee", back_populates="clients")
+    events: Mapped[list["Event"]] = relationship(back_populates="client")
 
-    # contracts: Mapped[list["Contract"]] = relationship(back_populates="client")
-    # events: Mapped[list["Event"]] = relationship(back_populates="client")
-
-    # def __repr__(self):
-    #     return (
-    #         f"Client(id:{self.id}, fullname: {self.fullname}, email: {self.email}, phone: {self.phone},"
-    #         f"compagny_name : {self.compagny_name!r}, creation_date : {self.creation_date!r},"
-    #         f"updating_date : {self.updating_date!r},"
-    #         f"commercial : {self.commercial.fullname!r})"
-    #     )
+    def __repr__(self):
+        return (
+            f"Client(id:{self.id}"
+            f"fullname: {self.fullname}"
+            f"email: {self.email}"
+            f"phone: {self.phone}"
+            f"compagny_name : {self.compagny_name!r}"
+            f"creation_date : {self.creation_date!r}"
+            f"updating_date : {self.updating_date!r}"
+            f"commercial : {self.commercial.fullname!r})"
+        )

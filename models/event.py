@@ -1,13 +1,36 @@
+from epicevents.database import Session
 from click import DateTime
 from sqlalchemy import String, ForeignKey, Date, Text, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from EpicEvents.database import Model
+from epicevents.database import Model
 from .contract import Contract
 
 
+class EventManager:
+    def add_event(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_event_by_name(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_event_by_id(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def get_all_event(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+
 class Event(Model):
-    _tablename_ = "event"
+    __tablename__ = "event"
     id: Mapped[int] = mapped_column(primary_key=True)
     start_date_start: Mapped[Date] = mapped_column(DateTime)
     end_date: Mapped[Date] = mapped_column(DateTime)

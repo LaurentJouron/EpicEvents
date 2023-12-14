@@ -1,27 +1,27 @@
 from utils.bases.controllers import BaseController
 from utils.contants import CONFIRMATION_MENU
 
-from .views import HomeView, AuthenticationView, ExitView
+from .views import HomeView, ReceptionView, ExitView
 
+reception_view = ReceptionView()
 exit_view = ExitView()
-auth_view = AuthenticationView()
 home_view = HomeView()
 
 
-class AuthenticationController(BaseController):
+class ReceptionController(BaseController):
     def run(self):
-        auth_view.welcome()
-        auth_view.follow_instructions()
+        reception_view.welcome()
+        reception_view.follow_instructions()
         while True:
-            choice = auth_view.display_menu(auth_view.authentication_menu)
+            choice = home_view.display_menu(home_view.home_menu)
             if choice == "1":
-                return ...
+                return ...  # Login
 
             elif choice == "2":
-                return ...
+                return ...  # Signup
 
             elif choice == "3":
-                return ExitController()
+                return ExitController()  # Exit
 
 
 class HomeController(BaseController):
@@ -29,12 +29,14 @@ class HomeController(BaseController):
         while True:
             choice = home_view.display_menu(home_view.home_menu)
             if choice == "1":
-                return ...
+                return ...  # Client for commercial
 
             elif choice == "2":
-                return ...
+                return ...  # Support for technician
 
             elif choice == "3":
+                return ...  # Gestion for manager
+            elif choice == "4":
                 return ExitController()
 
 

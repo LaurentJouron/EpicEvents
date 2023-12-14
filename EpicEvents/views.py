@@ -1,7 +1,7 @@
 from utils.bases.menus import BaseMenu
 
 
-class AuthenticationView(BaseMenu):
+class ReceptionView(BaseMenu):
     authentication_menu: dict = {
         "1": "Login",
         "2": "Signup",

@@ -91,6 +91,8 @@ Installer les bibliothèques nécessaires avec
 Activer l'environnement de travail (environnement virtuel) avec
   * ``pipenv shell`` ou ``pip shell``
 
+Lancez l'application avec cette commande
+  * ``pipenv run python -m epicevents`` ou ``pip run python -m epicevents``
 
 ___________
 
