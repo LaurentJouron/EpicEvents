@@ -1,32 +1,47 @@
-from controllers.employee_controller import EmployeeController
 from utils.bases.controllers import BaseController
 from utils.contants import CONFIRMATION_MENU
 
-from .views import HomeView
+from .views import HomeView, AuthenticationView, ExitView
 
-view = HomeView()
+exit_view = ExitView()
+auth_view = AuthenticationView()
+home_view = HomeView()
 
 
-class HomeController(BaseController):
+class AuthenticationController(BaseController):
     def run(self):
-        view.welcome()
-        view.follow_instructions()
+        auth_view.welcome()
+        auth_view.follow_instructions()
         while True:
-            choice = view.display_menu(view.home_menu)
+            choice = auth_view.display_menu(auth_view.authentication_menu)
             if choice == "1":
-                return EmployeeController()
+                return ...
 
             elif choice == "2":
                 return ...
 
-            elif choice == "5":
+            elif choice == "3":
+                return ExitController()
+
+
+class HomeController(BaseController):
+    def run(self):
+        while True:
+            choice = home_view.display_menu(home_view.home_menu)
+            if choice == "1":
+                return ...
+
+            elif choice == "2":
+                return ...
+
+            elif choice == "3":
                 return ExitController()
 
 
 class ExitController(BaseController):
     def run(self):
-        view.exit_game()
-        choice = view.display_menu(CONFIRMATION_MENU)
+        exit_view.exit_program()
+        choice = home_view.display_menu(CONFIRMATION_MENU)
         if choice == "1":
             return None
         else:

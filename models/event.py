@@ -1,24 +1,30 @@
-from sqlalchemy import create_engine, Column, Integer, String, Date
-from sqlalchemy.ext.declarative import declarative_base
+from click import DateTime
+from sqlalchemy import String, ForeignKey, Date, Text, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-Base = declarative_base()
-
-
-class Event(Base):
-    __tablename__ = "event"
-    id = Column(Integer, primary_key=True)
-    compagny_name = Column(String)
-    client_username = Column(String)
-    client_mail = Column(String)
-    client_phone_number = Column(Integer)
-    start_date = Column(Date)
-    end_date = Column(Date)
-    contact_support = Column(String)
-    address = Column(String)
-    attendees = Column(Integer)
-    notes = Column(String)
+from EpicEvents.database import Model
+from .contract import Contract
 
 
-# Création du moteur SQLAlchemy et de la table
-engine = create_engine("sqlite:///db.sqlite")
-Base.metadata.create_all(engine)
+class Event(Model):
+    _tablename_ = "event"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    start_date_start: Mapped[Date] = mapped_column(DateTime)
+    end_date: Mapped[Date] = mapped_column(DateTime)
+    address: Mapped[str] = mapped_column(Text)
+    attendees: Mapped[int] = mapped_column(Integer)
+    notes: Mapped[str] = mapped_column(Text)
+
+    # contract_id = mapped_column(ForeignKey("contract.id"))
+    # contract = relationship("Contract", back_populates="event")
+
+    # client_id = mapped_column(ForeignKey("client.id"))
+    # client = relationship("Client", back_populates="events")
+
+    # support_contact_id = mapped_column(
+    #     ForeignKey("employee.id"), nullable=True, default=None
+    # )
+    # support_contact = relationship("employee", back_populates="events")
+
+    # def __repr__(self) -> str:
+    #     return f"Event(id={self.id!r}, name={self.name!r})"

@@ -1,15 +1,15 @@
-from .controllers import HomeController
-from .views import HomeView
+from .controllers import AuthenticationController
+from .views import ExitView
 
-view = HomeView()
+exit_view = ExitView()
 
 
 def run_application():
-    controller = HomeController()
+    controller = AuthenticationController()
     while controller is not None:
         next_controller = controller.run()
         controller = next_controller
-    view.good_by()
+    exit_view.good_by()
 
 
 run_application()

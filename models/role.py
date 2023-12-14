@@ -1,16 +1,14 @@
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-
-
-class Role(Base):
-    __tablename__ = "role"
-    id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True)
+from EpicEvents.database import Model
 
 
-# Création du moteur SQLAlchemy et de la table
-engine = create_engine("sqlite:///db.sqlite")
-Base.metadata.create_all(engine)
+class Role(Model):
+    _tablename_ = "role"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+
+    def __repr__(self):
+        return f"Role(id={self.id}, name='{self.name}')"

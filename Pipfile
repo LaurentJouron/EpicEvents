@@ -9,6 +9,8 @@ pytest = "*"
 passlib = "*"
 sqlalchemy = "*"
 typer = "*"
+python-dotenv = "*"
+jwt = "*"
 
 [dev-packages]
 

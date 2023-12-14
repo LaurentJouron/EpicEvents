@@ -1,24 +1,37 @@
-from sqlalchemy import create_engine, Column, Integer, String, Date
-from sqlalchemy.ext.declarative import declarative_base
+from click import DateTime
+from sqlalchemy import String, ForeignKey, Text, Date
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-Base = declarative_base()
-
-
-class Client(Base):
-    __tablename__ = "client"
-    id = Column(Integer, primary_key=True)
-    compagny_name = Column(String)
-    information = Column(String)
-    last_name = Column(String)
-    first_name = Column(String)
-    username = Column(String)
-    email = Column(String, unique=True)
-    phone_number = Column(Integer, unique=True)
-    creation_date = Column(Date)
-    updating_date = Column(Date)
-    contact_commercial = Column(String)
-    address = Column(String)
+from EpicEvents.database import Model
+from .contract import Contract
+from .event import Event
 
 
-engine = create_engine("sqlite:///db.sqlite")
-Base.metadata.create_all(engine)
+class Client(Model):
+    _tablename_ = "client"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
+    compagny_name: Mapped[str] = mapped_column(String(300))
+    information: Mapped[str] = mapped_column(Text)
+    last_name: Mapped[str] = mapped_column(String(50))
+    first_name: Mapped[str] = mapped_column(String(50))
+    fullname: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(300), unique=True)
+    phone: Mapped[str] = mapped_column(String(20), unique=True)
+    creation_date: Mapped[Date] = mapped_column(DateTime)
+    updating_date: Mapped[Date] = mapped_column(DateTime)
+    address: Mapped[Text] = mapped_column(Text)
+
+    # commercial_id = mapped_column(ForeignKey("employee.id"))
+    # commercial = relationship("employee", back_populates="clients")
+
+    # contracts: Mapped[list["Contract"]] = relationship(back_populates="client")
+    # events: Mapped[list["Event"]] = relationship(back_populates="client")
+
+    # def __repr__(self):
+    #     return (
+    #         f"Client(id:{self.id}, fullname: {self.fullname}, email: {self.email}, phone: {self.phone},"
+    #         f"compagny_name : {self.compagny_name!r}, creation_date : {self.creation_date!r},"
+    #         f"updating_date : {self.updating_date!r},"
+    #         f"commercial : {self.commercial.fullname!r})"
+    #     )

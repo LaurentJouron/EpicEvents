@@ -1,45 +1,53 @@
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.exc import IntegrityError
-from passlib.hash import bcrypt
+from sqlalchemy import String, Text, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-Base = declarative_base()
+from EpicEvents.database import Model
+from .role import Role
+from .client import Client
+from .event import Event
+from .contract import Contract
 
-
-class Employee(Base):
-    __tablename__ = "employee"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String, unique=True, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    phone_number = Column(Integer, unique=True, nullable=False)
-    password_hash = Column(String, nullable=False)
-
-    def __init__(self, username, email, phone_number, password):
-        self.username = username
-        self.email = email
-        self.phone_number = phone_number
-        self.password_hash = self._hash_password(password)
-        self.logged_in = False
-
-    def _hash_password(self, password):
-        # Utilisation de passlib pour hacher le mot de passe
-        return bcrypt.hash(password)
-
-    def verify_password(self, password):
-        # Vérifie que le mot de passe correspond au hachage
-        return bcrypt.verify(password, self.password_hash)
-
-    def register(self, session):
-        try:
-            session.add(self)
-            session.commit()
-            print(f"Inscription réussie pour {self.username}.")
-        except IntegrityError as e:
-            session.rollback()
-            print(f"Erreur lors de l'inscription : {e.orig}")
+class EmployeeManager:
+    def get_by_id
 
 
-# Création du moteur SQLAlchemy et de la table
-engine = create_engine("sqlite:///db.sqlite")
-Base.metadata.create_all(engine)
+class Employee(Model):
+    _tablename_ = "employee"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    last_name: Mapped[str] = mapped_column(String(100))
+    first_name: Mapped[str] = mapped_column(String(100))
+    fullname: Mapped[str] = mapped_column(String(200))
+    email: Mapped[str] = mapped_column(String(300), unique=True)
+    phone: Mapped[str] = mapped_column(String(20), unique=True)
+    password: Mapped[str] = mapped_column(String(500))
+
+    # role: Mapped[list["Role"]] = relationship(
+    #     "Role",
+    #     back_populates="list",
+    #     cascade="all, delete",
+    #     passive_deletes=True,
+    # )
+
+    # client: Mapped[list["Client"]] = relationship(
+    #     "Client",
+    #     back_populates="commercial",
+    #     cascade="all, delete",
+    #     passive_deletes=True,
+    # )
+
+    # contract: Mapped[list["Contract"]] = relationship(
+    #     "Contract",
+    #     back_populates="gestion",
+    #     cascade="all, delete",
+    #     passive_deletes=True,
+    # )
+
+    # event: Mapped[list["Event"]] = relationship(
+    #     back_populates="support",
+    #     cascade="all, delete",
+    #     passive_deletes=True,
+    # )
+
+    # def __repr__(self) -> str:
+    #     return f"Employee(id={self.id}, fullname='{self.fullname}')"

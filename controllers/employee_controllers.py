@@ -1,6 +1,3 @@
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-
 from EpicEvents import controllers as home
 from models.employee import Employee
 from views.employee_views import EmployeeView
@@ -9,12 +6,6 @@ view = EmployeeView()
 
 
 class EmployeeController:
-    def __init__(self):
-        # Configuration la base de données et la session
-        engine = create_engine("sqlite:///db.sqlite")
-        Session = sessionmaker(bind=engine)
-        self.session = Session()
-
     def run(self):
         while True:
             choice = view.display_menu(view.employee_menu)
