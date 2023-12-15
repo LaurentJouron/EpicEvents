@@ -1,9 +1,8 @@
 import typer
-from .controllers import AuthenticationController
+
 from .views import ExitView
 from .database import Model, engine
-
-from models.role import Role
+from models import Role
 
 exit_view = ExitView()
 

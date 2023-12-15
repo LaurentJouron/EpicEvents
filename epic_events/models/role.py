@@ -1,9 +1,8 @@
-from epicevents.database import Session
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from epicevents.database import Model
-from .employee import Employee
+from epicevents.database import Model, Session
+from models import Employee
 
 
 class RoleManager:

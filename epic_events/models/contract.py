@@ -1,29 +1,28 @@
-from epicevents.database import Session
 from click import DateTime
 from sqlalchemy import String, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from epicevents.database import Model
-from .event import Event
+from epicevents.database import Model, Session
+from models import Event
 
 
-class EmployeeManager:
-    def add_employee(self):
+class ContractManager:
+    def add_contract(self):
         with Session() as session:
             with session.begin():
                 ...
 
-    def get_employee_by_name(self):
+    def get_contract_by_creation_date(self):
         with Session() as session:
             with session.begin():
                 ...
 
-    def get_employee_by_id(self):
+    def get_contract_by_id(self):
         with Session() as session:
             with session.begin():
                 ...
 
-    def get_all_employee(self):
+    def get_all_contract(self):
         with Session() as session:
             with session.begin():
                 ...

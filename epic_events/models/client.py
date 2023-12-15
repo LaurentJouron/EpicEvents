@@ -1,11 +1,9 @@
-from epicevents.database import Session
 from click import DateTime
 from sqlalchemy import String, ForeignKey, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from epicevents.database import Model
-from .event import Event
-from .employee import Employee
+from epicevents.database import Model, Session
+from models import Event, Employee
 
 
 class ClientManager:
@@ -56,7 +54,7 @@ class ClientManager:
 
 
 class Client(Model):
-    _tablename_ = "client"
+    __tablename__ = "client"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
     compagny_name: Mapped[str] = mapped_column(String(300))
