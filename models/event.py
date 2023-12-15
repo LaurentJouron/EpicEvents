@@ -1,10 +1,11 @@
 from epicevents.database import Session
 from click import DateTime
-from sqlalchemy import String, ForeignKey, Date, Text, Integer
+from sqlalchemy import ForeignKey, Date, Text, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model
-from .contract import Contract
+from .client import Client
+from .employee import Employee
 
 
 class EventManager:
@@ -38,23 +39,42 @@ class Event(Model):
     attendees: Mapped[int] = mapped_column(Integer)
     notes: Mapped[str] = mapped_column(Text)
 
-    contract_id: Mapped[int] = mapped_column(
-        ForeignKey("contract.id", ondelete="CASCADE")
+    client_id: Mapped[int] = mapped_column(
+        ForeignKey("client.id", ondelete="CASCADE")
     )
-    contract: Mapped[list["Contract"]] = relationship(
+    client: Mapped["Client"] = relationship("Client", back_populates="events")
+
+    commercial_id: Mapped[int] = mapped_column(
+        ForeignKey("commercial.id", ondelete="CASCADE")
+    )
+    commercial: Mapped["Employee"] = relationship(
+        "Employee", back_populates="events"
+    )
+
+    technician_id: Mapped[int] = mapped_column(
+        ForeignKey("technician.id", ondelete="CASCADE")
+    )
+    technician: Mapped["Employee"] = relationship(
+        "Employee", back_populates="events"
+    )
+
+    contract: Mapped["Event"] = relationship(
         "Contract",
-        back_populates="commercial",
+        back_populates="events",
         cascade="all, delete",
         passive_deletes=True,
     )
 
-    # client_id = mapped_column(ForeignKey("client.id"))
-    # client = relationship("Client", back_populates="events")
-
-    # support_contact_id = mapped_column(
-    #     ForeignKey("employee.id"), nullable=True, default=None
-    # )
-    # support_contact = relationship("employee", back_populates="events")
-
-    # def __repr__(self) -> str:
-    #     return f"Event(id={self.id!r}, name={self.name!r})"
+    def __repr__(self):
+        return (
+            f"Event(id:{self.id}"
+            f"start_date_start: {self.start_date_start}"
+            f"end_date: {self.end_date}"
+            f"address: {self.address}"
+            f"attendees : {self.attendees!r}"
+            f"notes : {self.notes!r}"
+            f"client : {self.client!r}"
+            f"commercial : {self.commercial.fullname!r})"
+            f"technician : {self.technician.fullname!r})"
+            f"contract : {self.contract.date_creation!r})"
+        )

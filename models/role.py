@@ -3,6 +3,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model
+from .employee import Employee
 
 
 class RoleManager:
@@ -38,9 +39,9 @@ class Role(Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), unique=True)
-    employees: Mapped[list["Role"]] = relationship(
-        "Employee",
-        back_populates="list",
+    employees: Mapped[list["Employee"]] = relationship(
+        "Role",
+        back_populates="role",
         cascade="all, delete",
         passive_deletes=True,
     )

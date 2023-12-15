@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model
 from .event import Event
+from .employee import Employee
 
 
 class ClientManager:
@@ -69,12 +70,17 @@ class Client(Model):
     updating_date: Mapped[Date] = mapped_column(DateTime)
     address: Mapped[Text] = mapped_column(Text)
 
-    commercial_id: Mapped[int] = mapped_column(
-        ForeignKey("employee.id"), ondelete="CASCADE"
+    commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
+    commercial: Mapped[list["Employee"]] = relationship(
+        "Employee", back_populates="client"
     )
-    commercial = relationship("employee", back_populates="clients")
 
-    events: Mapped[list["Event"]] = relationship(back_populates="client")
+    events: Mapped[list["Event"]] = relationship(
+        "Event",
+        back_populates="event",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
     def __repr__(self):
         return (

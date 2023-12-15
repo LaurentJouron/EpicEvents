@@ -25,6 +25,11 @@ class EmployeeManager:
             with session.begin():
                 ...
 
+    def get_employee_by_function(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
     def get_all_employee(self):
         with Session() as session:
             with session.begin():
@@ -51,40 +56,36 @@ class Employee(Model):
         ForeignKey("role.id", ondelete="CASCADE")
     )
     role: Mapped[list["Role"]] = relationship(
-        "Role",
-        back_populates="list",
-        cascade="all, delete",
-        passive_deletes=True,
+        "Role", back_populates="employee"
     )
 
-    client_id: Mapped[int] = mapped_column(
-        ForeignKey("client.id", ondelete="CASCADE")
-    )
     client: Mapped[list["Client"]] = relationship(
-        "Client",
-        back_populates="commercial",
-        cascade="all, delete",
-        passive_deletes=True,
+        "Client", back_populates="employee"
     )
 
-    contract_id: Mapped[int] = mapped_column(
-        ForeignKey("contract.id", ondelete="CASCADE")
-    )
     contract: Mapped[list["Contract"]] = relationship(
-        "Contract",
-        back_populates="gestion",
-        cascade="all, delete",
-        passive_deletes=True,
+        "Contract", back_populates="employee"
     )
 
-    event_id: Mapped[int] = mapped_column(
-        ForeignKey("event.id", ondelete="CASCADE")
-    )
-    event: Mapped[list["Event"]] = relationship(
-        back_populates="support",
-        cascade="all, delete",
-        passive_deletes=True,
+    event_technician: Mapped[list["Event"]] = relationship(
+        "Event", back_populates="employee"
     )
 
-    def __repr__(self) -> str:
-        return f"Employee(id={self.id}, fullname='{self.fullname}')"
+    event_commercial: Mapped[list["Event"]] = relationship(
+        "Event", back_populates="employee"
+    )
+
+    def __repr__(self):
+        return (
+            f"Employee(id:{self.id}"
+            f"last_name: {self.last_name}"
+            f"first_name: {self.first_name}"
+            f"fullname: {self.fullname}"
+            f"email: {self.email}"
+            f"phone: {self.phone}"
+            f"password: {self.password}"
+            f"role: {self.role}"
+            f"client: {self.client.compagny_name!r}"
+            f"event_technician: {self.event_technician!r}"
+            f"event_commercial: {self.event_commercial!r}"
+        )

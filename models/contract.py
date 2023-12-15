@@ -1,7 +1,6 @@
 from epicevents.database import Session
-from typing import Optional
 from click import DateTime
-from sqlalchemy import String, Text, ForeignKey, Date
+from sqlalchemy import String, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model
@@ -39,7 +38,14 @@ class Contract(Model):
     date_creation: Mapped[Date] = mapped_column(DateTime)
     status: Mapped[bool] = mapped_column(defaut=False)
 
-    # event: Mapped["Event"] = relationship(back_populates="contract")
+    event: Mapped["Event"] = relationship(back_populates="contract")
 
-    # def __repr__(self) -> str:
-    #     return f"Contract(id={self.id!r}, client.fullname={self.client.fullname!r}), event={self.event!r})"
+    def __repr__(self):
+        return (
+            f"Contract(id:{self.id}"
+            f"total_amount: {self.total_amount}"
+            f"outstanding_amount: {self.outstanding_amount}"
+            f"date_creation: {self.date_creation}"
+            f"status : {self.status}"
+            f"event : {self.event!r}"
+        )
