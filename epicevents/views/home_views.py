@@ -1,4 +1,16 @@
-from utils.bases.menus import BaseMenu
+from epicevents.utils.bases.menus import BaseMenu
+
+
+class HomeView(BaseMenu):
+    home_menu: dict = {
+        "1": "...",
+        "2": "...",
+        "3": "...",
+    }
+
+    def display_menu(self, menu_dict):
+        self._display_menu(menu_dict=menu_dict)
+        return self._response_menu(menu_dict=menu_dict)
 
 
 class ReceptionView(BaseMenu):
@@ -17,18 +29,6 @@ class ReceptionView(BaseMenu):
 
     def follow_instructions(self):
         self._space_presentation("Please follow the instructions below")
-
-
-class HomeView(BaseMenu):
-    home_menu: dict = {
-        "1": "...",
-        "2": "...",
-        "3": "...",
-    }
-
-    def display_menu(self, menu_dict):
-        self._display_menu(menu_dict=menu_dict)
-        return self._response_menu(menu_dict=menu_dict)
 
 
 class ExitView(BaseMenu):

@@ -1,5 +1,5 @@
-from .client import Client, ClientManager
-from .contract import Contract, ContractManager
-from .employee import Employee, EmployeeManager
-from .event import Event, EventManager
-from .role import Role, RoleManager
+from .role import Role, RoleManager  # noqa: F401
+from .employee import Employee, EmployeeManager  # noqa: F401
+from .client import Client, ClientManager  # noqa: F401
+from .event import Event, EventManager  # noqa: F401
+from .contract import Contract, ContractManager  # noqa: F401

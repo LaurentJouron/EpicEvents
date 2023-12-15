@@ -1,6 +1,5 @@
 from EpicEvents import controllers as home
-from models.employee import Employee
-from views.employee_views import EmployeeView
+from views import EmployeeView
 
 view = EmployeeView()
 
@@ -22,61 +21,24 @@ class EmployeeController:
 
 
 class EmployeeCreationController:
-    def __init__(self):
-        self.model = Employee
-
     def run(self):
-        employee_data = view.get_employee_data()
-        new_employee = Employee(**employee_data)
-        new_employee.register(self.session)
+        ...
         return EmployeeController()
 
 
 class EmployeeModifyController:
-    def __init__(self):
-        self.model = Employee
-
     def run(self):
-        username = view.get_one_employee()
-        employee = (
-            self.session.query(Employee).filter_by(username=username).first()
-        )
-
-        if employee:
-            new_data = view.get_employee_data()
-            for key, value in new_data.items():
-                setattr(employee, key, value)
-            self.session.commit()
-            self.updated_succefully()
-        else:
-            self.not_found()
+        ...
         return EmployeeController()
 
 
 class EmployeeDeleteController:
-    def __init__(self):
-        self.model = Employee
-
     def run(self):
-        username = view.get_one_employee()
-        employee = (
-            self.session.query(Employee).filter_by(username=username).first()
-        )
-
-        if employee:
-            self.session.delete(employee)
-            self.session.commit()
-            self.delete_succefully()
-        else:
-            self.not_found()
+        ...
         return EmployeeController()
 
 
 class EmployeeDisplayAll:
-    def __init__(self):
-        self.model = Employee
-
     def run(self):
-        employees = self.session.query(Employee).all()
-        self.view.display_employees(employees)
+        ...
         return EmployeeController()

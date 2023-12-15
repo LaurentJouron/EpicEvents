@@ -1,6 +1,6 @@
 import string
 
-from utils.contants import SIZE_LINE
+from epicevents.utils.contants import SIZE_LINE
 
 
 def _get_string(var):

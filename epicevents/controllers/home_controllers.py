@@ -1,7 +1,7 @@
-from utils.bases.controllers import BaseController
-from utils.contants import CONFIRMATION_MENU
+from epicevents.utils.bases.controllers import BaseController
+from epicevents.utils.contants import CONFIRMATION_MENU
 
-from .views import HomeView, ReceptionView, ExitView
+from views import HomeView, ReceptionView, ExitView
 
 reception_view = ReceptionView()
 exit_view = ExitView()

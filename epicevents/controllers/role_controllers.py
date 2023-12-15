@@ -1,9 +1,7 @@
-from sqlalchemy import select
-from epicevents.controllers import HomeController
-from epicevents.database import Session
-from utils.bases.controllers import BaseController
-from models.role import RoleManager
-from views.role_views import RoleView
+from epicevents.utils.bases.controllers import BaseController
+from models import RoleManager
+from views import RoleView
+from controllers import HomeController
 
 view = RoleView()
 role_manager = RoleManager()
@@ -35,23 +33,28 @@ class RoleController(BaseController):
 class AddRoleController(BaseController):
     def run(self):
         ...
+        return RoleController()
 
 
 class UpdateRoleController(BaseController):
     def run(self, name):
         ...
+        return RoleController()
 
 
 class GetRoleByIdController(BaseController):
     def run(self, role_id):
         ...
+        return RoleController()
 
 
 class GetRoleByNameController(BaseController):
     def run(self, name):
         ...
+        return RoleController()
 
 
 class GetAllRoleController(BaseController):
     def run(self):
         ...
+        return RoleController()

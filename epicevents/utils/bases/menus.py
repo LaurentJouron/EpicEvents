@@ -1,4 +1,4 @@
-from utils.bases.views import BaseView
+from epicevents.utils.bases.views import BaseView
 
 
 class BaseMenu(BaseView):

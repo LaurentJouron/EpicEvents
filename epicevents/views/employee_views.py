@@ -1,4 +1,4 @@
-from utils.bases.menus import BaseMenu
+from epicevents.utils.bases.menus import BaseMenu
 
 
 class EmployeeView(BaseMenu):
