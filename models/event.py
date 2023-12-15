@@ -38,8 +38,15 @@ class Event(Model):
     attendees: Mapped[int] = mapped_column(Integer)
     notes: Mapped[str] = mapped_column(Text)
 
-    # contract_id = mapped_column(ForeignKey("contract.id"))
-    # contract = relationship("Contract", back_populates="event")
+    contract_id: Mapped[int] = mapped_column(
+        ForeignKey("contract.id", ondelete="CASCADE")
+    )
+    contract: Mapped[list["Contract"]] = relationship(
+        "Contract",
+        back_populates="commercial",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
     # client_id = mapped_column(ForeignKey("client.id"))
     # client = relationship("Client", back_populates="events")

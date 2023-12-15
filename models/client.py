@@ -4,7 +4,6 @@ from sqlalchemy import String, ForeignKey, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model
-from .contract import Contract
 from .event import Event
 
 
@@ -74,6 +73,7 @@ class Client(Model):
         ForeignKey("employee.id"), ondelete="CASCADE"
     )
     commercial = relationship("employee", back_populates="clients")
+
     events: Mapped[list["Event"]] = relationship(back_populates="client")
 
     def __repr__(self):
