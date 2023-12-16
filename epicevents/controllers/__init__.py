@@ -1,10 +1,9 @@
-from .home_controllers import (
+from home_controllers import (  # noqa: F401
     ReceptionController,
     HomeController,
     ExitController,
-)  # noqa: F401
-
-from .role_controllers import (
+)
+from role_controllers import (  # noqa: F401
     RoleController,
     AddRoleController,
     UpdateRoleController,
@@ -12,8 +11,7 @@ from .role_controllers import (
     GetRoleByNameController,
     GetAllRoleController,
 )
-
-from .employee_controllers import (
+from employee_controllers import (  # noqa: F401
     EmployeeController,
     EmployeeCreationController,
     EmployeeModifyController,
@@ -21,6 +19,12 @@ from .employee_controllers import (
     EmployeeDisplayAll,
 )
 
-# from .client_controllers import
-# from .event_controllers import
-# from .contract_controllers import
+# from client_controllers import (  # noqa: F401
+#     ...
+# )
+# from event_controllers import (  # noqa: F401
+#     ...
+# )
+# from contract_controllers import (  # noqa: F401
+#     ...
+# )

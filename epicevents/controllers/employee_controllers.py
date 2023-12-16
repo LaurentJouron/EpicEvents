@@ -1,4 +1,4 @@
-from EpicEvents import controllers as home
+from epicevents.controllers import home_controllers as home
 from views import EmployeeView
 
 view = EmployeeView()

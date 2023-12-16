@@ -1,9 +1,9 @@
 import typer
 
-from .views import ExitView
+from .views.home_views import ExitView
+from .models import Role, Employee, Client, Event, Contract
 from .controllers import ReceptionController
 from .database import Model, engine
-from .models import Role, Employee, Client, Event, Contract
 
 exit_view = ExitView()
 
