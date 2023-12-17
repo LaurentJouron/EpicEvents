@@ -1,10 +1,7 @@
-from click import DateTime
 from sqlalchemy import String, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
-from models import Event
-
 
 class ContractManager:
     def add_contract(self):
@@ -34,8 +31,8 @@ class Contract(Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     total_amount: Mapped[str] = mapped_column(String(50))
     outstanding_amount: Mapped[str] = mapped_column(String(50))
-    date_creation: Mapped[Date] = mapped_column(DateTime)
-    status: Mapped[bool] = mapped_column(defaut=False)
+    date_creation: Mapped[Date] = mapped_column(Date)
+    status: Mapped[bool] = mapped_column(default=False)
 
     event: Mapped["Event"] = relationship(back_populates="contract")
 

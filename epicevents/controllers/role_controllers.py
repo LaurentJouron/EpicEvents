@@ -1,7 +1,7 @@
 from epicevents.utils.bases.controllers import BaseController
-from models import RoleManager
-from views import RoleView
-from controllers import HomeController
+from .home_controllers import HomeController
+from ..models import RoleManager
+from ..views import RoleView
 
 view = RoleView()
 role_manager = RoleManager()

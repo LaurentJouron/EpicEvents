@@ -1,10 +1,7 @@
-from click import DateTime
 from sqlalchemy import ForeignKey, Date, Text, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
-from models import Client, Employee
-
 
 class EventManager:
     def add_event(self):
@@ -31,8 +28,8 @@ class EventManager:
 class Event(Model):
     __tablename__ = "event"
     id: Mapped[int] = mapped_column(primary_key=True)
-    start_date_start: Mapped[Date] = mapped_column(DateTime)
-    end_date: Mapped[Date] = mapped_column(DateTime)
+    start_date_start: Mapped[Date] = mapped_column(Date)
+    end_date: Mapped[Date] = mapped_column(Date)
     address: Mapped[str] = mapped_column(Text)
     attendees: Mapped[int] = mapped_column(Integer)
     notes: Mapped[str] = mapped_column(Text)
@@ -43,14 +40,14 @@ class Event(Model):
     client: Mapped["Client"] = relationship("Client", back_populates="events")
 
     commercial_id: Mapped[int] = mapped_column(
-        ForeignKey("commercial.id", ondelete="CASCADE")
+        ForeignKey("employee.id", ondelete="CASCADE")
     )
     commercial: Mapped["Employee"] = relationship(
         "Employee", back_populates="events"
     )
 
     technician_id: Mapped[int] = mapped_column(
-        ForeignKey("technician.id", ondelete="CASCADE")
+        ForeignKey("employee.id", ondelete="CASCADE")
     )
     technician: Mapped["Employee"] = relationship(
         "Employee", back_populates="events"

@@ -1,10 +1,7 @@
-from click import DateTime
 from sqlalchemy import String, ForeignKey, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
-from models import Event, Employee
-
 
 class ClientManager:
     def create_client(self):
@@ -64,8 +61,8 @@ class Client(Model):
     fullname: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(300), unique=True)
     phone: Mapped[str] = mapped_column(String(20), unique=True)
-    creation_date: Mapped[Date] = mapped_column(DateTime)
-    updating_date: Mapped[Date] = mapped_column(DateTime)
+    creation_date: Mapped[Date] = mapped_column(Date)
+    updating_date: Mapped[Date] = mapped_column(Date)
     address: Mapped[Text] = mapped_column(Text)
 
     commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))

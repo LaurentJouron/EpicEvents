@@ -2,8 +2,6 @@ from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
-from models import Role, Client, Event, Contract
-
 
 class EmployeeManager:
     def add_employee(self):

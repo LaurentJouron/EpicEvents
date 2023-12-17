@@ -1,5 +1,5 @@
 from epicevents.controllers import home_controllers as home
-from views import EmployeeView
+from ..views import EmployeeView
 
 view = EmployeeView()
 
