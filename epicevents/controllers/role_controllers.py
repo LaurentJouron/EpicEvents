@@ -1,5 +1,4 @@
 from epicevents.utils.bases.controllers import BaseController
-from .home_controllers import HomeController
 from ..models import RoleManager
 from ..views import RoleView
 
@@ -27,12 +26,14 @@ class RoleController(BaseController):
                 return GetAllRoleController()
 
             elif choice == "6":
-                return HomeController()
+                ...
+                # return HomeController()
 
 
 class AddRoleController(BaseController):
     def run(self):
-        ...
+        name = view.role_name()
+        role_manager.add_role(name=name)
         return RoleController()
 
 

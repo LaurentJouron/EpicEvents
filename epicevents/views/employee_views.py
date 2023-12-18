@@ -22,7 +22,7 @@ class EmployeeView(BaseMenu):
         return {
             "username": username,
             "phone_number": phone_number,
-            "password_hash": password,
+            "password": password,
         }
 
     def get_one_employee(self):
