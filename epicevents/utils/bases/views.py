@@ -53,6 +53,12 @@ class BaseView:
     def _message_success(self):
         print("Successfully.")
 
+    def _delete_succefully(self):
+        print("Deleted successfully.")
+
+    def _updated_succefully(self):
+        print("Updated successfully.")
+
     def _enter_information(self):
         return self._star_presentation(" Enter information ")
 
@@ -61,3 +67,21 @@ class BaseView:
 
     def display_made_your_choice(self):
         print(self._space_presentation(" MADE YOUR CHOICE "))
+
+    def _get_first_name(self):
+        return self._get_string("Please enter first name: ").capitalize()
+
+    def _get_last_name(self):
+        return self._get_string("Enter the last name: ").capitalize()
+
+    def _get_name(self):
+        return self._get_string("Enter the name: ").capitalize()
+
+    def _not_found(self):
+        print("Not found.")
+
+    def _get_by_name(self):
+        return self._get_string("Enter a name: ").strip().capitalize()
+
+    def _get_by_id(self):
+        return self._get_int("Enter ID: ")

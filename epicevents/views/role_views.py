@@ -15,8 +15,32 @@ class RoleView(BaseMenu):
         self._display_menu(menu_dict=menu_dict)
         return self._response_menu(menu_dict=menu_dict)
 
-    def role_name(self):
-        self._get_string("Enter a role: ").strip().capitalize()
+    def get_by_name(self):
+        return self._get_by_name()
 
     def get_by_id(self):
-        self._get_int("Enter ID: ")
+        return self._get_by_id()
+
+    def exist_error(self, var):
+        print(f"'{var}' name already exists. Please enter a different name.")
+
+    def invalid_id(self, var):
+        print(f"This ID: '{var}' does not exist. Please enter a valid ID.")
+
+    def invalid_name(self, var):
+        print(f"No role found '{var}'. Please enter a valid role name.")
+
+    def role_information(self, var):
+        print(f"Current Role Information: {var}")
+
+    def success_message(self, var):
+        print(f"Role '{var}' added successfully.")
+
+    def success_update(self, var):
+        print(f"Role updated successfully. New Name: {var}")
+
+    def not_found(self):
+        self.not_found()
+
+    def all_round(self):
+        print("All Roles:")

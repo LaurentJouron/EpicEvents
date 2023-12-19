@@ -11,16 +11,32 @@ class EmployeeController:
             if choice == "1":
                 return EmployeeCreationController()
             elif choice == "2":
-                return EmployeeModifyController()
+                return GetEmployeeByNameController()
             elif choice == "3":
-                return EmployeeDeleteController()
+                return GetEmployeeByIdController()
             elif choice == "4":
-                return EmployeeDisplayAll()
+                return EmployeeModifyController()
             elif choice == "5":
+                return EmployeeDeleteController()
+            elif choice == "6":
+                return EmployeeDisplayAll()
+            elif choice == "7":
                 return home.HomeController()
 
 
 class EmployeeCreationController:
+    def run(self):
+        ...
+        return EmployeeController()
+
+
+class GetEmployeeByNameController:
+    def run(self):
+        ...
+        return EmployeeController()
+
+
+class GetEmployeeByIdController:
     def run(self):
         ...
         return EmployeeController()

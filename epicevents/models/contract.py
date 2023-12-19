@@ -1,7 +1,8 @@
-from sqlalchemy import String, Date
+from sqlalchemy import String, Date, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
+
 
 class ContractManager:
     def add_contract(self):
@@ -34,7 +35,17 @@ class Contract(Model):
     date_creation: Mapped[Date] = mapped_column(Date)
     status: Mapped[bool] = mapped_column(default=False)
 
+    employee: Mapped[list["Employee"]] = relationship(
+        "Employee", back_populates="contract"
+    )
+    employee_id: Mapped[int] = mapped_column(
+        ForeignKey("employee.id", ondelete="CASCADE")
+    )
+
     event: Mapped["Event"] = relationship(back_populates="contract")
+    event_id: Mapped[int] = mapped_column(
+        ForeignKey("event.id", ondelete="CASCADE")
+    )
 
     def __repr__(self):
         return (

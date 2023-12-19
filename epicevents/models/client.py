@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
 
+
 class ClientManager:
     def create_client(self):
         with Session() as session:
@@ -58,7 +59,6 @@ class Client(Model):
     information: Mapped[str] = mapped_column(Text)
     last_name: Mapped[str] = mapped_column(String(50))
     first_name: Mapped[str] = mapped_column(String(50))
-    fullname: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(300), unique=True)
     phone: Mapped[str] = mapped_column(String(20), unique=True)
     creation_date: Mapped[Date] = mapped_column(Date)

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
 
+
 class EventManager:
     def add_event(self):
         with Session() as session:
@@ -53,6 +54,9 @@ class Event(Model):
         "Employee", back_populates="events"
     )
 
+    contract_id: Mapped[int] = mapped_column(
+        ForeignKey("contract.id", ondelete="CASCADE")
+    )
     contract: Mapped["Event"] = relationship(
         "Contract",
         back_populates="events",

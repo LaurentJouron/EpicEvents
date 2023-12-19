@@ -1,26 +1,38 @@
 from epicevents.utils.bases.menus import BaseMenu
+import jwt
 
 
 class EmployeeView(BaseMenu):
     employee_menu: dict = {
         "1": "Signup",
-        "2": "Modify",
-        "3": "Delete",
-        "5": "Quit",
+        "2": "Get by name",
+        "3": "Get by ID",
+        "4": "Modify",
+        "5": "Delete",
+        "6": "All",
+        "7": "Return",
     }
 
-    def __get_username(self):
-        first_name = self._get_string("Please enter first name: ").capitalize()
-        last_name = self._get_string("Enter the last name: ").capitalize()
-        username = f"{first_name} {last_name}"
-        return username
+    def display_employees(self, employees):
+        for employee in employees:
+            self.display_employee(employee)
+            print("\n" + "=" * 30 + "\n")
+
+    # def _ecode_password(self):
+    #     password = self._get_string("Enter the password: ")
+    #     encoded = jwt.encode(
+    #         {"password": password}, private_key, algorithm="RS256"
+    #     )
+    #     return encoded
 
     def get_employee_data(self):
-        username = self.__get_username()
+        first_name = self._get_first_name()
+        last_name = self._get_last_name()
         phone_number = self._get_int("Enter the phone number: ")
         password = self._get_string("Enter you password: ")
         return {
-            "username": username,
+            "first_name": first_name,
+            "last_name": last_name,
             "phone_number": phone_number,
             "password": password,
         }
@@ -30,24 +42,20 @@ class EmployeeView(BaseMenu):
         return username
 
     def display_employee(self, employee):
-        print(f"Username: {employee.username}")
+        print(f"First_name: {employee.first_name}")
+        print(f"Last name: {employee.last_name}")
         print(f"Email: {employee.email}")
         print(f"Phone Number: {employee.phone_number}")
-
-    def display_employees(self, employees):
-        for employee in employees:
-            self.display_employee(employee)
-            print("\n" + "=" * 30 + "\n")
 
     def display_menu(self, menu_dict):
         self._display_menu(menu_dict=menu_dict)
         return self._response_menu(menu_dict=menu_dict)
 
     def not_found(self):
-        print("Person not found.")
+        self.not_found()
 
     def delete_succefully(self):
-        print("Employee deleted successfully.")
+        self._delete_succefully()
 
     def updated_succefully(self):
-        print("Employee updated successfully.")
+        self._updated_succefully()
