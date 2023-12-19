@@ -1,5 +1,4 @@
 from epicevents.utils.bases.menus import BaseMenu
-import jwt
 
 
 class EmployeeView(BaseMenu):
@@ -17,13 +16,6 @@ class EmployeeView(BaseMenu):
         for employee in employees:
             self.display_employee(employee)
             print("\n" + "=" * 30 + "\n")
-
-    # def _ecode_password(self):
-    #     password = self._get_string("Enter the password: ")
-    #     encoded = jwt.encode(
-    #         {"password": password}, private_key, algorithm="RS256"
-    #     )
-    #     return encoded
 
     def get_employee_data(self):
         first_name = self._get_first_name()

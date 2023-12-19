@@ -4,14 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-psycopg2 = "*"
 pytest = "*"
 passlib = "*"
 sqlalchemy = "*"
 typer = "*"
 python-dotenv = "*"
-jwt = "*"
-pyjwt = "*"
+pyjwt = {extras = ["crypto"], version = "*"}
 
 [dev-packages]
 
