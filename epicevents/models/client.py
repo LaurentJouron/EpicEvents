@@ -57,8 +57,8 @@ class Client(Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
     compagny_name: Mapped[str] = mapped_column(String(300))
     information: Mapped[str] = mapped_column(Text)
+    username: Mapped[str] = mapped_column(String(50))
     last_name: Mapped[str] = mapped_column(String(50))
-    first_name: Mapped[str] = mapped_column(String(50))
     email: Mapped[str] = mapped_column(String(300), unique=True)
     phone: Mapped[str] = mapped_column(String(20), unique=True)
     creation_date: Mapped[Date] = mapped_column(Date)
@@ -70,21 +70,19 @@ class Client(Model):
         "Employee", back_populates="client"
     )
 
-    events: Mapped[list["Event"]] = relationship(
-        "Event",
-        back_populates="event",
-        cascade="all, delete",
-        passive_deletes=True,
+    event_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
+    event: Mapped[list["Event"]] = relationship(
+        "Event", back_populates="client"
     )
 
     def __repr__(self):
         return (
             f"Client(id:{self.id}"
-            f"fullname: {self.fullname}"
+            f"username: {self.username}"
             f"email: {self.email}"
             f"phone: {self.phone}"
             f"compagny_name : {self.compagny_name!r}"
             f"creation_date : {self.creation_date!r}"
             f"updating_date : {self.updating_date!r}"
-            f"commercial : {self.commercial.fullname!r})"
+            f"commercial : {self.commercial.username!r})"
         )

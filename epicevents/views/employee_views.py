@@ -18,12 +18,12 @@ class EmployeeView(BaseMenu):
             print("\n" + "=" * 30 + "\n")
 
     def get_employee_data(self):
-        first_name = self._get_first_name()
+        username = self._get_username()
         last_name = self._get_last_name()
         phone_number = self._get_int("Enter the phone number: ")
         password = self._get_string("Enter you password: ")
         return {
-            "first_name": first_name,
+            "username": username,
             "last_name": last_name,
             "phone_number": phone_number,
             "password": password,
@@ -34,7 +34,7 @@ class EmployeeView(BaseMenu):
         return username
 
     def display_employee(self, employee):
-        print(f"First_name: {employee.first_name}")
+        print(f"Username: {employee.username}")
         print(f"Last name: {employee.last_name}")
         print(f"Email: {employee.email}")
         print(f"Phone Number: {employee.phone_number}")

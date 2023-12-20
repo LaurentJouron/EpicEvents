@@ -41,39 +41,35 @@ class Employee(Model):
     __tablename__ = "employee"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    username: Mapped[str] = mapped_column(String(100))
     last_name: Mapped[str] = mapped_column(String(100))
-    first_name: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(300), unique=True)
     phone: Mapped[str] = mapped_column(String(20), unique=True)
     password: Mapped[str] = mapped_column(String(500))
 
-    role_id: Mapped[int] = mapped_column(
-        ForeignKey("role.id", ondelete="CASCADE")
-    )
+    role_id: Mapped[int] = mapped_column(ForeignKey("role.id"))
     role: Mapped[list["Role"]] = relationship(
-        "Role", back_populates="employees"
+        "Role", back_populates="employee"
     )
 
+    client_id: Mapped[int] = mapped_column(ForeignKey("client.id"))
     client: Mapped[list["Client"]] = relationship(
-        "Client", back_populates="employees"
-    )
-    client_id: Mapped[int] = mapped_column(
-        ForeignKey("client.id", ondelete="CASCADE")
+        "Client", back_populates="employee"
     )
 
+    commercial_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
+    commercial: Mapped[list["Event"]] = relationship(
+        "Event", back_populates="employee"
+    )
+
+    support_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
+    support: Mapped[list["Event"]] = relationship(
+        "Event", back_populates="employee"
+    )
+
+    contract_id: Mapped[int] = mapped_column(ForeignKey("contract.id"))
     contract: Mapped[list["Contract"]] = relationship(
-        "Contract", back_populates="employees"
-    )
-    contract_id: Mapped[int] = mapped_column(
-        ForeignKey("contract.id", ondelete="CASCADE")
-    )
-
-    event_technician: Mapped[list["Event"]] = relationship(
-        "Event", back_populates="technicians"
-    )
-
-    event_commercial: Mapped[list["Event"]] = relationship(
-        "Event", back_populates="commercial"
+        "Contract", back_populates="employee"
     )
 
     @hybrid_property
@@ -83,14 +79,13 @@ class Employee(Model):
     def __repr__(self):
         return (
             f"Employee(id:{self.id}, "
+            f"username: {self.username}, "
             f"last_name: {self.last_name}, "
-            f"first_name: {self.first_name}, "
-            f"fullname: {self.fullname}, "
             f"email: {self.email}, "
             f"phone: {self.phone}, "
             f"password: {self.password}, "
             f"role: {self.role}, "
             f"client: {self.client.compagny_name!r}, "
-            f"event_technician: {self.event_technician!r}, "
-            f"event_commercial: {self.event_commercial!r})"
+            f"support: {self.support!r}, "
+            f"commercial: {self.commercial!r})"
         )

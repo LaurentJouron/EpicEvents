@@ -18,9 +18,6 @@ from .employee_controllers import (  # noqa: F401
     EmployeeDeleteController,
     EmployeeDisplayAll,
 )
-from .authentication_controllers import (  # noqa: F401
-    AuthenticationController,
-)
 
 # from .client_controllers import (  # noqa: F401
 #     ...

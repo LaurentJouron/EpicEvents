@@ -68,8 +68,8 @@ class BaseView:
     def display_made_your_choice(self):
         print(self._space_presentation(" MADE YOUR CHOICE "))
 
-    def _get_first_name(self):
-        return self._get_string("Please enter first name: ").capitalize()
+    def _get_username(self):
+        return self._get_string("Please enter username: ").capitalize()
 
     def _get_last_name(self):
         return self._get_string("Enter the last name: ").capitalize()

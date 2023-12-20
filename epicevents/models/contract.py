@@ -35,16 +35,14 @@ class Contract(Model):
     date_creation: Mapped[Date] = mapped_column(Date)
     status: Mapped[bool] = mapped_column(default=False)
 
-    employee: Mapped[list["Employee"]] = relationship(
+    gestion_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
+    gestion: Mapped[list["Employee"]] = relationship(
         "Employee", back_populates="contract"
     )
-    employee_id: Mapped[int] = mapped_column(
-        ForeignKey("employee.id", ondelete="CASCADE")
-    )
 
-    event: Mapped["Event"] = relationship(back_populates="contract")
-    event_id: Mapped[int] = mapped_column(
-        ForeignKey("event.id", ondelete="CASCADE")
+    event_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
+    event: Mapped["Contract"] = relationship(
+        "Contract", back_populates="event"
     )
 
     def __repr__(self):
@@ -54,5 +52,5 @@ class Contract(Model):
             f"outstanding_amount: {self.outstanding_amount}"
             f"date_creation: {self.date_creation}"
             f"status : {self.status}"
-            f"event : {self.event!r}"
+            f"event : {self.event.start_date!r}"
         )
