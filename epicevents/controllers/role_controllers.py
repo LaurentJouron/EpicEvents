@@ -33,7 +33,7 @@ class RoleController(BaseController):
 class AddRoleController(BaseController):
     def run(self):
         role_name = view.get_role_name()
-        existing_role = role_manager.get_by_name(role_name)
+        existing_role = role_manager.get_name(role_name)
         if existing_role:
             view.exist_error(role_name)
             return RoleController()

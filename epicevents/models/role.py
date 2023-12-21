@@ -8,14 +8,13 @@ class RoleManager:
     def add_role(self, name):
         with Session() as session:
             with session.begin():
-                new_role = Role(name=name, employees=[])
+                new_role = Role(name=name)
                 session.add(new_role)
 
     def update_role(self, role_id, new_name):
         with Session() as session:
             with session.begin():
-                role = session.query(Role).get(role_id)
-                role.name = new_name
+                ...
 
     def get_role_by_id(self, role_id):
         with Session() as session:

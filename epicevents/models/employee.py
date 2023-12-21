@@ -6,35 +6,49 @@ from epicevents.database import Model, Session
 
 
 class EmployeeManager:
-    def add_employee(self):
+    def add_employee(self, **kwargs):
         with Session() as session:
             with session.begin():
-                ...
+                new_employee = Employee(
+                    username=kwargs["username"],
+                    last_name=kwargs["last_name"],
+                    email=kwargs["email"],
+                    phone=kwargs["phone"],
+                    password=kwargs["password"],
+                )
+                session.add(new_employee)
 
-    def get_employee_by_name(self):
+    def get_employee_by_username(self, username):
         with Session() as session:
             with session.begin():
-                ...
+                session.query(Employee).filter_by(username=username)
 
-    def get_employee_by_id(self):
+    def get_employee_by_id(self, id):
         with Session() as session:
             with session.begin():
-                ...
+                session.query(Employee).filter_by(id=id)
 
-    def get_employee_by_function(self):
+    def get_employee_by_email(self, email):
         with Session() as session:
             with session.begin():
-                ...
+                session.query(Employee).filter_by(email=email)
 
     def get_all_employee(self):
         with Session() as session:
             with session.begin():
                 return session.query(Employee).all()
 
-    def login(self):
+    def delete_employee(self, username, email):
         with Session() as session:
             with session.begin():
-                ...
+                session.delete(username=username, email=email)
+
+    def login(self, username, password):
+        with Session() as session:
+            with session.begin():
+                session.query(Employee).filter_by(
+                    username=username, password=password
+                )
 
 
 class Employee(Model):

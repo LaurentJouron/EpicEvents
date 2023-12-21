@@ -19,19 +19,23 @@ class EmployeeView(BaseMenu):
 
     def get_employee_data(self):
         username = self._get_username()
-        last_name = self._get_last_name()
-        phone_number = self._get_int("Enter the phone number: ")
-        password = self._get_string("Enter you password: ")
+        last_name = self._get_lastname()
+        email = self._get_string("Enter email: ")
+        phone = self._get_string("Enter the phone number: ")
+        password = self.get_password
         return {
             "username": username,
             "last_name": last_name,
-            "phone_number": phone_number,
+            "email": email,
+            "phone": phone,
             "password": password,
         }
 
-    def get_one_employee(self):
-        username = self.__get_username()
-        return username
+    def get_username(self):
+        return self._get_username()
+
+    def get_password(self):
+        return input("Enter password: ").strip()
 
     def display_employee(self, employee):
         print(f"Username: {employee.username}")

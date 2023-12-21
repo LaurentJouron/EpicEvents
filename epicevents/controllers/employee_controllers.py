@@ -1,10 +1,15 @@
+from passlib.hash import pbkdf2_sha256
+
+from epicevents.utils.bases.controllers import BaseController
 from epicevents.controllers import home_controllers as home
+from ..models import EmployeeManager
 from ..views import EmployeeView
 
 view = EmployeeView()
+model = EmployeeManager()
 
 
-class EmployeeController:
+class EmployeeController(BaseController):
     def run(self):
         while True:
             choice = view.display_menu(view.employee_menu)
@@ -24,37 +29,46 @@ class EmployeeController:
                 return home.HomeController()
 
 
-class EmployeeCreationController:
+class EmployeeLogin(BaseController):
+    def run(self):
+        username = view.get_username()
+        password = view.get_password()
+        password_hash = ...
+        return pbkdf2_sha256.verify(password, password_hash)
+
+
+class EmployeeCreationController(BaseController):
+    def run(self):
+        employee_data = view.get_employee_data()
+        model.add_employee(employee_data)
+        return EmployeeController()
+
+
+class GetEmployeeByNameController(BaseController):
     def run(self):
         ...
         return EmployeeController()
 
 
-class GetEmployeeByNameController:
+class GetEmployeeByIdController(BaseController):
     def run(self):
         ...
         return EmployeeController()
 
 
-class GetEmployeeByIdController:
+class EmployeeModifyController(BaseController):
     def run(self):
         ...
         return EmployeeController()
 
 
-class EmployeeModifyController:
+class EmployeeDeleteController(BaseController):
     def run(self):
         ...
         return EmployeeController()
 
 
-class EmployeeDeleteController:
-    def run(self):
-        ...
-        return EmployeeController()
-
-
-class EmployeeDisplayAll:
+class EmployeeDisplayAll(BaseController):
     def run(self):
         ...
         return EmployeeController()
