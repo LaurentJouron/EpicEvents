@@ -14,7 +14,9 @@ class RoleManager:
     def update_role(self, role_id, new_name):
         with Session() as session:
             with session.begin():
-                ...
+                role = session.query(Role).get(role_id)
+                if role:
+                    role.name = new_name
 
     def get_role_by_id(self, role_id):
         with Session() as session:

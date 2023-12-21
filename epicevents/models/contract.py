@@ -5,25 +5,28 @@ from epicevents.database import Model, Session
 
 
 class ContractManager:
-    def add_contract(self):
+    def add_contract(self, **kwargs):
         with Session() as session:
             with session.begin():
-                ...
+                new_contract = Contract(
+                    total_amount=kwargs["total_amount"],
+                    outstanding_amount=kwargs["outstanding_amount"],
+                    date_creation=kwargs["date_creation"],
+                    status=kwargs["status"],
+                    gestion_id=kwargs["gestion_id"],
+                    event_id=kwargs["event_id"],
+                )
+                session.add(new_contract)
 
-    def get_contract_by_creation_date(self):
+    def get_contract_by_id(self, contract_id):
         with Session() as session:
             with session.begin():
-                ...
-
-    def get_contract_by_id(self):
-        with Session() as session:
-            with session.begin():
-                ...
+                return session.query(Contract).get(contract_id)
 
     def get_all_contract(self):
         with Session() as session:
             with session.begin():
-                ...
+                return session.query(Contract).all()
 
 
 class Contract(Model):
@@ -52,5 +55,5 @@ class Contract(Model):
             f"outstanding_amount: {self.outstanding_amount}"
             f"date_creation: {self.date_creation}"
             f"status : {self.status}"
-            f"event : {self.event.start_date!r}"
+            f"event_start_date : {self.event.start_date!r}"
         )

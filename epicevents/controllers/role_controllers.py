@@ -30,6 +30,12 @@ class RoleController(BaseController):
                 # return HomeController()
 
 
+class RoleInitialiseController(BaseController):
+    def run(self):
+        for role in view.initialise_role():
+            role_manager.add_role(role)
+
+
 class AddRoleController(BaseController):
     def run(self):
         role_name = view.get_role_name()

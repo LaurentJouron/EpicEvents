@@ -1,7 +1,7 @@
 from passlib.hash import pbkdf2_sha256
 
 from epicevents.utils.bases.controllers import BaseController
-from epicevents.controllers import home_controllers as home
+from ..controllers import home_controllers as home
 from ..models import EmployeeManager
 from ..views import EmployeeView
 

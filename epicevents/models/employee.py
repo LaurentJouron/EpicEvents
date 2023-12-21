@@ -1,6 +1,5 @@
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.ext.hybrid import hybrid_property
 
 from epicevents.database import Model, Session
 
@@ -23,10 +22,14 @@ class EmployeeManager:
             with session.begin():
                 session.query(Employee).filter_by(username=username)
 
-    def get_employee_by_id(self, id):
+    def get_employee_by_id(self, employee_id):
         with Session() as session:
             with session.begin():
-                session.query(Employee).filter_by(id=id)
+                return (
+                    session.query(Employee)
+                    .filter(Employee.id == employee_id)
+                    .first()
+                )
 
     def get_employee_by_email(self, email):
         with Session() as session:
@@ -41,13 +44,27 @@ class EmployeeManager:
     def delete_employee(self, username, email):
         with Session() as session:
             with session.begin():
-                session.delete(username=username, email=email)
+                employee_to_delete = (
+                    session.query(Employee)
+                    .filter(
+                        (Employee.username == username)
+                        | (Employee.email == email)
+                    )
+                    .first()
+                )
+                if employee_to_delete:
+                    session.delete(employee_to_delete)
 
     def login(self, username, password):
         with Session() as session:
             with session.begin():
-                session.query(Employee).filter_by(
-                    username=username, password=password
+                return (
+                    session.query(Employee)
+                    .filter(
+                        (Employee.username == username)
+                        & (Employee.password == password)
+                    )
+                    .first()
                 )
 
 
@@ -63,32 +80,24 @@ class Employee(Model):
 
     role_id: Mapped[int] = mapped_column(ForeignKey("role.id"))
     role: Mapped[list["Role"]] = relationship(
-        "Role", back_populates="employee"
+        "Role", back_populates="employees"
     )
 
-    client_id: Mapped[int] = mapped_column(ForeignKey("client.id"))
     client: Mapped[list["Client"]] = relationship(
         "Client", back_populates="employee"
     )
 
-    commercial_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
     commercial: Mapped[list["Event"]] = relationship(
         "Event", back_populates="employee"
     )
 
-    support_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
     support: Mapped[list["Event"]] = relationship(
         "Event", back_populates="employee"
     )
 
-    contract_id: Mapped[int] = mapped_column(ForeignKey("contract.id"))
     contract: Mapped[list["Contract"]] = relationship(
         "Contract", back_populates="employee"
     )
-
-    @hybrid_property
-    def fullname(self):
-        return f"{self.first_name} {self.last_name}"
 
     def __repr__(self):
         return (
