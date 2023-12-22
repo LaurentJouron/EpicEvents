@@ -15,9 +15,6 @@ class RoleView(BaseMenu):
         self._display_menu(menu_dict=menu_dict)
         return self._response_menu(menu_dict=menu_dict)
 
-    def initialise_role(self):
-        return ("Gestion", "Support", "Commercial")
-
     def get_by_name(self):
         return self._get_by_name()
 

@@ -172,3 +172,6 @@ class BaseView:
 
     def _get_by_id(self):
         return self._get_int("Enter ID: ")
+
+    def _get_password(self):
+        return input("Please enter password: ").upper()

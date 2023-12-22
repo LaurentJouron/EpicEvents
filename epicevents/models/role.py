@@ -42,8 +42,6 @@ class Role(Model):
     employees: Mapped[list["Employee"]] = relationship(
         "Employee",
         back_populates="role",
-        cascade="all, delete",
-        passive_deletes=True,
     )
 
     def __repr__(self):

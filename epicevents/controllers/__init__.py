@@ -10,7 +10,6 @@ from .role_controllers import (  # noqa: F401
     GetRoleByIdController,
     GetRoleByNameController,
     GetAllRoleController,
-    RoleInitialiseController,
 )
 from .employee_controllers import (  # noqa: F401
     EmployeeController,
