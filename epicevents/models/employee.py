@@ -20,7 +20,11 @@ class EmployeeManager:
     def get_employee_by_username(self, username):
         with Session() as session:
             with session.begin():
-                session.query(Employee).filter_by(username=username)
+                return (
+                    session.query(Employee)
+                    .filter_by(username=username)
+                    .first()
+                )
 
     def get_employee_by_id(self, employee_id):
         with Session() as session:
@@ -84,15 +88,19 @@ class Employee(Model):
     )
 
     client: Mapped[list["Client"]] = relationship(
-        "Client", back_populates="employee"
+        "Client", back_populates="commercial"
     )
 
     commercial: Mapped[list["Event"]] = relationship(
-        "Event", back_populates="employee"
+        "Event",
+        back_populates="commercial",
+        foreign_keys="[Event.commercial_id]",
     )
 
     support: Mapped[list["Event"]] = relationship(
-        "Event", back_populates="employee"
+        "Event",
+        back_populates="event",
+        foreign_keys="[Event.support_id]",
     )
 
     contract: Mapped[list["Contract"]] = relationship(

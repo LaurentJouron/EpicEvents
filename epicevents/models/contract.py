@@ -21,7 +21,11 @@ class ContractManager:
     def get_contract_by_id(self, contract_id):
         with Session() as session:
             with session.begin():
-                return session.query(Contract).get(contract_id)
+                return (
+                    session.query(Contract)
+                    .filter(Contract.id == contract_id)
+                    .first()
+                )
 
     def get_all_contract(self):
         with Session() as session:

@@ -26,7 +26,7 @@ class EventManager:
             with session.begin():
                 return (
                     session.query(Event)
-                    .filter_by(start_date=start_date)
+                    .filter(Event.start_date == start_date)
                     .first()
                 )
 
@@ -54,17 +54,19 @@ class Event(Model):
 
     commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
     commercial: Mapped["Employee"] = relationship(
-        "Employee", back_populates="event"
+        "Employee",
+        back_populates="commercial",
+        foreign_keys="[Event.commercial_id]",
     )
 
     support_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
     support: Mapped["Employee"] = relationship(
-        "Employee", back_populates="event"
+        "Employee", back_populates="event", foreign_keys="[Event.support_id]"
     )
 
     contract_id: Mapped[int] = mapped_column(ForeignKey("contract.id"))
-    contract: Mapped["Event"] = relationship(
-        "Event", back_populates="contract"
+    contract: Mapped["Contract"] = relationship(
+        "Contract", back_populates="event"
     )
 
     def __repr__(self):

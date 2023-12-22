@@ -46,12 +46,14 @@ class ClientManager:
     def get_client_by_username(self, username):
         with Session() as session:
             with session.begin():
-                session.query(Client).filter_by(username=username).first()
+                return (
+                    session.query(Client).filter_by(username=username).first()
+                )
 
     def get_client_by_email(self, email):
         with Session() as session:
             with session.begin():
-                session.query(Client).filter_by(email=email).first()
+                return session.query(Client).filter_by(email=email).first()
 
     def get_client_by_phone(self, phone):
         with Session() as session:
