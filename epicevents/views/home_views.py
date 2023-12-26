@@ -1,18 +1,15 @@
 from epicevents.utils.bases.menus import BaseMenu
+from epicevents.utils.bases.views import BaseView
 
 
-class ReceptionView(BaseMenu):
-    authentication_menu: dict = {"1": "Login", "2": "Exit"}
-
-    def display_menu(self, menu_dict):
-        self._display_menu(menu_dict=menu_dict)
-        return self._response_menu(menu_dict=menu_dict)
-
+class ReceptionView(BaseView):
     def welcome(self):
-        self._space_presentation(" Welcome on << EPIC EVENTS>> ")
+        welcome = " Welcome on << EPIC EVENTS >> "
+        self._display_centered_title(welcome)
 
     def follow_instructions(self):
-        self._space_presentation("Please follow the instructions below")
+        instructions = "Follow the instructions below \n"
+        self._display_centered_title(instructions, stars=False)
 
 
 class HomeView(BaseMenu):
@@ -22,14 +19,10 @@ class HomeView(BaseMenu):
         "3": "...",
     }
 
-    def display_menu(self, menu_dict):
-        self._display_menu(menu_dict=menu_dict)
-        return self._response_menu(menu_dict=menu_dict)
 
-
-class ExitView(BaseMenu):
+class ExitView(BaseView):
     def exit_program(self):
-        self._space_presentation(" EXIT EPIC EVENTS ")
+        self._display_centered_title(" EXIT EPIC EVENTS ")
 
     def good_by(self):
         self._space_presentation("Good day and see you soon...\n")

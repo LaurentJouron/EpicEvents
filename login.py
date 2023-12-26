@@ -9,10 +9,12 @@ class Login(BaseView):
         return username, password
 
     def code_login(self, password):
-        password_hash = pbkdf2_sha256.using(salt_size=64).hash(password)
-        return password_hash
+        return pbkdf2_sha256.using(salt_size=64).hash(password)
 
-    def decode_login(self, password, password_hash):
+    def decode_login(self, password_hash):
+        return  # decode password_hash
+
+    def verify_login(self, password, password_hash):
         return pbkdf2_sha256.verify(password, password_hash)
 
 
@@ -20,12 +22,11 @@ login = Login()
 
 # Exemple d'utilisation
 username, password = login.get_login()
-password_hash = login.code_login(password)
+password_hash = login.decode_login(password)
 print(password_hash)
 
-# Simulation d'une tentative de connexion
 entered_password = "motdepasse123"
-if login.decode_login(entered_password, password_hash):
+if login.verify_login(entered_password, password_hash):
     print("Connexion réussie")
 else:
     print("Échec de la connexion")

@@ -7,9 +7,10 @@ name = "pypi"
 pytest = "*"
 passlib = "*"
 sqlalchemy = "*"
-typer = "*"
 python-dotenv = "*"
 pyjwt = {extras = ["crypto"], version = "*"}
+typer = {extras = ["all"], version = "*"}
+rich = "*"
 
 [dev-packages]
 

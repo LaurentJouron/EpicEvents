@@ -22,6 +22,7 @@ class ReceptionController(BaseController):
 
             elif choice == "3":
                 return ExitController()  # Exit
+        return ExitController()  # Exit
 
 
 class HomeController(BaseController):

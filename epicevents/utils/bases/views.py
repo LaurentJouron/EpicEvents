@@ -1,177 +1,82 @@
-import re
-
-from epicevents.utils.contants import SIZE_LINE
-
-
-def _get_string(var):
-    """
-    Collect a string input from the user.
-
-    Args:
-        prompt (str): The input prompt.
-        validator (function, optional): A validation function.
-        Defaults to None.
-
-    Returns:
-        str: The user's input.
-    """
-    pattern = r"^[a-zA-Z -àçéëêèïîôûù]+$"
-    if re.match(pattern, var):
-        return True
-    else:
-        return False
-
-
-def _get_int(var):
-    """
-    Collect an integer input from the user.
-
-    Args:
-        prompt (str): The input prompt.
-        validator (function, optional): A validation function.
-        Defaults to None.
-
-    Returns:
-        int: The user's input as an integer.
-    """
-    return var.isdigit()
+from rich import print
+from rich.console import Console
+from rich.text import Text
+from rich.prompt import Prompt
 
 
 class BaseView:
-    string_validator = _get_string
-    integer_validator = _get_int
+    def __init__(self):
+        super().__init__()
+        self.console = Console()
 
-    def _get_string(self, prompt, validator=None):
-        """
-        Collect a string input from the user.
+    def _display_centered_title(self, title, stars=True):
+        padding = (self.console.width - len(title)) // 2
+        text = Text()
+        if stars:
+            text.append(" " * padding)
+            text.append("✨" * 1, style="bright_blue")
+            text.append(" " + title + " ", style="bold blue")
+            text.append("✨" * 1, style="bright_blue")
+            text.append(" " * padding)
+        else:
+            text.append(" " * padding)
+            text.append(" " * 3 + title + " ", style="bold blue")
+            text.append(" " * 3)
+            text.append(" " * padding)
+        self.console.print(text)
 
-        Args:
-            prompt (str): The input prompt.
-            validator (function, optional): A validation function.
-            Defaults to None.
+    def __display_test(prompt, style="bold white"):
+        print(f"[{style}]{prompt}[/{style}]")
 
-        Returns:
-            str: The user's input.
-        """
-        validator = validator or type(self).string_validator
-        while True:
-            answer = input(prompt).strip()
-            if validator(answer):
-                return answer
-
-    def _get_int(self, prompt, validator=None):
-        """
-        Collect an integer input from the user.
-
-        Args:
-            prompt (str): The input prompt.
-            validator (function, optional): A validation function.
-            Defaults to None.
-
-        Returns:
-            int: The user's input as an integer.
-        """
-        validator = validator or type(self).integer_validator
-        while True:
-            answer = input(prompt).strip()
-            if validator(answer):
-                return int(answer)
-
-    def _select_number(self):
-        """
-        Collect a number input from the user.
-
-        Returns:
-            str: The user's input as a string.
-        """
-        while True:
-            try:
-                answer = input("Select the menu number: ")
-                return answer
-            except ValueError:
-                self._message_error(answer)
-
-    def _space_presentation(self, prompt):
-        """
-        Display a presentation message with spaces.
-
-        Args:
-            prompt (str): The presentation message.
-        """
-        print(f"\n{prompt.center(SIZE_LINE, ' ')}")
-
-    def _star_presentation(self, prompt):
-        """
-        Display a presentation message with stars.
-
-        Args:
-            prompt (str): The presentation message.
-        """
-        print(f"\n{prompt.center(SIZE_LINE, '*')}")
+    def __ask_value(self, prompt, default):
+        return Prompt.ask(prompt=prompt, default=default)
 
     def _message_error(self, var=""):
-        """
-        Display a value error message.
-
-        Args:
-            var (str, optional): The variable causing the error.
-            Defaults to "".
-        """
         if var != "":
-            print(f"\n{var} is value error.")
+            self.__display_test(f"\n{var} is value error.")
         else:
-            print("Value error.")
+            self._value_error
 
-    def _message_success(self):
-        """
-        Display a success message.
-        """
-        print("Successfully.")
+    def _success_message(self):
+        self.__display_test("✔️ Success.")
 
-    def _delete_succefully(self):
-        """
-        Display a success message.
-        """
-        print("Deleted successfully.")
+    def _success_delete(self):
+        self.__display_test("✔️ Deleted successfully.")
 
-    def _updated_succefully(self):
-        """
-        Display a success message.
-        """
-        print("Updated successfully.")
-
-    def _enter_information(self):
-        """
-        Display a success message.
-        """
-        return self._star_presentation(" Enter information ")
-
-    def display_value_and_sentence(self, sentence, value):
-        print(f"\n{sentence}: {value}")
-
-    def display_made_your_choice(self):
-        """
-        Display a success message.
-        """
-        print(self._space_presentation(" MADE YOUR CHOICE "))
+    def _success_updated(self):
+        self.__display_test("✔️ Updated successfully.")
 
     def _not_found(self):
-        """
-        Display a success message.
-        """
-        print("Not found.")
+        self.__display_test("⛔️ Not found.")
+
+    def _value_error(self):
+        self.__display_test("⛔️ Value error.")
 
     def _get_username(self):
-        return self._get_string("Please enter username: ").capitalize()
+        prompt = "Enter your username"
+        default = "login username"
+        return self.__ask_value(prompt=prompt, default=default).capitalize()
 
     def _get_lastname(self):
-        return self._get_string("Enter the last name: ").capitalize()
+        prompt = "Enter your last name"
+        default = ""
+        return self.__ask_value(prompt=prompt, default=default).capitalize()
 
     def _get_name(self):
-        return self._get_string("Enter the name: ").strip().capitalize()
+        prompt = "Enter name"
+        default = ""
+        return (
+            self.__ask_value(prompt=prompt, default=default)
+            .strip()
+            .capitalize()
+        )
 
     def _get_by_id(self):
-        return self._get_int("Enter ID: ")
+        prompt = "Enter ID: "
+        default = ""
+        return self.__ask_value(prompt=prompt, default=default)
 
     def _get_password(self):
-        return input("Please enter password: ").upper()
+        prompt = "Please enter password: "
+        default = ""
+        return self.__ask_value(prompt=prompt, default=default).upper()
