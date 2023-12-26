@@ -12,6 +12,10 @@ class EmployeeView(BaseMenu):
         "7": "Return",
     }
 
+    def display_menu(self):
+        self._display_menu("Employee menu", menu_dict=self.employee_menu)
+        return self._response_menu(menu_dict=self.employee_menu)
+
     def display_employees(self, employees):
         for employee in employees:
             self.display_employee(employee)

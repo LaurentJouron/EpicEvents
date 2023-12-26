@@ -1,6 +1,7 @@
 from epicevents.utils.bases.controllers import BaseController
 from epicevents.utils.contants import CONFIRMATION_MENU
 
+from ..controllers import employee_controllers as employee
 from ..views import HomeView, ReceptionView, ExitView
 
 reception_view = ReceptionView()
@@ -13,7 +14,7 @@ class ReceptionController(BaseController):
         reception_view.welcome()
         reception_view.follow_instructions()
         while True:
-            choice = home_view.display_menu(home_view.home_menu)
+            choice = home_view.display_menu()
             if choice == "1":
                 return ...  # Login
 
@@ -30,14 +31,14 @@ class HomeController(BaseController):
         while True:
             choice = home_view.display_menu(home_view.home_menu)
             if choice == "1":
-                return ...  # Client for commercial
-
+                return employee.EmployeeController()
             elif choice == "2":
-                return ...  # Support for technician
-
+                return ...  # client
             elif choice == "3":
-                return ...  # Gestion for manager
+                return ...  # event
             elif choice == "4":
+                return ...  # contract
+            elif choice == "5":
                 return ExitController()
 
 

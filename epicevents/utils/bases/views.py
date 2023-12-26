@@ -1,82 +1,91 @@
-from rich import print
+import platform
+import os
 from rich.console import Console
-from rich.text import Text
-from rich.prompt import Prompt
 
 
 class BaseView:
-    def __init__(self):
-        super().__init__()
-        self.console = Console()
+    reception_color = "bold blue"
+    error_color = "bold red"
+    phrase_color = "bold white"
+    console = Console(width=100)
 
+    # Reception presentation
     def _display_centered_title(self, title, stars=True):
-        padding = (self.console.width - len(title)) // 2
-        text = Text()
+        style = self.reception_color
+        justify = "center"
         if stars:
-            text.append(" " * padding)
-            text.append("✨" * 1, style="bright_blue")
-            text.append(" " + title + " ", style="bold blue")
-            text.append("✨" * 1, style="bright_blue")
-            text.append(" " * padding)
+            self.console.print("✨" + title + "✨", style=style, justify=justify)
         else:
-            text.append(" " * padding)
-            text.append(" " * 3 + title + " ", style="bold blue")
-            text.append(" " * 3)
-            text.append(" " * padding)
-        self.console.print(text)
+            self.console.print(title, style=style, justify=justify)
 
-    def __display_test(prompt, style="bold white"):
-        print(f"[{style}]{prompt}[/{style}]")
+    def _display_left_phrase(self, title):
+        style = self.phrase_color
+        justify = "left"
+        return self.console.print(title, style=style, justify=justify)
 
-    def __ask_value(self, prompt, default):
-        return Prompt.ask(prompt=prompt, default=default)
+    # Success presentation
+    def __success(self, prompt):
+        style = self.reception_color
+        justify = "left"
+        self.console.print("✔️ " + prompt, style=style, justify=justify)
+
+    def _success_message(self):
+        prompt = "Success"
+        self.__success(prompt)
+
+    def _success_delete(self):
+        prompt = "Deleted successfully."
+        self.__success(prompt)
+
+    def _success_updated(self):
+        prompt = "Updated successfully."
+        self.__success(prompt)
+
+    # Error presentation
+    def __error(self, prompt):
+        style = self.error_color
+        justify = "left"
+        self.console.print("⛔️ " + prompt, style=style, justify=justify)
 
     def _message_error(self, var=""):
         if var != "":
-            self.__display_test(f"\n{var} is value error.")
+            self.__error(f"{var} is value error.")
         else:
-            self._value_error
-
-    def _success_message(self):
-        self.__display_test("✔️ Success.")
-
-    def _success_delete(self):
-        self.__display_test("✔️ Deleted successfully.")
-
-    def _success_updated(self):
-        self.__display_test("✔️ Updated successfully.")
+            self.__error("Value error.")
 
     def _not_found(self):
-        self.__display_test("⛔️ Not found.")
+        self.__error("Not found.")
 
-    def _value_error(self):
-        self.__display_test("⛔️ Value error.")
+    # Answer presentation
+    def __get_answer(self, prompt):
+        return self.console.input(prompt)
 
     def _get_username(self):
-        prompt = "Enter your username"
-        default = "login username"
-        return self.__ask_value(prompt=prompt, default=default).capitalize()
+        prompt = "\nPlease enter the [i][bold red]username[/][/i] ? "
+        return self.__get_answer(prompt=prompt).strip().capitalize()
 
     def _get_lastname(self):
-        prompt = "Enter your last name"
-        default = ""
-        return self.__ask_value(prompt=prompt, default=default).capitalize()
+        prompt = "\nPlease enter the [bold red]lastname[/] ? "
+        return self.__get_answer(prompt=prompt).capitalize()
 
     def _get_name(self):
-        prompt = "Enter name"
-        default = ""
-        return (
-            self.__ask_value(prompt=prompt, default=default)
-            .strip()
-            .capitalize()
-        )
+        prompt = "\nPlease enter the [bold red]name[/] ? "
+        return self.__get_answer(prompt=prompt).capitalize()
 
     def _get_by_id(self):
-        prompt = "Enter ID: "
-        default = ""
-        return self.__ask_value(prompt=prompt, default=default)
+        prompt = "\nPlease enter the [bold red]ID[/] ? "
+        return self.__get_answer(prompt=prompt).strip().capitalize()
 
     def _get_password(self):
-        prompt = "Please enter password: "
-        default = ""
-        return self.__ask_value(prompt=prompt, default=default).upper()
+        prompt = "\nPlease enter the [bold red]password[/] ? "
+        return self.__get_answer(prompt=prompt).strip().upper()
+
+    def _select_number(self):
+        prompt = "\nPlease select [bold red]number[/] ? "
+        return self.__get_answer(prompt=prompt)
+
+    def clean_console(self):
+        if platform.system() == "Windows":
+            os.system("cls")
+        elif platform.system() == "Linux":
+            os.system("clear")

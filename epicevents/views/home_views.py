@@ -4,7 +4,7 @@ from epicevents.utils.bases.views import BaseView
 
 class ReceptionView(BaseView):
     def welcome(self):
-        welcome = " Welcome on << EPIC EVENTS >> "
+        welcome = " Welcome on EPIC EVENTS "
         self._display_centered_title(welcome)
 
     def follow_instructions(self):
@@ -14,15 +14,22 @@ class ReceptionView(BaseView):
 
 class HomeView(BaseMenu):
     home_menu: dict = {
-        "1": "...",
-        "2": "...",
-        "3": "...",
+        "1": "Employee",
+        "2": "Client",
+        "3": "Event",
+        "4": "Contract",
+        "5": "Exit",
     }
+
+    def display_menu(self):
+        self._display_menu("Home menu", menu_dict=self.home_menu)
+        return self._response_menu(menu_dict=self.home_menu)
 
 
 class ExitView(BaseView):
     def exit_program(self):
-        self._display_centered_title(" EXIT EPIC EVENTS ")
+        exiting = " EXIT EPIC EVENTS "
+        self._display_centered_title(exiting, stars=False)
 
     def good_by(self):
-        self._space_presentation("Good day and see you soon...\n")
+        self._space_presentation("Good day and see you soon...")

@@ -1,9 +1,8 @@
-from passlib.hash import pbkdf2_sha256
-
 from epicevents.utils.bases.controllers import BaseController
-from ..controllers import home_controllers as home
+
 from ..models import EmployeeManager
 from ..views import EmployeeView
+from ..controllers import home_controllers as home
 
 view = EmployeeView()
 model = EmployeeManager()
@@ -27,14 +26,6 @@ class EmployeeController(BaseController):
                 return EmployeeDisplayAll()
             elif choice == "7":
                 return home.HomeController()
-
-
-class EmployeeLogin(BaseController):
-    def run(self):
-        username = view.get_username()
-        password = view.get_password()
-        password_hash = ...
-        return pbkdf2_sha256.verify(password, password_hash)
 
 
 class EmployeeCreationController(BaseController):
