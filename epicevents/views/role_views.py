@@ -1,4 +1,4 @@
-from epicevents.utils.bases.menus import BaseMenu
+from epicevents.views.utils.bases.menus import BaseMenu
 
 
 class RoleView(BaseMenu):

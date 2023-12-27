@@ -1,5 +1,5 @@
-from epicevents.utils.bases.menus import BaseMenu
-from epicevents.utils.bases.views import BaseView
+from epicevents.views.utils.bases.menus import BaseMenu
+from epicevents.views.utils.bases.views import BaseView
 
 
 class ReceptionView(BaseView):
@@ -8,7 +8,7 @@ class ReceptionView(BaseView):
         self._display_centered_title(welcome)
 
     def follow_instructions(self):
-        instructions = "Follow the instructions below \n"
+        instructions = "Follow the instructions below"
         self._display_centered_title(instructions, stars=False)
 
 
@@ -18,7 +18,8 @@ class HomeView(BaseMenu):
         "2": "Client",
         "3": "Event",
         "4": "Contract",
-        "5": "Exit",
+        "5": "Role",
+        "6": "Exit",
     }
 
     def display_menu(self):
