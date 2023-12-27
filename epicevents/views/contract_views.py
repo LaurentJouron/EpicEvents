@@ -1,4 +1,4 @@
-from epicevents.views.utils.bases.menus import BaseMenu
+from epicevents.utils.bases.menus import BaseMenu
 
 
 class ContractView(BaseMenu):

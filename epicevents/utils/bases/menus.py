@@ -1,4 +1,4 @@
-from epicevents.views.utils.bases.views import BaseView
+from epicevents.utils.bases.views import BaseView
 
 
 class BaseMenu(BaseView):
@@ -9,7 +9,6 @@ class BaseMenu(BaseView):
 
     def _response_menu(self, menu_dict):
         choice = self._select_number()
-        for key, value in menu_dict.items():
-            if value == choice:
-                return key
+        if choice in menu_dict:
+            return choice
         return self._message_error(choice)

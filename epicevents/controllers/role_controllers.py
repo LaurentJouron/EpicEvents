@@ -1,4 +1,4 @@
-from epicevents.views.utils.bases.controllers import BaseController
+from epicevents.utils.bases.controllers import BaseController
 from ..models import RoleManager
 from ..views import RoleView
 from ..controllers import home_controllers
@@ -10,7 +10,7 @@ manager = RoleManager()
 class RoleController(BaseController):
     def run(self):
         while True:
-            choice = view.display_menu(view.role_menu)
+            choice = view.display_menu()
             if choice == "1":
                 return AddRoleController()
 
@@ -32,19 +32,20 @@ class RoleController(BaseController):
 
 class AddRoleController(BaseController):
     def run(self):
-        role_name = view.get_role_name()
-        existing_role = manager.get_name(role_name)
+        role_name = view.get_name()
+        existing_role = manager.add_role(role_name)
         if existing_role:
             view.exist_error(role_name)
             return RoleController()
         manager.add_role(name=role_name)
-        view.success_message(role_name)
+        view.success_message()
         return RoleController()
 
 
 class UpdateRoleController(BaseController):
-    def run(self, role_id):
-        existing_role = manager.get_by_id(role_id)
+    def run(self):
+        role_id = view.get_id()
+        existing_role = manager.get_id(role_id)
         if not existing_role:
             view.invalid_id()
             return RoleController()
@@ -56,7 +57,8 @@ class UpdateRoleController(BaseController):
 
 
 class GetRoleByIdController(BaseController):
-    def run(self, role_id):
+    def run(self):
+        role_id = view.get_id()
         role = manager.get_by_id(role_id)
         if role:
             view.role_information(role)
@@ -67,6 +69,7 @@ class GetRoleByIdController(BaseController):
 
 class GetRoleByNameController(BaseController):
     def run(self, name):
+        name = view.get_name()
         role = manager.get_by_name(name)
         if role:
             view.role_information(role)

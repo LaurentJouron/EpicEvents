@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Date, Text, Integer
+from sqlalchemy import ForeignKey, Date, Text, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from epicevents.database import Model, Session
@@ -9,6 +9,7 @@ class EventManager:
         with Session() as session:
             with session.begin():
                 new_event = Event(
+                    name=kwargs["name"],
                     start_date=kwargs["start_date"],
                     end_date=kwargs["end_date"],
                     address=kwargs["address"],
@@ -43,6 +44,7 @@ class EventManager:
 class Event(Model):
     __tablename__ = "event"
     id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
     start_date: Mapped[Date] = mapped_column(Date)
     end_date: Mapped[Date] = mapped_column(Date)
     address: Mapped[str] = mapped_column(Text)
@@ -72,6 +74,7 @@ class Event(Model):
     def __repr__(self):
         return (
             f"Event(id:{self.id}"
+            f"name: {self.name}"
             f"start_date: {self.start_date}"
             f"end_date: {self.end_date}"
             f"address: {self.address}"

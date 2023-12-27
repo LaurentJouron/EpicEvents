@@ -1,12 +1,14 @@
 import platform
 import os
 from rich.console import Console
+from rich.prompt import IntPrompt
 
 
 class BaseView:
     reception_color = "bold blue"
-    error_color = "bold red"
+    error_color = "bold magenta"
     phrase_color = "bold white"
+    success_color = "bold green"
     console = Console(width=100)
 
     # Reception presentation
@@ -25,21 +27,18 @@ class BaseView:
 
     # Success presentation
     def __success(self, prompt):
-        style = self.reception_color
+        style = self.success_color
         justify = "left"
         self.console.print("✔️ " + prompt, style=style, justify=justify)
 
     def _success_message(self):
-        prompt = "Success"
-        self.__success(prompt)
+        self.__success("Success.")
 
     def _success_delete(self):
-        prompt = "Deleted successfully."
-        self.__success(prompt)
+        self.__success("Deleted successfully.")
 
     def _success_updated(self):
-        prompt = "Updated successfully."
-        self.__success(prompt)
+        self.__success("Updated successfully.")
 
     # Error presentation
     def __error(self, prompt):
@@ -56,32 +55,37 @@ class BaseView:
     def _not_found(self):
         self.__error("Not found.")
 
+    def _exist_error(self, var):
+        return self.__error(f"{var} is already registered.")
+
     # Answer presentation
     def __get_answer(self, prompt):
         return self.console.input(prompt)
 
     def _get_username(self):
-        prompt = "\nPlease enter the [i][bold red]username[/][/i] ? "
+        prompt = (
+            f"\nPlease enter the [i][{self.reception_color}]username[/][/i] ? "
+        )
         return self.__get_answer(prompt=prompt).strip().capitalize()
 
     def _get_lastname(self):
-        prompt = "\nPlease enter the [bold red]lastname[/] ? "
+        prompt = f"\nPlease enter the [{self.reception_color}]lastname[/] ? "
         return self.__get_answer(prompt=prompt).capitalize()
 
     def _get_name(self):
-        prompt = "\nPlease enter the [bold red]name[/] ? "
+        prompt = f"\nPlease enter the [{self.reception_color}]name[/] ? "
         return self.__get_answer(prompt=prompt).capitalize()
 
-    def _get_by_id(self):
-        prompt = "\nPlease enter the [bold red]ID[/] ? "
+    def _get_id(self):
+        prompt = f"\nPlease enter the [{self.reception_color}]ID[/] ? "
         return self.__get_answer(prompt=prompt).strip().capitalize()
 
     def _get_password(self):
-        prompt = "\nPlease enter the [bold red]password[/] ? "
+        prompt = f"\nPlease enter the [{self.reception_color}]password[/] ? "
         return self.__get_answer(prompt=prompt).strip().upper()
 
     def _select_number(self):
-        prompt = "\nPlease select [bold red]number[/] ? "
+        prompt = f"\nPlease select [{self.reception_color}]number[/] ? "
         return self.__get_answer(prompt=prompt)
 
     def clean_console(self):

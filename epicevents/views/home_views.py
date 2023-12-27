@@ -1,5 +1,5 @@
-from epicevents.views.utils.bases.menus import BaseMenu
-from epicevents.views.utils.bases.views import BaseView
+from epicevents.utils.bases.menus import BaseMenu
+from epicevents.utils.bases.views import BaseView
 
 
 class ReceptionView(BaseView):

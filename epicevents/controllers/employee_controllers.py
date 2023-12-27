@@ -1,4 +1,4 @@
-from epicevents.views.utils.bases.controllers import BaseController
+from epicevents.utils.bases.controllers import BaseController
 
 from ..models import EmployeeManager
 from ..views import EmployeeView

@@ -1,15 +1,15 @@
 import typer
 
-from .views.home_views import ExitView
-from .controllers import ReceptionController
 from .database import Model, engine
+from .views.home_views import ExitView
+from .controllers import HomeController
 
 exit_view = ExitView()
 
 
 def main():
     Model.metadata.create_all(engine)
-    controller = ReceptionController()
+    controller = HomeController()
     while controller is not None:
         next_controller = controller.run()
         controller = next_controller
