@@ -11,7 +11,7 @@ class ContractManager:
                 new_contract = Contract(
                     total_amount=kwargs["total_amount"],
                     outstanding_amount=kwargs["outstanding_amount"],
-                    date_creation=kwargs["date_creation"],
+                    creation_date=kwargs["creation_date"],
                     status=kwargs["status"],
                     gestion_id=kwargs["gestion_id"],
                     event_id=kwargs["event_id"],
@@ -37,23 +37,27 @@ class Contract(Model):
     __tablename__ = "contract"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(50))
     total_amount: Mapped[str] = mapped_column(String(50))
     outstanding_amount: Mapped[str] = mapped_column(String(50))
-    date_creation: Mapped[Date] = mapped_column(Date)
+    creation_date: Mapped[Date] = mapped_column(Date)
     status: Mapped[bool] = mapped_column(default=False)
 
     gestion_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    gestion: Mapped[list["Employee"]] = relationship(back_populates="gestion")
+    gestion: Mapped["Employee"] = relationship(back_populates="gestion")
 
     event_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
-    event: Mapped["Contract"] = relationship(back_populates="event")
+    event: Mapped["Event"] = relationship(
+        back_populates="contracts", single_parent=True
+    )
 
     def __repr__(self):
         return (
             f"Contract(id:{self.id}"
+            f"name: {self.name}"
             f"total_amount: {self.total_amount}"
             f"outstanding_amount: {self.outstanding_amount}"
-            f"date_creation: {self.date_creation}"
+            f"creation_date: {self.creation_date}"
             f"status : {self.status}"
             f"event_start_date : {self.event.start_date!r}"
         )

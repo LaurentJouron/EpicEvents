@@ -1,5 +1,6 @@
 from epicevents.utils.bases.menus import BaseMenu
 from epicevents.utils.bases.views import BaseView
+from epicevents.utils.contants import CONFIRMATION_MENU
 
 
 class ReceptionView(BaseView):
@@ -23,15 +24,20 @@ class HomeView(BaseMenu):
         "6": "Exit",
     }
 
-    def display_menu(self):
+    def choice_menu(self):
         self._display_menu("Home menu", menu_dict=self.home_menu)
         return self._response_menu(menu_dict=self.home_menu)
 
 
-class ExitView(BaseView):
+class ExitView(BaseMenu):
     def exit_program(self):
         exiting = " EXIT EPIC EVENTS "
-        self._display_centered_title(exiting, stars=False)
+        self._display_centered_title(title=exiting, stars=False)
 
     def good_by(self):
-        self._space_presentation("Good day and see you soon...")
+        phrase = "Good day and see you soon..."
+        self._display_centered_title(title=phrase, stars=False)
+
+    def choice_menu(self):
+        self._display_menu("Confirm exiting", menu_dict=CONFIRMATION_MENU)
+        return self._response_menu(menu_dict=CONFIRMATION_MENU)

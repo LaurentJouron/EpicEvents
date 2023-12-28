@@ -10,9 +10,9 @@ manager = RoleManager()
 class RoleController(BaseController):
     def run(self):
         while True:
-            choice = view.display_menu()
+            choice = view.menu_choice()
             if choice == "1":
-                return AddRoleController()
+                return CreateRoleController()
 
             elif choice == "2":
                 return UpdateRoleController()
@@ -24,13 +24,16 @@ class RoleController(BaseController):
                 return GetRoleByNameController()
 
             elif choice == "5":
-                return GetAllRoleController()
+                return DeleteRoleController()
 
             elif choice == "6":
-                return home_controllers()
+                return GetAllRoleController()
+
+            elif choice == "7":
+                return home_controllers.HomeController()
 
 
-class AddRoleController(BaseController):
+class CreateRoleController(BaseController):
     def run(self):
         role_name = view.get_name()
         existing_role = manager.add_role(role_name)
@@ -76,6 +79,11 @@ class GetRoleByNameController(BaseController):
         else:
             view.invalid_name(name)
         return RoleController()
+
+
+class DeleteRoleController(BaseController):
+    def run(self):
+        ...
 
 
 class GetAllRoleController(BaseController):

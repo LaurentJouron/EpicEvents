@@ -7,11 +7,12 @@ class RoleView(BaseMenu):
         "2": "Update",
         "3": "Get by ID",
         "4": "Get by name",
-        "5": "Get all role",
-        "6": "Return",
+        "5": "Delete",
+        "6": "All",
+        "7": "Return",
     }
 
-    def display_menu(self):
+    def menu_choice(self):
         self._display_menu("Role menu", menu_dict=self.role_menu)
         return self._response_menu(menu_dict=self.role_menu)
 
@@ -23,9 +24,9 @@ class RoleView(BaseMenu):
 
     def get_id(self):
         self._display_title("ID")
-        id = self._get_id()
+        ident = self._get_id()
         self.clean_console()
-        return id
+        return ident
 
     def message_error(self, var):
         return self._message_error(var)

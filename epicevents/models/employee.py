@@ -1,5 +1,6 @@
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import List
 
 from ..models.client import Client
 
@@ -85,31 +86,31 @@ class Employee(Model):
     password: Mapped[str] = mapped_column(String(500))
 
     role_id: Mapped[int] = mapped_column(ForeignKey("role.id"))
-    role: Mapped[list["Role"]] = relationship(back_populates="employees")
+    role: Mapped["Role"] = relationship(back_populates="employee")
 
-    client: Mapped[list["Client"]] = relationship(back_populates="commercial")
-
-    commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    commercial: Mapped[list["Employee"]] = relationship(
-        back_populates="client", foreign_keys=[commercial_id]
+    commercial: Mapped[List["Client"]] = relationship(
+        back_populates="commercial"
+    )
+    commercial: Mapped[List["Event"]] = relationship(
+        back_populates="commercial"
     )
 
-    support: Mapped[list["Event"]] = relationship(
+    support: Mapped[List["Event"]] = relationship(
         back_populates="support",
     )
 
-    contract: Mapped[list["Contract"]] = relationship(back_populates="gestion")
+    gestion: Mapped[List["Contract"]] = relationship(back_populates="gestion")
 
     def __repr__(self):
         return (
-            f"Employee(id:{self.id}, "
-            f"username: {self.username}, "
-            f"last_name: {self.last_name}, "
-            f"email: {self.email}, "
-            f"phone: {self.phone}, "
-            f"password: {self.password}, "
-            f"role: {self.role}, "
-            f"client: {self.client.compagny_name!r}, "
-            f"support: {self.support!r}, "
+            f"Employee(id:{self.id}"
+            f"username: {self.username} {self.last_name}"
+            f"last_name: {self.last_name}"
+            f"email: {self.email}"
+            f"phone: {self.phone}"
+            f"password: {self.password}"
+            f"role: {self.role}"
+            f"client: {self.client.compagny_name!r}"
+            f"support: {self.support!r}"
             f"commercial: {self.commercial!r})"
         )

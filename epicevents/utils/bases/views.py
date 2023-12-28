@@ -1,99 +1,90 @@
-import platform
-import os
 from rich.console import Console
+from ..contants import SIZE_LINE
 
 
 class BaseView:
-    reception_color = "bold blue"
-    error_color = "bold magenta"
-    phrase_color = "bold white"
-    success_color = "bold green"
-    console = Console(width=100)
+    RECEPTION_COLOR = "bold blue"
+    ERROR_COLOR = "bold magenta"
+    PHRASE_COLOR = "bold white"
+    SUCCESS_COLOR = "bold green"
+    CENTER = "center"
+    LEFT = "left"
+    console = Console(width=SIZE_LINE)
 
     # Reception presentation
     def _display_centered_title(self, title, stars=True):
-        style = self.reception_color
-        justify = "center"
-        if stars:
-            self.console.print("✨" + title + "✨", style=style, justify=justify)
-        else:
-            self.console.print(title, style=style, justify=justify)
+        title_str = f"✨{title}✨" if stars else title
+        self.console.print(
+            title_str, style=self.RECEPTION_COLOR, justify=self.CENTER
+        )
 
     def _display_left_phrase(self, title):
-        style = self.phrase_color
-        justify = "left"
-        return self.console.print(title, style=style, justify=justify)
+        self.console.print(title, style=self.PHRASE_COLOR, justify=self.LEFT)
 
     def _display_title(self, title):
-        self.console.rule(f"[bold blue]{title}")
+        self.console.rule(f"[{self.RECEPTION_COLOR}]{title}")
 
     # Success presentation
-    def __success(self, prompt):
-        style = self.success_color
-        justify = "left"
-        self.console.print("✔️ " + prompt, style=style, justify=justify)
-
-    def _success_message(self):
-        self.__success("Success.")
+    def _success_message(self, prompt="Success."):
+        self.console.print(
+            f"✔️ {prompt}", style=self.SUCCESS_COLOR, justify=self.LEFT
+        )
 
     def _success_delete(self):
-        self.__success("Deleted successfully.")
+        self._success_message("Deleted successfully.")
 
     def _success_updated(self):
-        self.__success("Updated successfully.")
+        self._success_message("Updated successfully.")
 
     # Error presentation
-    def __error(self, prompt):
-        style = self.error_color
-        justify = "left"
-        self.console.print("⛔️ " + prompt, style=style, justify=justify)
-
     def _message_error(self, var=""):
-        if var != "":
-            self.__error(f"{var} is value error.")
-        else:
-            self.__error("Value error.")
+        var_msg = f"{var} is value error." if var else "Value error."
+        self.console.print(
+            f"⛔️ {var_msg}", style=self.ERROR_COLOR, justify=self.LEFT
+        )
 
     def _not_found(self):
-        self.__error("Not found.")
+        self._message_error("Not found.")
 
     def _exist_error(self, var):
-        return self.__error(f"{var} is already registered.")
+        self._message_error(f"{var} is already registered.")
 
     # Answer presentation
-    def __get_answer(self, prompt):
+    def _get_answer(self, prompt):
         return self.console.input(prompt)
 
-    def _get_username(self):
+    def _get_answer_item(self, item):
         prompt = (
-            f"\nPlease enter the [i][{self.reception_color}]username: [/][/i]"
+            f"\nPlease enter the [i][{self.RECEPTION_COLOR}]{item}: [/][/i]"
         )
-        return self.__get_answer(prompt=prompt).strip().capitalize()
+        return self._get_answer(prompt=prompt)
+
+    def _get_username(self):
+        return self._get_answer_item("username").strip().capitalize()
 
     def _get_lastname(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]lastname: [/]"
-        return self.__get_answer(prompt=prompt).capitalize()
+        return self._get_answer_item("lastname").capitalize()
 
     def _get_name(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]name: [/]"
-        return self.__get_answer(prompt=prompt).capitalize()
+        return self._get_answer_item("name").capitalize()
+
+    def _get_email(self):
+        return self._get_answer_item("email").lower()
+
+    def _get_phone_number(self):
+        return self._get_answer_item("phone number")
 
     def _get_id(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]ID: [/]"
-        return self.__get_answer(prompt=prompt).strip().capitalize()
+        return self._get_answer_item("ID").strip()
 
     def _get_password(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]password: [/]"
-        return self.__get_answer(prompt=prompt).strip().upper()
+        return self._get_answer_item("password").strip().upper()
 
     def _select_number(self):
-        prompt = f"\nPlease select [{self.reception_color}]number:[/] "
-        number = self.__get_answer(prompt=prompt)
+        number = self._get_answer_item("number").strip()
         self.clean_console()
         return number
 
+    # Clean console
     def clean_console(self):
-        if platform.system() == "Windows":
-            os.system("cls")
-        elif platform.system() == "Linux":
-            os.system("clear")
+        self.console.clear()
