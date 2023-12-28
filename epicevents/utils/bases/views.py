@@ -1,7 +1,6 @@
 import platform
 import os
 from rich.console import Console
-from rich.prompt import IntPrompt
 
 
 class BaseView:
@@ -24,6 +23,9 @@ class BaseView:
         style = self.phrase_color
         justify = "left"
         return self.console.print(title, style=style, justify=justify)
+
+    def _display_title(self, title):
+        self.console.rule(f"[bold blue]{title}")
 
     # Success presentation
     def __success(self, prompt):
@@ -64,29 +66,31 @@ class BaseView:
 
     def _get_username(self):
         prompt = (
-            f"\nPlease enter the [i][{self.reception_color}]username[/][/i] ? "
+            f"\nPlease enter the [i][{self.reception_color}]username: [/][/i]"
         )
         return self.__get_answer(prompt=prompt).strip().capitalize()
 
     def _get_lastname(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]lastname[/] ? "
+        prompt = f"\nPlease enter the [{self.reception_color}]lastname: [/]"
         return self.__get_answer(prompt=prompt).capitalize()
 
     def _get_name(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]name[/] ? "
+        prompt = f"\nPlease enter the [{self.reception_color}]name: [/]"
         return self.__get_answer(prompt=prompt).capitalize()
 
     def _get_id(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]ID[/] ? "
+        prompt = f"\nPlease enter the [{self.reception_color}]ID: [/]"
         return self.__get_answer(prompt=prompt).strip().capitalize()
 
     def _get_password(self):
-        prompt = f"\nPlease enter the [{self.reception_color}]password[/] ? "
+        prompt = f"\nPlease enter the [{self.reception_color}]password: [/]"
         return self.__get_answer(prompt=prompt).strip().upper()
 
     def _select_number(self):
-        prompt = f"\nPlease select [{self.reception_color}]number[/] ? "
-        return self.__get_answer(prompt=prompt)
+        prompt = f"\nPlease select [{self.reception_color}]number:[/] "
+        number = self.__get_answer(prompt=prompt)
+        self.clean_console()
+        return number
 
     def clean_console(self):
         if platform.system() == "Windows":

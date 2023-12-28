@@ -16,16 +16,19 @@ class RoleView(BaseMenu):
         return self._response_menu(menu_dict=self.role_menu)
 
     def get_name(self):
-        return self._get_name()
+        self._display_title("name")
+        name = self._get_name()
+        self.clean_console()
+        return name
 
     def get_id(self):
-        return self._get_id()
+        self._display_title("ID")
+        id = self._get_id()
+        self.clean_console()
+        return id
 
     def message_error(self, var):
         return self._message_error(var)
-
-    def role_information(self, var):
-        print(f"Current Role Information: {var}")
 
     def success_message(self):
         return self._success_message()

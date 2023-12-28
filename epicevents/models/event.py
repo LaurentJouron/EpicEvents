@@ -52,24 +52,16 @@ class Event(Model):
     notes: Mapped[str] = mapped_column(Text)
 
     client_id: Mapped[int] = mapped_column(ForeignKey("client.id"))
-    client: Mapped["Client"] = relationship("Client", back_populates="event")
+    client: Mapped[list["Client"]] = relationship(back_populates="event")
 
     commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    commercial: Mapped["Employee"] = relationship(
-        "Employee",
-        back_populates="commercial",
-        foreign_keys="[Event.commercial_id]",
-    )
+    commercial: Mapped["Employee"] = relationship(back_populates="commercial")
 
     support_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    support: Mapped["Employee"] = relationship(
-        "Employee", back_populates="event", foreign_keys="[Event.support_id]"
-    )
+    support: Mapped["Employee"] = relationship(back_populates="support")
 
     contract_id: Mapped[int] = mapped_column(ForeignKey("contract.id"))
-    contract: Mapped["Contract"] = relationship(
-        "Contract", back_populates="event"
-    )
+    contracts: Mapped[list["Contract"]] = relationship(back_populates="event")
 
     def __repr__(self):
         return (

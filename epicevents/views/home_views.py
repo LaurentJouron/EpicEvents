@@ -4,6 +4,7 @@ from epicevents.utils.bases.views import BaseView
 
 class ReceptionView(BaseView):
     def welcome(self):
+        self.clean_console()
         welcome = " Welcome on EPIC EVENTS "
         self._display_centered_title(welcome)
 

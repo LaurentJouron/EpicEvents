@@ -68,7 +68,7 @@ class ClientManager:
 class Client(Model):
     __tablename__ = "client"
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
     compagny_name: Mapped[str] = mapped_column(String(300))
     information: Mapped[str] = mapped_column(Text)
     username: Mapped[str] = mapped_column(String(50))
@@ -81,12 +81,10 @@ class Client(Model):
 
     commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
     commercial: Mapped[list["Employee"]] = relationship(
-        "Employee", back_populates="client"
+        back_populates="client"
     )
 
-    event: Mapped[list["Event"]] = relationship(
-        "Event", back_populates="client"
-    )
+    event: Mapped[list["Event"]] = relationship(back_populates="client")
 
     def __repr__(self):
         return (

@@ -1,6 +1,8 @@
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from ..models.client import Client
+
 from epicevents.database import Model, Session
 
 
@@ -83,29 +85,20 @@ class Employee(Model):
     password: Mapped[str] = mapped_column(String(500))
 
     role_id: Mapped[int] = mapped_column(ForeignKey("role.id"))
-    role: Mapped[list["Role"]] = relationship(
-        "Role", back_populates="employees"
-    )
+    role: Mapped[list["Role"]] = relationship(back_populates="employees")
 
-    client: Mapped[list["Client"]] = relationship(
-        "Client", back_populates="commercial"
-    )
+    client: Mapped[list["Client"]] = relationship(back_populates="commercial")
 
-    commercial: Mapped[list["Event"]] = relationship(
-        "Event",
-        back_populates="commercial",
-        foreign_keys="[Event.commercial_id]",
+    commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
+    commercial: Mapped[list["Employee"]] = relationship(
+        back_populates="client", foreign_keys=[commercial_id]
     )
 
     support: Mapped[list["Event"]] = relationship(
-        "Event",
-        back_populates="event",
-        foreign_keys="[Event.support_id]",
+        back_populates="support",
     )
 
-    contract: Mapped[list["Contract"]] = relationship(
-        "Contract", back_populates="employee"
-    )
+    contract: Mapped[list["Contract"]] = relationship(back_populates="gestion")
 
     def __repr__(self):
         return (

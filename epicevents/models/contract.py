@@ -43,14 +43,10 @@ class Contract(Model):
     status: Mapped[bool] = mapped_column(default=False)
 
     gestion_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    gestion: Mapped[list["Employee"]] = relationship(
-        "Employee", back_populates="contract"
-    )
+    gestion: Mapped[list["Employee"]] = relationship(back_populates="gestion")
 
     event_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
-    event: Mapped["Contract"] = relationship(
-        "Contract", back_populates="event"
-    )
+    event: Mapped["Contract"] = relationship(back_populates="event")
 
     def __repr__(self):
         return (
