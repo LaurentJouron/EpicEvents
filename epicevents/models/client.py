@@ -79,8 +79,10 @@ class Client(Model):
     information: Mapped[str] = mapped_column(Text)
     creation_date: Mapped[Date] = mapped_column(Date)
     updating_date: Mapped[Date] = mapped_column(Date)
+
     commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    commercial: Mapped["Employee"] = relationship(back_populates="commercial")
+    commercial: Mapped["Employee"] = relationship(back_populates="client")
+
     event: Mapped[List["Event"]] = relationship(back_populates="client")
 
     def __repr__(self):

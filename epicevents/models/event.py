@@ -1,6 +1,5 @@
 from sqlalchemy import ForeignKey, Date, Text, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from epicevents.database import Model, Session
 
 
@@ -54,16 +53,8 @@ class Event(Model):
     client_id: Mapped[int] = mapped_column(ForeignKey("client.id"))
     client: Mapped["Client"] = relationship(back_populates="event")
 
-    commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    commercial: Mapped["Employee"] = relationship(back_populates="commercial")
-
-    support_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    support: Mapped["Employee"] = relationship(back_populates="support")
-
     contract_id: Mapped[int] = mapped_column(ForeignKey("contract.id"))
-    contracts: Mapped["Contract"] = relationship(
-        back_populates="event", single_parent=True
-    )
+    contract: Mapped["Contract"] = relationship(back_populates="event")
 
     def __repr__(self):
         return (
@@ -75,7 +66,5 @@ class Event(Model):
             f"attendees : {self.attendees!r}"
             f"notes : {self.notes!r}"
             f"client : {self.client!r}"
-            f"commercial : {self.commercial.username!r})"
-            f"technician : {self.technician.username!r})"
             f"contract : {self.contract.date_creation!r})"
         )

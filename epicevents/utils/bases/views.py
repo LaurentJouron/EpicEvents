@@ -25,16 +25,19 @@ class BaseView:
         self.console.rule(f"[{self.RECEPTION_COLOR}]{title}")
 
     # Success presentation
-    def _success_message(self, prompt="Success."):
+    def _success_message(self, prompt):
         self.console.print(
             f"✔️ {prompt}", style=self.SUCCESS_COLOR, justify=self.LEFT
         )
 
     def _success_delete(self):
-        self._success_message("Deleted successfully.")
+        self._success_message(" Deleted successfully ")
+
+    def _success_creating(self):
+        self._success_message(" Creating successfully ")
 
     def _success_updated(self):
-        self._success_message("Updated successfully.")
+        self._success_message(" Updated successfully ")
 
     # Error presentation
     def _message_error(self, var=""):

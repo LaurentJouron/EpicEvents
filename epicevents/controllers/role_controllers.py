@@ -1,3 +1,6 @@
+import time
+import logging
+from sqlalchemy.exc import IntegrityError
 from epicevents.utils.bases.controllers import BaseController
 from ..models import RoleManager
 from ..views import RoleView
@@ -36,13 +39,25 @@ class RoleController(BaseController):
 class CreateRoleController(BaseController):
     def run(self):
         role_name = view.get_name()
-        existing_role = manager.add_role(role_name)
-        if existing_role:
-            view.exist_error(role_name)
+        try:
+            manager.add_role(name=role_name)
+            view.success_creating()
+            time.sleep(2)
+            view.clean_console()
             return RoleController()
-        manager.add_role(name=role_name)
-        view.success_message()
-        return RoleController()
+        except IntegrityError as e:
+            logging.error(f"IntegrityError: {e}")
+            view.exist_error(role_name)
+            time.sleep(2)
+            view.clean_console()
+            return RoleController()
+        except Exception as e:
+            logging.exception(f"Unexpected error: {e}")
+            time.sleep(2)
+            view.clean_console()
+            raise
+        finally:
+            RoleController()
 
 
 class UpdateRoleController(BaseController):

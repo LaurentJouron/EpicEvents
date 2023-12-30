@@ -31,8 +31,8 @@ class RoleView(BaseMenu):
     def message_error(self, var):
         return self._message_error(var)
 
-    def success_message(self):
-        return self._success_message()
+    def success_creating(self):
+        return self._success_creating()
 
     def success_update(self):
         return self._success_updated()

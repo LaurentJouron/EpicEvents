@@ -1,4 +1,6 @@
 from sqlalchemy import String, ForeignKey
+from sqlalchemy import Table
+from sqlalchemy import Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 
@@ -75,6 +77,14 @@ class EmployeeManager:
                 )
 
 
+employee_event = Table(
+    "employee_event",
+    Model.metadata,
+    Column("employee_id", ForeignKey("event.id")),
+    Column("event_id", ForeignKey("employee.id")),
+)
+
+
 class Employee(Model):
     __tablename__ = "employee"
 
@@ -88,29 +98,21 @@ class Employee(Model):
     role_id: Mapped[int] = mapped_column(ForeignKey("role.id"))
     role: Mapped["Role"] = relationship(back_populates="employee")
 
-    commercial: Mapped[List["Client"]] = relationship(
-        back_populates="commercial"
-    )
-    commercial: Mapped[List["Event"]] = relationship(
-        back_populates="commercial"
-    )
+    client: Mapped[List["Client"]] = relationship(back_populates="commercial")
 
-    support: Mapped[List["Event"]] = relationship(
-        back_populates="support",
-    )
+    event: Mapped[List["Event"]] = relationship(secondary=employee_event)
 
     gestion: Mapped[List["Contract"]] = relationship(back_populates="gestion")
 
     def __repr__(self):
         return (
-            f"Employee(id:{self.id}"
+            f"Employee("
+            f"id:{self.id}"
             f"username: {self.username} {self.last_name}"
-            f"last_name: {self.last_name}"
             f"email: {self.email}"
             f"phone: {self.phone}"
             f"password: {self.password}"
             f"role: {self.role}"
             f"client: {self.client.compagny_name!r}"
-            f"support: {self.support!r}"
-            f"commercial: {self.commercial!r})"
+            ")"
         )

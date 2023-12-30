@@ -46,10 +46,7 @@ class Contract(Model):
     gestion_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
     gestion: Mapped["Employee"] = relationship(back_populates="gestion")
 
-    event_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
-    event: Mapped["Event"] = relationship(
-        back_populates="contracts", single_parent=True
-    )
+    event: Mapped["Event"] = relationship(back_populates="contract")
 
     def __repr__(self):
         return (
