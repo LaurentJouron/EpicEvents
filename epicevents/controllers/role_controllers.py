@@ -42,18 +42,18 @@ class CreateRoleController(BaseController):
         try:
             manager.add_role(name=role_name)
             view.success_creating()
-            time.sleep(2)
+            time.sleep(1)
             view.clean_console()
             return RoleController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
             view.exist_error(role_name)
-            time.sleep(2)
+            time.sleep(1)
             view.clean_console()
             return RoleController()
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
-            time.sleep(2)
+            time.sleep(1)
             view.clean_console()
             raise
         finally:
@@ -62,15 +62,17 @@ class CreateRoleController(BaseController):
 
 class UpdateRoleController(BaseController):
     def run(self):
+        all_role = GetAllRoleController()
+        all_role.run()
         role_id = view.get_id()
-        existing_role = manager.get_id(role_id)
+        existing_role = manager.get_role_by_id(role_id)
         if not existing_role:
             view.invalid_id()
             return RoleController()
-        view.role_information(existing_role)
-        new_name = view.get_role_name()
+        view.display_name(existing_role)
+        new_name = view.get_name()
         manager.update_role(existing_role, new_name)
-        view.success_update(new_name)
+        view._success_update()
         return RoleController()
 
 
@@ -86,28 +88,35 @@ class GetRoleByIdController(BaseController):
 
 
 class GetRoleByNameController(BaseController):
-    def run(self, name):
+    def run(self):
+        all_role = GetAllRoleController()
+        all_role.run()
         name = view.get_name()
-        role = manager.get_by_name(name)
+        role = manager.get_role_by_name(name)
         if role:
-            view.role_information(role)
+            view.display_name(name)
         else:
-            view.invalid_name(name)
+            view.not_found(name)
         return RoleController()
 
 
 class DeleteRoleController(BaseController):
     def run(self):
-        ...
+        all_role = GetAllRoleController()
+        all_role.run()
+        role_id = view.get_id()
+        deleted = manager.delete_role(role_id)
+        if deleted:
+            view.success_delete()
+        else:
+            view.not_found()
+        time.sleep(1)
+        view.clean_console()
+        return RoleController()
 
 
 class GetAllRoleController(BaseController):
     def run(self):
-        all_roles = manager.get_all_role()
-        if all_roles:
-            view.all_round()
-            for role in all_roles:
-                print(role)
-        else:
-            view.not_found()
+        roles = manager.get_all_roles()
+        view.display_roles_table(roles)
         return RoleController()

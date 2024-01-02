@@ -15,7 +15,7 @@ class ReceptionController(BaseController):
         time.sleep(2)
         view.clean_console()
         reception_view.follow_instructions()
-        time.sleep(2)
+        time.sleep(1)
         view.clean_console()
         while True:
             choice = view.choice_menu()

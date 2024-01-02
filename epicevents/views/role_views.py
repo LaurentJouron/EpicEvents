@@ -1,4 +1,8 @@
 from epicevents.utils.bases.menus import BaseMenu
+from rich.table import Table
+from rich.console import Console
+
+console = Console()
 
 
 class RoleView(BaseMenu):
@@ -19,13 +23,24 @@ class RoleView(BaseMenu):
     def get_name(self):
         self._display_title("name")
         name = self._get_name()
-        self.clean_console()
         return name
 
+    def display_roles_table(self, roles):
+        self._display_menu("Role table", menu_dict="")
+        table = Table(
+            title="Roles", show_header=True, header_style="bold blue"
+        )
+        table.add_column("ID", style="dim")
+        table.add_column("Name", style="bold")
+
+        for role in roles:
+            table.add_row(str(role.id), role.name)
+
+        console.print(table)
+
     def get_id(self):
-        self._display_title("ID")
+        self._display_title("Ident")
         ident = self._get_id()
-        self.clean_console()
         return ident
 
     def message_error(self, var):
@@ -37,8 +52,14 @@ class RoleView(BaseMenu):
     def success_update(self):
         return self._success_updated()
 
+    def success_delete(self):
+        return self._success_delete()
+
     def not_found(self):
         self._not_found()
 
     def exist_error(self, var):
         return super()._exist_error(var)
+
+    def display_name(self, name):
+        return self._display_left_phrase(title=name)
