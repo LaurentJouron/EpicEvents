@@ -2,11 +2,13 @@ from epicevents.utils.bases.menus import BaseMenu
 from epicevents.utils.bases.views import BaseView
 from epicevents.utils.contants import CONFIRMATION_MENU
 
+epic_events = "EPIC EVENTS"
+
 
 class ReceptionView(BaseView):
     def welcome(self):
         self.clean_console()
-        welcome = " Welcome on EPIC EVENTS "
+        welcome = f" Welcome on {epic_events} "
         self._display_centered_title(welcome)
 
     def follow_instructions(self):
@@ -31,7 +33,7 @@ class HomeView(BaseMenu):
 
 class ExitView(BaseMenu):
     def exit_program(self):
-        exiting = " EXIT EPIC EVENTS "
+        exiting = f" EXIT {epic_events} "
         self._display_centered_title(title=exiting, stars=False)
 
     def good_by(self):

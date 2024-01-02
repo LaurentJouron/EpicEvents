@@ -1,6 +1,7 @@
 from sqlalchemy import ForeignKey, Date, Text, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from epicevents.database import Model, Session
+
+from ..database import Model, Session
 
 
 class EventManager:
@@ -55,16 +56,3 @@ class Event(Model):
 
     contract_id: Mapped[int] = mapped_column(ForeignKey("contract.id"))
     contract: Mapped["Contract"] = relationship(back_populates="event")
-
-    def __repr__(self):
-        return (
-            f"Event(id:{self.id}"
-            f"name: {self.name}"
-            f"start_date: {self.start_date}"
-            f"end_date: {self.end_date}"
-            f"address: {self.address}"
-            f"attendees : {self.attendees!r}"
-            f"notes : {self.notes!r}"
-            f"client : {self.client!r}"
-            f"contract : {self.contract.date_creation!r})"
-        )

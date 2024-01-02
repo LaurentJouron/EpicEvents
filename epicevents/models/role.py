@@ -1,9 +1,9 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List
 from sqlalchemy.orm.session import make_transient
+from typing import List
 
-from epicevents.database import Model, Session
+from ..database import Model, Session
 
 
 class RoleManager:
@@ -23,7 +23,10 @@ class RoleManager:
     def get_role_by_id(self, role_id):
         with Session() as session:
             with session.begin():
-                return session.query(Role).get(role_id)
+                role = session.query(Role).get(role_id)
+                if role:
+                    return role.id
+                return None
 
     def get_role_by_name(self, name):
         with Session() as session:

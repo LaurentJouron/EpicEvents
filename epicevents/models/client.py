@@ -2,7 +2,7 @@ from sqlalchemy import String, ForeignKey, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 
-from epicevents.database import Model, Session
+from ..database import Model, Session
 
 
 class ClientManager:
@@ -84,17 +84,3 @@ class Client(Model):
     commercial: Mapped["Employee"] = relationship(back_populates="client")
 
     event: Mapped[List["Event"]] = relationship(back_populates="client")
-
-    def __repr__(self):
-        return (
-            f"Client(id:{self.id}"
-            f"compagny_name : {self.compagny_name!r}"
-            f"username: {self.username} {self.last_name}"
-            f"email: {self.email}"
-            f"phone: {self.phone}"
-            f"address: {self.address}"
-            f"information: {self.information}"
-            f"creation_date : {self.creation_date!r}"
-            f"updating_date : {self.updating_date!r}"
-            f"commercial : {self.commercial.username!r})"
-        )

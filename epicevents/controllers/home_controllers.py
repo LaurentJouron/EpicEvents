@@ -1,8 +1,13 @@
-from epicevents.utils.bases.controllers import BaseController
 import time
 
-from ..controllers import employee_controllers, role_controllers
+from ..utils.contants import SHORT_SLEEP, LONG_SLEEP
+from ..utils.bases.controllers import BaseController
 from ..views import HomeView, ReceptionView, ExitView
+from ..controllers import (
+    employee_controllers,
+    role_controllers,
+    client_controllers,
+)
 
 view = HomeView()
 reception_view = ReceptionView()
@@ -12,10 +17,10 @@ exit_view = ExitView()
 class ReceptionController(BaseController):
     def run(self):
         reception_view.welcome()
-        time.sleep(2)
+        time.sleep(LONG_SLEEP)
         view.clean_console()
         reception_view.follow_instructions()
-        time.sleep(1)
+        time.sleep(SHORT_SLEEP)
         view.clean_console()
         while True:
             choice = view.choice_menu()
@@ -33,10 +38,10 @@ class ReceptionController(BaseController):
 class HomeController(BaseController):
     def run(self):
         reception_view.welcome()
-        time.sleep(2)
+        time.sleep(LONG_SLEEP)
         view.clean_console()
         reception_view.follow_instructions()
-        time.sleep(2)
+        time.sleep(SHORT_SLEEP)
         view.clean_console()
         while True:
             choice = view.choice_menu()
@@ -45,7 +50,7 @@ class HomeController(BaseController):
                 return employee_controllers.EmployeeController()
             elif choice == "2":
                 # Client
-                return ...
+                return client_controllers.ClientController()
             elif choice == "3":
                 # Event
                 return ...

@@ -1,9 +1,10 @@
-from epicevents.utils.bases.views import BaseView
+from ...utils.bases.views import BaseView
+from ..contants import RECEPTION_COLOR
 
 
 class BaseMenu(BaseView):
     def _display_menu(self, menu, menu_dict):
-        self.console.rule(f"[{self.RECEPTION_COLOR}]{menu}")
+        self.console.rule(f"[{RECEPTION_COLOR}]{menu}")
         for key in menu_dict:
             self.console.print(f"{key} - {menu_dict[key]} ")
 

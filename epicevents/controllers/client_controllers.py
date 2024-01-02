@@ -1,4 +1,10 @@
-from epicevents.utils.bases.controllers import BaseController
+import logging
+import time
+
+from sqlalchemy.exc import IntegrityError
+
+from ..utils.contants import SHORT_SLEEP
+from ..utils.bases.controllers import BaseController
 from ..models import ClientManager
 from ..views import ClientView
 from ..controllers import home_controllers
@@ -35,7 +41,26 @@ class ClientController(BaseController):
 
 class CreateClientController(BaseController):
     def run(self):
-        ...
+        client = view.get_client_data()
+        try:
+            manager.create_client(client)
+            view.success_creating()
+            time.sleep(SHORT_SLEEP)
+            view.clean_console()
+            return ClientController()
+        except IntegrityError as e:
+            logging.error(f"IntegrityError: {e}")
+            view.exist_error(client)
+            time.sleep(SHORT_SLEEP)
+            view.clean_console()
+            return ClientController()
+        except Exception as e:
+            logging.exception(f"Unexpected error: {e}")
+            time.sleep(SHORT_SLEEP)
+            view.clean_console()
+            raise
+        finally:
+            ClientController()
 
 
 class UpdateClientController(BaseController):

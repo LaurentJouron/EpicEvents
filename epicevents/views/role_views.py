@@ -1,6 +1,15 @@
-from epicevents.utils.bases.menus import BaseMenu
 from rich.table import Table
 from rich.console import Console
+
+from epicevents.utils.bases.menus import BaseMenu
+from ..utils.contants import (
+    RECEPTION_COLOR,
+    BOLD,
+    NAME,
+    ID,
+    IDENT,
+    DIM,
+)
 
 console = Console()
 
@@ -21,25 +30,23 @@ class RoleView(BaseMenu):
         return self._response_menu(menu_dict=self.role_menu)
 
     def get_name(self):
-        self._display_title("name")
+        self._display_title(NAME)
         name = self._get_name()
         return name
 
     def display_roles_table(self, roles):
         self._display_menu("Role table", menu_dict="")
         table = Table(
-            title="Roles", show_header=True, header_style="bold blue"
+            title="Roles", show_header=True, header_style=RECEPTION_COLOR
         )
-        table.add_column("ID", style="dim")
-        table.add_column("Name", style="bold")
-
+        table.add_column(ID, style=DIM)
+        table.add_column(NAME, style=BOLD)
         for role in roles:
             table.add_row(str(role.id), role.name)
-
         console.print(table)
 
     def get_id(self):
-        self._display_title("Ident")
+        self._display_title(IDENT)
         ident = self._get_id()
         return ident
 
@@ -63,3 +70,9 @@ class RoleView(BaseMenu):
 
     def display_name(self, name):
         return self._display_left_phrase(title=name)
+
+    def role_information(self, title):
+        return self._display_left_phrase(title=title)
+
+    def invalid_id(self, title):
+        return self._invalid_id(title=title)

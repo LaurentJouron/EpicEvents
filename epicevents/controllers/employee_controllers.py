@@ -1,5 +1,7 @@
 import time
-from epicevents.utils.bases.controllers import BaseController
+
+from ..utils.bases.controllers import BaseController
+from ..utils.contants import LONG_SLEEP
 from ..models import EmployeeManager
 from ..views import employee_views
 from ..controllers import home_controllers
@@ -33,7 +35,7 @@ class EmployeeCreationController(BaseController):
         employee_data = view.get_employee_data()
         manager.add_employee(employee_data)
         view._success_message()
-        time.sleep(2)
+        time.sleep(LONG_SLEEP)
         view.clean_console()
         return EmployeeController()
 
@@ -55,7 +57,7 @@ class EmployeeModifyController(BaseController):
     def run(self):
         ...
         view._success_updated()
-        time.sleep(2)
+        time.sleep(LONG_SLEEP)
         view.clean_console()
         return EmployeeController()
 
@@ -64,7 +66,7 @@ class EmployeeDeleteController(BaseController):
     def run(self):
         ...
         view._success_delete()
-        time.sleep(2)
+        time.sleep(LONG_SLEEP)
         view.clean_console()
         return EmployeeController()
 

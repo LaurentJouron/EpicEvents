@@ -4,9 +4,8 @@ from sqlalchemy import Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 
+from ..database import Model, Session
 from ..models.client import Client
-
-from epicevents.database import Model, Session
 
 
 class EmployeeManager:
@@ -103,16 +102,3 @@ class Employee(Model):
     event: Mapped[List["Event"]] = relationship(secondary=employee_event)
 
     gestion: Mapped[List["Contract"]] = relationship(back_populates="gestion")
-
-    def __repr__(self):
-        return (
-            f"Employee("
-            f"id:{self.id}"
-            f"username: {self.username} {self.last_name}"
-            f"email: {self.email}"
-            f"phone: {self.phone}"
-            f"password: {self.password}"
-            f"role: {self.role}"
-            f"client: {self.client.compagny_name!r}"
-            ")"
-        )

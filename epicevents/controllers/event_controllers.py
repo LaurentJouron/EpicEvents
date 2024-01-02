@@ -1,4 +1,4 @@
-from epicevents.utils.bases.controllers import BaseController
+from ..utils.bases.controllers import BaseController
 from ..models import EventManager
 from ..views import EventView
 from ..controllers import home_controllers
