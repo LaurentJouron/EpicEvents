@@ -1,7 +1,10 @@
 from datetime import datetime
-from sqlalchemy import String, ForeignKey, Text, Date
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
+
+from sqlalchemy import String, ForeignKey, Text
+from sqlalchemy.types import Date
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm.session import make_transient
 
 from ..database import Model, Session
 
@@ -25,13 +28,17 @@ class ClientManager:
                         phone=kwargs["phone"],
                         address=kwargs["address"],
                         information=kwargs["information"],
+                        creation_date=datetime.now(),
                     )
                     session.add(new_client)
 
     def get_client_by_id(self, client_id):
         with Session() as session:
             with session.begin():
-                return session.query(Client).filter_by(id=client_id).first()
+                client = session.query(Client).get(client_id)
+                if client:
+                    return client.id
+                return None
 
     def get_client_by_compagny_name(self, compagny_name):
         with Session() as session:
@@ -45,23 +52,42 @@ class ClientManager:
     def get_client_by_username(self, username):
         with Session() as session:
             with session.begin():
-                return (
-                    session.query(Client).filter_by(username=username).first()
-                )
+                return session.query(Client).filter_by(username=username)
 
     def get_client_by_email(self, email):
         with Session() as session:
             with session.begin():
-                return session.query(Client).filter_by(email=email).first()
+                client = session.query(Client).get(email=email)
+                if client:
+                    return client.id
+                return None
 
     def get_client_by_phone(self, phone):
         with Session() as session:
             with session.begin():
-                session.query(Client).filter_by(phone=phone).first()
+                client = session.query(Client).get(phone=phone)
+                if client:
+                    return client.id
+                return None
 
     def get_all_client(self):
         with Session() as session:
-            return session.query(Client).all()
+            with session.begin():
+                clients = session.query(Client).all()
+                for client in clients:
+                    session.expunge(client)
+                    make_transient(client)
+                return clients
+
+    def delete_client(self, client_id):
+        with Session() as session:
+            with session.begin():
+                client = session.query(Client).get(client_id)
+                if client:
+                    session.delete(client)
+                    return True
+                else:
+                    return False
 
 
 class Client(Model):
@@ -75,10 +101,13 @@ class Client(Model):
     phone: Mapped[str] = mapped_column(String(20), unique=True)
     address: Mapped[Text] = mapped_column(Text)
     information: Mapped[str] = mapped_column(Text)
-    creation_date: Mapped[Date] = mapped_column(Date)
-    updating_date: Mapped[Date] = mapped_column(Date)
 
-    commercial_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
+    creation_date: Mapped[Date] = mapped_column(Date)
+    updating_date: Mapped[Date] = mapped_column(Date, nullable=True)
+
+    commercial_id: Mapped[int] = mapped_column(
+        ForeignKey("employee.id"), nullable=True
+    )
     commercial: Mapped["Employee"] = relationship(back_populates="client")
 
     event: Mapped[List["Event"]] = relationship(back_populates="client")

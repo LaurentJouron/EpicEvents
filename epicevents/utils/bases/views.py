@@ -24,7 +24,10 @@ class BaseView:
     def _display_title(self, title):
         self.console.rule(f"[{RECEPTION_COLOR}]{title}")
 
-    # Success presentation
+    def clean_console(self):
+        self.console.clear()
+
+    # class BaseSuccess:
     def _success_message(self, prompt):
         self.console.print(f"✔️ {prompt}", style=SUCCESS_COLOR, justify=LEFT)
 
@@ -37,7 +40,7 @@ class BaseView:
     def _success_updated(self):
         self._success_message(" Updated successfully ")
 
-    # Error presentation
+    # class BaseError:
     def _message_error(self, var=""):
         var_msg = f"{var} is value error." if var else "Value error."
         self.console.print(f"⛔️ {var_msg}", style=ERROR_COLOR, justify=LEFT)
@@ -51,7 +54,7 @@ class BaseView:
     def _exist_error(self, var):
         self._message_error(f"{var} is already registered.")
 
-    # Answer presentation
+    # class BaseAnswer:
     def _get_answer(self, prompt):
         return self.console.input(prompt)
 
@@ -84,7 +87,3 @@ class BaseView:
         number = self._get_answer_item("number").strip()
         self.clean_console()
         return number
-
-    # Clean console
-    def clean_console(self):
-        self.console.clear()

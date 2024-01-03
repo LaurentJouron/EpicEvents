@@ -1,9 +1,8 @@
 from rich.table import Table
 from rich.console import Console
-from datetime import datetime
 
 from ..utils.bases.menus import BaseMenu
-from ..utils.contants import RECEPTION_COLOR, BOLD, DIM
+from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT, NAME
 
 console = Console()
 
@@ -31,7 +30,6 @@ class ClientView(BaseMenu):
         phone = self._get_phone_number()
         address = self._get_answer_item("address")
         information = self._get_answer_item("information")
-        creation_date = datetime.now()
         return {
             "compagny_name": compagny_name,
             "username": username,
@@ -40,7 +38,6 @@ class ClientView(BaseMenu):
             "phone": phone,
             "address": address,
             "information": information,
-            "creation_date": creation_date,
         }
 
     def display_client_table(self, clients):
@@ -56,9 +53,9 @@ class ClientView(BaseMenu):
         table.add_column("phone", style=BOLD)
         table.add_column("address", style=BOLD)
         table.add_column("information", style=BOLD)
-        table.add_column("creation_date", style=BOLD)
-        table.add_column("updating_date", style=BOLD)
-        table.add_column("commercial_id", style=BOLD)
+        # table.add_column("creation_date", style=BOLD)
+        # table.add_column("updating_date", style=BOLD)
+        # table.add_column("commercial_id", style=BOLD)
         for client in clients:
             table.add_row(
                 str(client.id),
@@ -69,23 +66,48 @@ class ClientView(BaseMenu):
                 client.phone,
                 client.address,
                 client.information,
-                client.creation_date,
-                client.updating_date,
-                client.commercial_id,
+                # client.creation_date,
+                # client.updating_date,
+                # client.commercial_id,
             )
         console.print(table)
+
+    def get_id(self):
+        self._display_title(IDENT)
+        ident = self._get_id()
+        return ident
+
+    def get_name(self):
+        self._display_title(NAME)
+        name = self._get_name()
+        return name
+
+    def client_information(self, title):
+        return self._display_left_phrase(title=title)
 
     def message_error(self, var):
         return self._message_error(var)
 
-    def success_message(self):
-        return self._success_message()
+    def success_creating(self):
+        return self._success_creating()
 
     def success_update(self):
         return self._success_updated()
+
+    def success_delete(self):
+        return self._success_delete()
 
     def not_found(self):
         self._not_found()
 
     def exist_error(self, var):
         return super()._exist_error(var)
+
+    def display_name(self, name):
+        return self._display_left_phrase(title=name)
+
+    def role_information(self, title):
+        return self._display_left_phrase(title=title)
+
+    def invalid_id(self, title):
+        return self._invalid_id(title=title)

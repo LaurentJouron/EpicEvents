@@ -8,9 +8,9 @@ pytest = "*"
 passlib = "*"
 sqlalchemy = "*"
 python-dotenv = "*"
-pyjwt = {extras = ["crypto"], version = "*"}
 typer = {extras = ["all"], version = "*"}
 rich = "*"
+pyjwt = {extras = ["crypto"], version = "*"}
 
 [dev-packages]
 
