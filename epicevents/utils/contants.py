@@ -5,7 +5,7 @@ CONFIRMATION_MENU: dict = {"1": "Yes", "2": "No"}
 SHORT_SLEEP: int = 1
 LONG_SLEEP: int = 2
 
-ID = "ID"
+ID = "id"
 NAME = "name"
 
 IDENT = "Ident"

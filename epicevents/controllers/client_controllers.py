@@ -41,23 +41,23 @@ class ClientController(BaseController):
 
 class CreateClientController(BaseController):
     def run(self):
-        client = view.get_client_data()
+        client_data = view.get_client_data()
         try:
-            manager.create_client(client)
+            manager.create_client(**client_data)
             view.success_creating()
             time.sleep(SHORT_SLEEP)
             view.clean_console()
             return ClientController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
-            view.exist_error(client)
+            view.exist_error(client_data)
             time.sleep(SHORT_SLEEP)
-            view.clean_console()
+            # view.clean_console()
             return ClientController()
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
             time.sleep(SHORT_SLEEP)
-            view.clean_console()
+            # view.clean_console()
             raise
         finally:
             ClientController()

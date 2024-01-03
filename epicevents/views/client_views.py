@@ -32,16 +32,16 @@ class ClientView(BaseMenu):
         address = self._get_answer_item("address")
         information = self._get_answer_item("information")
         creation_date = datetime.now()
-        return (
-            compagny_name,
-            username,
-            last_name,
-            email,
-            phone,
-            address,
-            information,
-            creation_date,
-        )
+        return {
+            "compagny_name": compagny_name,
+            "username": username,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "address": address,
+            "information": information,
+            "creation_date": creation_date,
+        }
 
     def display_client_table(self, clients):
         self._display_menu("Client table", menu_dict="")

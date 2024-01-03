@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import String, ForeignKey, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
@@ -9,26 +10,23 @@ class ClientManager:
     def create_client(self, **kwargs):
         with Session() as session:
             with session.begin():
-                new_client = Client(
-                    compagny_name=kwargs["compagny_name"],
-                    username=kwargs["username"],
-                    last_name=kwargs["last_name"],
-                    email=kwargs["email"],
-                    phone=kwargs["phone"],
-                    address=kwargs["address"],
-                    information=kwargs["information"],
-                    creation_date=kwargs["creation_date"],
-                    updating_date=kwargs["updating_date"],
-                )
-                session.add(new_client)
-
-    def update_client(self, client_id, **kwargs):
-        with Session() as session:
-            with session.begin():
-                client_to_update = session.query(Client).get(client_id)
-                if client_to_update:
-                    for key, value in kwargs.items():
-                        setattr(client_to_update, key, value)
+                if "id" in kwargs:
+                    client = session.query(Client).get(kwargs["id"])
+                    if client:
+                        for key, value in kwargs.items():
+                            setattr(client, key, value)
+                        client.updating_date = datetime.now()
+                else:
+                    new_client = Client(
+                        compagny_name=kwargs["compagny_name"],
+                        username=kwargs["username"],
+                        last_name=kwargs["last_name"],
+                        email=kwargs["email"],
+                        phone=kwargs["phone"],
+                        address=kwargs["address"],
+                        information=kwargs["information"],
+                    )
+                    session.add(new_client)
 
     def get_client_by_id(self, client_id):
         with Session() as session:
