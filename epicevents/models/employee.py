@@ -63,18 +63,6 @@ class EmployeeManager:
                 if employee_to_delete:
                     session.delete(employee_to_delete)
 
-    def login(self, username, password):
-        with Session() as session:
-            with session.begin():
-                return (
-                    session.query(Employee)
-                    .filter(
-                        (Employee.username == username)
-                        & (Employee.password == password)
-                    )
-                    .first()
-                )
-
 
 employee_event = Table(
     "employee_event",

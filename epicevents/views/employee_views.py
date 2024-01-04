@@ -1,4 +1,5 @@
-from epicevents.utils.bases.menus import BaseMenu
+import jwt
+from ..utils.bases.menus import BaseMenu
 
 
 class EmployeeView(BaseMenu):
@@ -27,13 +28,18 @@ class EmployeeView(BaseMenu):
         email = self._get_email()
         phone = self._get_phone_number()
         password = self.get_password
+        password_jwt = self.encoded_jwt(username=username, password=password)
         return {
             "username": username,
             "last_name": last_name,
             "email": email,
             "phone": phone,
-            "password": password,
+            "password": password_jwt,
         }
+
+    def display_menu(self, menu_dict):
+        self._display_menu(menu_dict=menu_dict)
+        return self._response_menu(menu_dict=menu_dict)
 
     def get_username(self):
         return self._get_username()
@@ -41,15 +47,28 @@ class EmployeeView(BaseMenu):
     def get_password(self):
         return input("Enter password: ").strip()
 
+    def encoded_jwt(self, username, password):
+        return jwt.encode(
+            {"username": username, "password": password},
+            "password",
+            algorithm="HS256",
+        )
+
+    def decode_jwt(self, encoded_jwt):
+        return jwt.decode(encoded_jwt, "password", algorithms=["HS256"])
+
+    def test_encoded_decode(self, username, password, encoded):
+        decode = self.decode_jwt(encoded_jwt=encoded)
+        if username == decode["username"] and password == decode["password"]:
+            return True
+        else:
+            self._message_error()
+
     def display_employee(self, employee):
         print(f"Username: {employee.username}")
         print(f"Last name: {employee.last_name}")
         print(f"Email: {employee.email}")
         print(f"Phone Number: {employee.phone_number}")
-
-    def display_menu(self, menu_dict):
-        self._display_menu(menu_dict=menu_dict)
-        return self._response_menu(menu_dict=menu_dict)
 
     def not_found(self):
         self.not_found()

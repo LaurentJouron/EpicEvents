@@ -1,6 +1,6 @@
-from epicevents.utils.bases.menus import BaseMenu
-from epicevents.utils.bases.views import BaseView
-from epicevents.utils.contants import CONFIRMATION_MENU
+from ..utils.bases.menus import BaseMenu
+from ..utils.bases.views import BaseView
+from ..utils.contants import CONFIRMATION_MENU
 
 epic_events = "EPIC EVENTS"
 

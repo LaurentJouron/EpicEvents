@@ -1,7 +1,10 @@
 import time
+import logging
+
+from sqlalchemy.exc import IntegrityError
 
 from ..utils.bases.controllers import BaseController
-from ..utils.contants import LONG_SLEEP
+from ..utils.contants import LONG_SLEEP, SHORT_SLEEP
 from ..models import EmployeeManager
 from ..views import employee_views
 from ..controllers import home_controllers
@@ -32,12 +35,26 @@ class EmployeeController(BaseController):
 
 class EmployeeCreationController(BaseController):
     def run(self):
-        employee_data = view.get_employee_data()
-        manager.add_employee(employee_data)
-        view._success_message()
-        time.sleep(LONG_SLEEP)
-        view.clean_console()
-        return EmployeeController()
+        employee = view.get_employee_data()
+        try:
+            manager.add_employee(employee)
+            view.success_creating()
+            time.sleep(SHORT_SLEEP)
+            view.clean_console()
+            return EmployeeController()
+        except IntegrityError as e:
+            logging.error(f"IntegrityError: {e}")
+            view.exist_error(employee)
+            time.sleep(SHORT_SLEEP)
+            view.clean_console()
+            return EmployeeController()
+        except Exception as e:
+            logging.exception(f"Unexpected error: {e}")
+            time.sleep(SHORT_SLEEP)
+            view.clean_console()
+            raise
+        finally:
+            EmployeeController()
 
 
 class GetEmployeeByNameController(BaseController):
