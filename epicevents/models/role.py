@@ -57,5 +57,5 @@ class Role(Model):
     __tablename__ = "role"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     employee: Mapped[List["Employee"]] = relationship(back_populates="role")

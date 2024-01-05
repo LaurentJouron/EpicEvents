@@ -65,21 +65,42 @@ class CreateRoleController(BaseController):
 
 class UpdateRoleController(BaseController):
     def run(self):
-        get_role = GetRoleByIdController()
-        get_role_id = get_role.run()
-        role_id = manager.get_role_by_id(get_role_id)
-
-        view.display_name()
+        roles = manager.get_all_roles()
+        view.display_roles_table(roles)
+        role_id = view.get_id()
+        view.role_information("name")
         new_name = view.get_name()
         manager.update_role(role_id, new_name)
-        view._success_update()
+        view.success_update()
         return RoleController()
+
+
+class UpdateRoleController(BaseController):
+    def run(self):
+        roles = manager.get_all_roles()
+        view.display_roles_table(roles)
+        role_id = view.get_id()
+
+        try:
+            role = manager.get_role_by_id(role_id)
+            if role:
+                view.role_information("name")
+                new_name = view.get_name()
+                manager.update_role(role_id, new_name)
+                view.success_update()
+            else:
+                view.not_found()
+        except Exception as e:
+            logging.exception(f"Unexpected error during role update: {e}")
+            view.message_error(str(e))
+        finally:
+            return RoleController()
 
 
 class GetRoleByIdController(BaseController):
     def run(self):
-        all_role = GetAllRoleController()
-        all_role.run()
+        roles = manager.get_all_roles()
+        view.display_roles_table(roles)
         role_id = view.get_id()
         role_name = manager.get_role_by_id(role_id)
         if role_name:
@@ -91,12 +112,12 @@ class GetRoleByIdController(BaseController):
 
 class GetRoleByNameController(BaseController):
     def run(self):
-        all_role = GetAllRoleController()
-        all_role.run()
+        roles = manager.get_all_roles()
+        view.display_roles_table(roles)
         name = view.get_name()
         role = manager.get_role_by_name(name)
         if role:
-            view.display_name(name)
+            view.role_information(name)
         else:
             view.not_found(name)
         time.sleep(SHORT_SLEEP)

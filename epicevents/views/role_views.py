@@ -68,9 +68,6 @@ class RoleView(BaseMenu):
     def exist_error(self, var):
         return super()._exist_error(var)
 
-    def display_name(self, name):
-        return self._display_left_phrase(title=name)
-
     def role_information(self, title):
         return self._display_left_phrase(title=title)
 
