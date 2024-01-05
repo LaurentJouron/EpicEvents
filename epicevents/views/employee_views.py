@@ -1,8 +1,9 @@
 import jwt
 from ..utils.bases.menus import BaseMenu
+from ..utils.bases.views import BaseView
 
 
-class EmployeeView(BaseMenu):
+class EmployeeView(BaseMenu, BaseView):
     employee_menu: dict = {
         "1": "Create",
         "2": "Update",

@@ -1,9 +1,9 @@
+from ..database import Model, Session
+
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm.session import make_transient
 from typing import List
-
-from ..database import Model, Session
 
 
 class RoleManager:

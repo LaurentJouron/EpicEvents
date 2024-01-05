@@ -12,11 +12,11 @@ class ReceptionView(BaseView):
         self._display_centered_title(welcome)
 
     def follow_instructions(self):
-        instructions = "Follow the instructions below"
+        instructions = "\nFollow the instructions below"
         self._display_centered_title(instructions, stars=False)
 
 
-class HomeView(BaseMenu):
+class HomeView(BaseMenu, BaseView):
     home_menu: dict = {
         "1": "Employee",
         "2": "Client",
@@ -31,7 +31,7 @@ class HomeView(BaseMenu):
         return self._response_menu(menu_dict=self.home_menu)
 
 
-class ExitView(BaseMenu):
+class ExitView(BaseMenu, BaseView):
     def exit_program(self):
         exiting = f" EXIT {epic_events} "
         self._display_centered_title(title=exiting, stars=False)

@@ -47,20 +47,26 @@ class HomeController(BaseController):
             choice = view.choice_menu()
             if choice == "1":
                 # Employee
+                view.clean_console()
                 return employee_controllers.EmployeeController()
             elif choice == "2":
                 # Client
+                view.clean_console()
                 return client_controllers.ClientController()
             elif choice == "3":
                 # Event
+                view.clean_console()
                 return ...
             elif choice == "4":
                 # Contract
+                view.clean_console()
                 return ...
             elif choice == "5":
                 # Role
+                view.clean_console()
                 return role_controllers.RoleController()
             elif choice == "6":
+                view.clean_console()
                 return ExitController()
 
 
@@ -71,4 +77,5 @@ class ExitController(BaseController):
         if choice == "1":
             return None
         else:
+            view.clean_console()
             return HomeController()

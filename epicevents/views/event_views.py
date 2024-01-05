@@ -1,7 +1,8 @@
-from epicevents.utils.bases.menus import BaseMenu
+from ..utils.bases.menus import BaseMenu
+from ..utils.bases.views import BaseView
 
 
-class EventView(BaseMenu):
+class EventView(BaseMenu, BaseView):
     event_menu: dict = {
         "1": "Create",
         "2": "Update",

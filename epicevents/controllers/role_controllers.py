@@ -1,13 +1,13 @@
 import time
 import logging
 
-from sqlalchemy.exc import IntegrityError
-
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import SHORT_SLEEP
 from ..models import RoleManager
 from ..views import RoleView
 from ..controllers import home_controllers
+
+from sqlalchemy.exc import IntegrityError
 
 view = RoleView()
 manager = RoleManager()
@@ -18,24 +18,31 @@ class RoleController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
+                view.clean_console()
                 return CreateRoleController()
 
             elif choice == "2":
+                view.clean_console()
                 return UpdateRoleController()
 
             elif choice == "3":
+                view.clean_console()
                 return GetRoleByIdController()
 
             elif choice == "4":
+                view.clean_console()
                 return GetRoleByNameController()
 
             elif choice == "5":
+                view.clean_console()
                 return DeleteRoleController()
 
             elif choice == "6":
+                view.clean_console()
                 return GetAllRoleController()
 
             elif choice == "7":
+                view.clean_console()
                 return home_controllers.HomeController()
 
 
@@ -46,18 +53,15 @@ class CreateRoleController(BaseController):
             manager.add_role(name=role_name)
             view.success_creating()
             time.sleep(SHORT_SLEEP)
-            view.clean_console()
             return RoleController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
             view.exist_error(role_name)
             time.sleep(SHORT_SLEEP)
-            view.clean_console()
             return RoleController()
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
             time.sleep(SHORT_SLEEP)
-            view.clean_console()
             raise
         finally:
             RoleController()
@@ -68,19 +72,6 @@ class UpdateRoleController(BaseController):
         roles = manager.get_all_roles()
         view.display_roles_table(roles)
         role_id = view.get_id()
-        view.role_information("name")
-        new_name = view.get_name()
-        manager.update_role(role_id, new_name)
-        view.success_update()
-        return RoleController()
-
-
-class UpdateRoleController(BaseController):
-    def run(self):
-        roles = manager.get_all_roles()
-        view.display_roles_table(roles)
-        role_id = view.get_id()
-
         try:
             role = manager.get_role_by_id(role_id)
             if role:

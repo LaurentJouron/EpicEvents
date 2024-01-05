@@ -1,4 +1,3 @@
-from rich.console import Console
 from ..contants import (
     SIZE_LINE,
     RECEPTION_COLOR,
@@ -9,27 +8,12 @@ from ..contants import (
     LEFT,
 )
 
+from rich.console import Console
 
-class BaseView:
-    console = Console(width=SIZE_LINE)
 
-    # Reception presentation
-    def _display_centered_title(self, title, stars=True):
-        title_str = f"✨{title}✨" if stars else title
-        self.console.print(title_str, style=RECEPTION_COLOR, justify=CENTER)
-
-    def _display_left_phrase(self, title):
-        self.console.print(title, style=PHRASE_COLOR, justify=LEFT)
-
-    def _display_title(self, title):
-        self.console.rule(f"[{RECEPTION_COLOR}]{title}")
-
-    def clean_console(self):
-        self.console.clear()
-
-    # class BaseSuccess:
+class BaseSuccessView:
     def _success_message(self, prompt):
-        self.console.print(f"✔️ {prompt}", style=SUCCESS_COLOR, justify=LEFT)
+        self.console.print(f"\n✔️ {prompt}", style=SUCCESS_COLOR, justify=LEFT)
 
     def _success_delete(self):
         self._success_message(" Deleted successfully ")
@@ -40,10 +24,11 @@ class BaseView:
     def _success_updated(self):
         self._success_message(" Updated successfully ")
 
-    # class BaseError:
+
+class BaseErrorView:
     def _message_error(self, var=""):
         var_msg = f"{var} is value error." if var else "Value error."
-        self.console.print(f"⛔️ {var_msg}", style=ERROR_COLOR, justify=LEFT)
+        self.console.print(f"\n⛔️ {var_msg}", style=ERROR_COLOR, justify=LEFT)
 
     def _not_found(self):
         self._message_error("Not found.")
@@ -54,7 +39,8 @@ class BaseView:
     def _exist_error(self, var):
         self._message_error(f"{var} is already registered.")
 
-    # class BaseAnswer:
+
+class BaseAnswerView:
     def _get_answer(self, prompt):
         return self.console.input(prompt)
 
@@ -84,6 +70,22 @@ class BaseView:
         return self._get_answer_item("password").strip().upper()
 
     def _select_number(self):
-        number = self._get_answer_item("number").strip()
-        self.clean_console()
-        return number
+        return self._get_answer_item("number").strip()
+
+
+class BaseView(BaseErrorView, BaseSuccessView, BaseAnswerView):
+    console = Console(width=SIZE_LINE)
+
+    # Reception presentation
+    def _display_centered_title(self, title, stars=True):
+        title_str = f"\n✨{title}✨" if stars else title
+        self.console.print(title_str, style=RECEPTION_COLOR, justify=CENTER)
+
+    def _display_left_phrase(self, title):
+        self.console.print(title, style=PHRASE_COLOR, justify=LEFT)
+
+    def _display_title(self, title):
+        self.console.rule(f"[{RECEPTION_COLOR}]{title}")
+
+    def clean_console(self):
+        self.console.clear()

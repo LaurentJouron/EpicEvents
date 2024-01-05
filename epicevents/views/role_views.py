@@ -1,7 +1,5 @@
-from rich.table import Table
-from rich.console import Console
-
-from epicevents.utils.bases.menus import BaseMenu
+from ..utils.bases.menus import BaseMenu
+from ..utils.bases.views import BaseView
 from ..utils.contants import (
     RECEPTION_COLOR,
     BOLD,
@@ -11,10 +9,14 @@ from ..utils.contants import (
     DIM,
 )
 
+from rich.table import Table
+from rich.console import Console
+
+
 console = Console()
 
 
-class RoleView(BaseMenu):
+class RoleView(BaseMenu, BaseView):
     role_menu: dict = {
         "1": "Create",
         "2": "Update",
@@ -31,8 +33,7 @@ class RoleView(BaseMenu):
 
     def get_name(self):
         self._display_title(NAME)
-        name = self._get_name()
-        return name
+        return self._get_name()
 
     def display_roles_table(self, roles):
         self._display_menu("Role table", menu_dict="")
@@ -50,9 +51,6 @@ class RoleView(BaseMenu):
         ident = self._get_id()
         return ident
 
-    def message_error(self, var):
-        return self._message_error(var)
-
     def success_creating(self):
         return self._success_creating()
 
@@ -61,6 +59,9 @@ class RoleView(BaseMenu):
 
     def success_delete(self):
         return self._success_delete()
+
+    def message_error(self, var):
+        return self._message_error(var)
 
     def not_found(self):
         self._not_found()

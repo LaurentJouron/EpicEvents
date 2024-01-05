@@ -2,12 +2,13 @@ from rich.table import Table
 from rich.console import Console
 
 from ..utils.bases.menus import BaseMenu
+from ..utils.bases.views import BaseView
 from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT, NAME
 
 console = Console()
 
 
-class ClientView(BaseMenu):
+class ClientView(BaseMenu, BaseView):
     client_menu: dict = {
         "1": "Create",
         "2": "Update",
