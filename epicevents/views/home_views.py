@@ -7,13 +7,16 @@ epic_events = "EPIC EVENTS"
 
 class ReceptionView(BaseView):
     def welcome(self):
-        self.clean_console()
+        self._clean_console()
         welcome = f" Welcome on {epic_events} "
         self._display_centered_title(welcome)
 
     def follow_instructions(self):
         instructions = "\nFollow the instructions below"
         self._display_centered_title(instructions, stars=False)
+
+    def clean_console(self):
+        self._clean_console()
 
 
 class HomeView(BaseMenu, BaseView):
@@ -30,6 +33,9 @@ class HomeView(BaseMenu, BaseView):
         self._display_menu("Home menu", menu_dict=self.home_menu)
         return self._response_menu(menu_dict=self.home_menu)
 
+    def clean_console(self):
+        self._clean_console()
+
 
 class ExitView(BaseMenu, BaseView):
     def exit_program(self):
@@ -43,3 +49,6 @@ class ExitView(BaseMenu, BaseView):
     def choice_menu(self):
         self._display_menu("Confirm exiting", menu_dict=CONFIRMATION_MENU)
         return self._response_menu(menu_dict=CONFIRMATION_MENU)
+
+    def clean_console(self):
+        self._clean_console()

@@ -20,18 +20,21 @@ class RoleManager:
                 if role:
                     role.name = new_name
 
-    def get_role_by_id(self, role_id):
+    def get_role_name_by_id(self, role_id):
         with Session() as session:
             with session.begin():
                 role = session.query(Role).get(role_id)
                 if role:
-                    return role.id
+                    return role.name
                 return None
 
-    def get_role_by_name(self, name):
+    def get_role_id_by_name(self, name):
         with Session() as session:
             with session.begin():
-                return session.query(Role).filter_by(name=name).first()
+                role = session.query(Role).filter(Role.name == name).first()
+                if role:
+                    return role.id
+                return None
 
     def get_all_roles(self):
         with Session() as session:

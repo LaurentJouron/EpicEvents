@@ -18,10 +18,10 @@ class ReceptionController(BaseController):
     def run(self):
         reception_view.welcome()
         time.sleep(LONG_SLEEP)
-        view.clean_console()
+        reception_view.clean_console()
         reception_view.follow_instructions()
         time.sleep(SHORT_SLEEP)
-        view.clean_console()
+        reception_view.clean_console()
         while True:
             choice = view.choice_menu()
             if choice == "1":

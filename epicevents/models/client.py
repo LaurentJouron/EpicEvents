@@ -1,4 +1,5 @@
 from datetime import datetime
+from genericpath import commonprefix
 from typing import List
 
 from sqlalchemy import String, ForeignKey, Text
@@ -13,41 +14,51 @@ class ClientManager:
     def create_client(self, **kwargs):
         with Session() as session:
             with session.begin():
-                if "id" in kwargs:
-                    client = session.query(Client).get(kwargs["id"])
-                    if client:
-                        for key, value in kwargs.items():
-                            setattr(client, key, value)
-                        client.updating_date = datetime.now()
-                else:
-                    new_client = Client(
-                        compagny_name=kwargs["compagny_name"],
-                        username=kwargs["username"],
-                        last_name=kwargs["last_name"],
-                        email=kwargs["email"],
-                        phone=kwargs["phone"],
-                        address=kwargs["address"],
-                        information=kwargs["information"],
-                        creation_date=datetime.now(),
-                    )
-                    session.add(new_client)
+                new_client = Client(
+                    compagny_name=kwargs["compagny_name"],
+                    username=kwargs["username"],
+                    last_name=kwargs["last_name"],
+                    email=kwargs["email"],
+                    phone=kwargs["phone"],
+                    address=kwargs["address"],
+                    information=kwargs["information"],
+                    creation_date=datetime.now(),
+                )
+                session.add(new_client)
 
-    def get_client_by_id(self, client_id):
+    def update_client(self, client_id, **kwargs):
         with Session() as session:
             with session.begin():
                 client = session.query(Client).get(client_id)
                 if client:
-                    return client.id
-                return None
+                    client.compagny_name = kwargs["compagny_name"]
+                    client.username = kwargs["username"]
+                    client.last_name = kwargs["last_name"]
+                    client.email = kwargs["email"]
+                    client.phone = kwargs["phone"]
+                    client.address = kwargs["address"]
+                    client.information = kwargs["information"]
+                    client.updating_date = datetime.now()
 
-    def get_client_by_compagny_name(self, compagny_name):
+    def get_client_compagny_name_by_id(self, client_id):
         with Session() as session:
             with session.begin():
-                return (
+                client = session.query(Client).get(client_id)
+                if client:
+                    return client.compagny_name
+                return None
+
+    def get_client_id_by_compagny_name(self, compagny_name):
+        with Session() as session:
+            with session.begin():
+                client = (
                     session.query(Client)
                     .filter_by(compagny_name=compagny_name)
                     .first()
                 )
+                if client:
+                    return client.id
+                return None
 
     def get_client_by_username(self, username):
         with Session() as session:

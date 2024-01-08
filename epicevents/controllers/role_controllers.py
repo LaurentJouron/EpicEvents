@@ -2,7 +2,7 @@ import time
 import logging
 
 from ..utils.bases.controllers import BaseController
-from ..utils.contants import SHORT_SLEEP
+from ..utils.contants import SHORT_SLEEP, NAME
 from ..models import RoleManager
 from ..views import RoleView
 from ..controllers import home_controllers
@@ -53,15 +53,18 @@ class CreateRoleController(BaseController):
             manager.add_role(name=role_name)
             view.success_creating()
             time.sleep(SHORT_SLEEP)
+            view.clean_console()
             return RoleController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
             view.exist_error(role_name)
             time.sleep(SHORT_SLEEP)
+            view.clean_console()
             return RoleController()
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
             time.sleep(SHORT_SLEEP)
+            view.clean_console()
             raise
         finally:
             RoleController()
@@ -73,9 +76,9 @@ class UpdateRoleController(BaseController):
         view.display_roles_table(roles)
         role_id = view.get_id()
         try:
-            role = manager.get_role_by_id(role_id)
-            if role:
-                view.role_information("name")
+            role_name = manager.get_role_name_by_id(role_id)
+            if role_name:
+                view.role_information(NAME)
                 new_name = view.get_name()
                 manager.update_role(role_id, new_name)
                 view.success_update()
@@ -93,7 +96,7 @@ class GetRoleByIdController(BaseController):
         roles = manager.get_all_roles()
         view.display_roles_table(roles)
         role_id = view.get_id()
-        role_name = manager.get_role_by_id(role_id)
+        role_name = manager.get_role_name_by_id(role_id)
         if role_name:
             view.role_information(role_name)
         else:
@@ -105,14 +108,12 @@ class GetRoleByNameController(BaseController):
     def run(self):
         roles = manager.get_all_roles()
         view.display_roles_table(roles)
-        name = view.get_name()
-        role = manager.get_role_by_name(name)
-        if role:
-            view.role_information(name)
+        role_name = view.get_name()
+        role_id = manager.get_role_id_by_name(role_name)
+        if role_id:
+            view.role_information(role_id)
         else:
-            view.not_found(name)
-        time.sleep(SHORT_SLEEP)
-        view.clean_console()
+            view.not_found()
         return RoleController()
 
 

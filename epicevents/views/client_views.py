@@ -31,6 +31,7 @@ class ClientView(BaseMenu, BaseView):
         phone = self._get_phone_number()
         address = self._get_answer_item("address")
         information = self._get_answer_item("information")
+
         return {
             "compagny_name": compagny_name,
             "username": username,
@@ -112,3 +113,6 @@ class ClientView(BaseMenu, BaseView):
 
     def invalid_id(self, title):
         return self._invalid_id(title=title)
+
+    def clean_console(self):
+        self._clean_console()

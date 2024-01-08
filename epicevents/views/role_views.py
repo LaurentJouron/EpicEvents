@@ -20,8 +20,8 @@ class RoleView(BaseMenu, BaseView):
     role_menu: dict = {
         "1": "Create",
         "2": "Update",
-        "3": "Get by ID",
-        "4": "Get by name",
+        "3": "Get name by ID",
+        "4": "Get ID by name",
         "5": "Delete",
         "6": "All",
         "7": "Return",
@@ -35,6 +35,10 @@ class RoleView(BaseMenu, BaseView):
         self._display_title(NAME)
         return self._get_name()
 
+    def get_id(self):
+        self._display_title(IDENT)
+        return self._get_id()
+
     def display_roles_table(self, roles):
         self._display_menu("Role table", menu_dict="")
         table = Table(
@@ -45,11 +49,6 @@ class RoleView(BaseMenu, BaseView):
         for role in roles:
             table.add_row(str(role.id), role.name)
         console.print(table)
-
-    def get_id(self):
-        self._display_title(IDENT)
-        ident = self._get_id()
-        return ident
 
     def success_creating(self):
         return self._success_creating()
@@ -64,7 +63,7 @@ class RoleView(BaseMenu, BaseView):
         return self._message_error(var)
 
     def not_found(self):
-        self._not_found()
+        return self._not_found()
 
     def exist_error(self, var):
         return super()._exist_error(var)
@@ -74,3 +73,6 @@ class RoleView(BaseMenu, BaseView):
 
     def invalid_id(self, title):
         return self._invalid_id(title=title)
+
+    def clean_console(self):
+        self._clean_console()

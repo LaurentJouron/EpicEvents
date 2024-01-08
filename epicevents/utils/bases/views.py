@@ -26,18 +26,17 @@ class BaseSuccessView:
 
 
 class BaseErrorView:
-    def _message_error(self, var=""):
-        var_msg = f"{var} is value error." if var else "Value error."
+    def _message_error(self, var_msg=""):
         self.console.print(f"\n⛔️ {var_msg}", style=ERROR_COLOR, justify=LEFT)
 
-    def _not_found(self):
-        self._message_error("Not found.")
+    def _not_found(self, var=""):
+        self._message_error(" Not found.")
 
-    def _invalid_id(self):
-        self._message_error("No valid ID.")
+    def _invalid_id(self, var=""):
+        self.console.print(f" {var} is no valid.")
 
     def _exist_error(self, var):
-        self._message_error(f"{var} is already registered.")
+        self.console.print(f" {var} is already registered.")
 
 
 class BaseAnswerView:
@@ -87,5 +86,5 @@ class BaseView(BaseErrorView, BaseSuccessView, BaseAnswerView):
     def _display_title(self, title):
         self.console.rule(f"[{RECEPTION_COLOR}]{title}")
 
-    def clean_console(self):
+    def _clean_console(self):
         self.console.clear()
