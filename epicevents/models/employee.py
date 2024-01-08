@@ -2,6 +2,7 @@ from sqlalchemy import String, ForeignKey
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm.session import make_transient
 from typing import List
 
 from ..database import Model, Session
@@ -9,7 +10,7 @@ from ..models.client import Client
 
 
 class EmployeeManager:
-    def add_employee(self, **kwargs):
+    def create_employee(self, **kwargs):
         with Session() as session:
             with session.begin():
                 new_employee = Employee(
@@ -47,7 +48,11 @@ class EmployeeManager:
     def get_all_employee(self):
         with Session() as session:
             with session.begin():
-                return session.query(Employee).all()
+                employees = session.query(Employee).all()
+                for employee in employees:
+                    session.expunge(employee)
+                    make_transient(employee)
+                return employee
 
     def delete_employee(self, username, email):
         with Session() as session:
@@ -82,7 +87,7 @@ class Employee(Model):
     phone: Mapped[str] = mapped_column(String(20), unique=True)
     password: Mapped[str] = mapped_column(String(500))
 
-    role_id: Mapped[int] = mapped_column(ForeignKey("role.id"))
+    role_id: Mapped[int] = mapped_column(ForeignKey("role.id"), nullable=True)
     role: Mapped["Role"] = relationship(back_populates="employee")
 
     client: Mapped[List["Client"]] = relationship(back_populates="commercial")

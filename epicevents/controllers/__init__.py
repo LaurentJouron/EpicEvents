@@ -15,9 +15,9 @@ from .role_controllers import (  # noqa: F401
 from .employee_controllers import (  # noqa: F401
     EmployeeController,
     EmployeeCreationController,
-    GetEmployeeByNameController,
-    GetEmployeeByIdController,
-    EmployeeModifyController,
+    UpdateEmployeeController,
+    GetEmployeeIdByUsernameController,
+    GetEmployeeUsernameByIdController,
     EmployeeDeleteController,
     EmployeeDisplayAll,
 )
@@ -26,8 +26,8 @@ from .client_controllers import (  # noqa: F401
     ClientController,
     CreateClientController,
     UpdateClientController,
-    GetClientByIdController,
-    GetClientByNameController,
+    GetClientCompagnyNameByIdController,
+    GetClientIdByCompagnyNameController,
     DeleteClientController,
     GetAllClientController,
 )

@@ -10,8 +10,8 @@ sqlalchemy = "*"
 python-dotenv = "*"
 typer = {extras = ["all"], version = "*"}
 rich = "*"
-pyjwt = "*"
 jwt = "*"
+pyjwt = {extras = ["crypto"], version = "*"}
 
 [dev-packages]
 

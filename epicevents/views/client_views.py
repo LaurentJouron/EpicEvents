@@ -12,8 +12,8 @@ class ClientView(BaseMenu, BaseView):
     client_menu: dict = {
         "1": "Create",
         "2": "Update",
-        "3": "Get by ID",
-        "4": "Get by Compagny name",
+        "3": "Get compagny name by ID",
+        "4": "Get ID by compagny name",
         "5": "Delete",
         "6": "All",
         "7": "Return",
@@ -24,6 +24,7 @@ class ClientView(BaseMenu, BaseView):
         return self._response_menu(menu_dict=self.client_menu)
 
     def get_client_data(self):
+        self._display_title("Client information")
         compagny_name = self._get_answer_item("compagny name").capitalize()
         username = self._get_username()
         last_name = self._get_lastname()

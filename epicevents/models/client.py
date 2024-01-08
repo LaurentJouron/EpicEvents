@@ -1,5 +1,4 @@
 from datetime import datetime
-from genericpath import commonprefix
 from typing import List
 
 from sqlalchemy import String, ForeignKey, Text
@@ -31,13 +30,20 @@ class ClientManager:
             with session.begin():
                 client = session.query(Client).get(client_id)
                 if client:
-                    client.compagny_name = kwargs["compagny_name"]
-                    client.username = kwargs["username"]
-                    client.last_name = kwargs["last_name"]
-                    client.email = kwargs["email"]
-                    client.phone = kwargs["phone"]
-                    client.address = kwargs["address"]
-                    client.information = kwargs["information"]
+                    if kwargs["compagny_name"] != client.compagny_name:
+                        client.compagny_name = kwargs["compagny_name"]
+                    if kwargs["username"] != client.compagny_name:
+                        client.username = kwargs["username"]
+                    if kwargs["last_name"] != client.last_name:
+                        client.last_name = kwargs["last_name"]
+                    if kwargs["email"] != client.email:
+                        client.email = kwargs["email"]
+                    if kwargs["phone"] != client.phone:
+                        client.phone = kwargs["phone"]
+                    if kwargs["address"] != client.address:
+                        client.address = kwargs["address"]
+                    if kwargs["information"] != client.information:
+                        client.information = kwargs["information"]
                     client.updating_date = datetime.now()
 
     def get_client_compagny_name_by_id(self, client_id):
@@ -105,12 +111,14 @@ class Client(Model):
     __tablename__ = "client"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    compagny_name: Mapped[str] = mapped_column(String(300))
-    username: Mapped[str] = mapped_column(String(50))
+    compagny_name: Mapped[str] = mapped_column(String(300), nullable=False)
+    username: Mapped[str] = mapped_column(String(50), nullable=False)
     last_name: Mapped[str] = mapped_column(String(50))
-    email: Mapped[str] = mapped_column(String(300), unique=True)
-    phone: Mapped[str] = mapped_column(String(20), unique=True)
-    address: Mapped[Text] = mapped_column(Text)
+    email: Mapped[str] = mapped_column(
+        String(300), unique=True, nullable=False
+    )
+    phone: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
+    address: Mapped[Text] = mapped_column(Text, nullable=False)
     information: Mapped[str] = mapped_column(Text)
 
     creation_date: Mapped[Date] = mapped_column(Date)

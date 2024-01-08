@@ -1,14 +1,19 @@
-import jwt
+from passlib.hash import pbkdf2_sha256
+from rich.table import Table
+from rich.console import Console
 from ..utils.bases.menus import BaseMenu
 from ..utils.bases.views import BaseView
+from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT, NAME
+
+console = Console()
 
 
 class EmployeeView(BaseMenu, BaseView):
     employee_menu: dict = {
         "1": "Create",
         "2": "Update",
-        "3": "Get by ID",
-        "4": "Get by name",
+        "3": "Get username by ID",
+        "4": "Get ID by username",
         "5": "Delete",
         "6": "All",
         "7": "Return",
@@ -28,42 +33,46 @@ class EmployeeView(BaseMenu, BaseView):
         last_name = self._get_lastname()
         email = self._get_email()
         phone = self._get_phone_number()
-        password = self.get_password
-        password_jwt = self.encoded_jwt(username=username, password=password)
+        password = self._get_password()
+        encoded_password = self.encoded_password(password=password)
         return {
             "username": username,
             "last_name": last_name,
             "email": email,
             "phone": phone,
-            "password": password_jwt,
+            "password": encoded_password,
         }
+
+    def display_employee_table(self, employees):
+        self._display_menu("Employee table", menu_dict="")
+        table = Table(
+            title="Employee", show_header=True, header_style=RECEPTION_COLOR
+        )
+        table.add_column("ID", style=DIM)
+        table.add_column("username", style=BOLD)
+        table.add_column("last_name", style=BOLD)
+        table.add_column("email", style=BOLD)
+        table.add_column("phone", style=BOLD)
+        for employee in employees:
+            table.add_row(
+                str(employee.id),
+                employee.username,
+                employee.last_name,
+                employee.email,
+                employee.phone,
+            )
+        console.print(table)
 
     def display_menu(self, menu_dict):
         self._display_menu(menu_dict=menu_dict)
         return self._response_menu(menu_dict=menu_dict)
 
-    def get_username(self):
-        return self._get_username()
+    def encoded_password(self, password):
+        return pbkdf2_sha256.using(salt_size=64).hash(password)
 
-    def get_password(self):
-        return input("Enter password: ").strip()
-
-    def encoded_jwt(self, username, password):
-        return jwt.encode(
-            {"username": username, "password": password},
-            "password",
-            algorithm="HS256",
-        )
-
-    def decode_jwt(self, encoded_jwt):
-        return jwt.decode(encoded_jwt, "password", algorithms=["HS256"])
-
-    def test_encoded_decode(self, username, password, encoded):
-        decode = self.decode_jwt(encoded_jwt=encoded)
-        if username == decode["username"] and password == decode["password"]:
-            return True
-        else:
-            self._message_error()
+    def test_decode_password(self, password_hash):
+        password = self._get_password()
+        return pbkdf2_sha256.verify(password, password_hash)
 
     def display_employee(self, employee):
         print(f"Username: {employee.username}")
@@ -74,8 +83,17 @@ class EmployeeView(BaseMenu, BaseView):
     def not_found(self):
         self.not_found()
 
+    def exist_error(self, var):
+        return super()._exist_error(var)
+
     def delete_succefully(self):
         self._delete_succefully()
 
     def updated_succefully(self):
         self._updated_succefully()
+
+    def success_creating(self):
+        return self._success_creating()
+
+    def clean_console(self):
+        self._clean_console()
