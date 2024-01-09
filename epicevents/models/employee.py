@@ -66,19 +66,15 @@ class EmployeeManager:
                     make_transient(employee)
                 return employees
 
-    def delete_employee(self, username, email):
+    def delete_employee(self, employee_id):
         with Session() as session:
             with session.begin():
-                employee_to_delete = (
-                    session.query(Employee)
-                    .filter(
-                        (Employee.username == username)
-                        | (Employee.email == email)
-                    )
-                    .first()
-                )
-                if employee_to_delete:
-                    session.delete(employee_to_delete)
+                employee = session.query(Employee).get(employee_id)
+                if employee:
+                    session.delete(employee)
+                    return True
+                else:
+                    return False
 
 
 employee_event = Table(

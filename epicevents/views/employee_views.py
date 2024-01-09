@@ -85,7 +85,7 @@ class EmployeeView(BaseMenu, BaseView):
         print(f"Phone Number: {employee.phone_number}")
 
     def not_found(self, var=""):
-        self.not_found(var=var)
+        self._not_found(var=var)
 
     def exist_error(self, var):
         return super()._exist_error(var)
@@ -104,3 +104,6 @@ class EmployeeView(BaseMenu, BaseView):
 
     def display_login(self):
         return self._display_title("Login")
+
+    def display_create_employee(self):
+        return self._display_title("Create employee")

@@ -18,6 +18,7 @@ class EmployeeController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
+                view.clean_console()
                 return EmployeeCreationController()
             elif choice == "2":
                 return UpdateEmployeeController()
@@ -35,6 +36,7 @@ class EmployeeController(BaseController):
 
 class EmployeeCreationController(BaseController):
     def run(self):
+        view.display_create_employee()
         employee_data = view.get_employee_data()
         try:
             manager.create_employee(**employee_data)
