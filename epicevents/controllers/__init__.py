@@ -19,7 +19,8 @@ from .employee_controllers import (  # noqa: F401
     GetEmployeeIdByUsernameController,
     GetEmployeeUsernameByIdController,
     EmployeeDeleteController,
-    EmployeeDisplayAll,
+    EmployeeDisplayAllController,
+    EmployeeLoginController,
 )
 
 from .client_controllers import (  # noqa: F401

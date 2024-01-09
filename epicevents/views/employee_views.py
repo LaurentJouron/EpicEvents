@@ -3,7 +3,7 @@ from rich.table import Table
 from rich.console import Console
 from ..utils.bases.menus import BaseMenu
 from ..utils.bases.views import BaseView
-from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT, NAME
+from ..utils.contants import RECEPTION_COLOR, BOLD, DIM
 
 console = Console()
 
@@ -17,6 +17,7 @@ class EmployeeView(BaseMenu, BaseView):
         "5": "Delete",
         "6": "All",
         "7": "Return",
+        "8": "Get password by username",
     }
 
     def menu_choice(self):
@@ -42,6 +43,9 @@ class EmployeeView(BaseMenu, BaseView):
             "phone": phone,
             "password": encoded_password,
         }
+
+    def get_username(self):
+        return self._get_username()
 
     def display_employee_table(self, employees):
         self._display_menu("Employee table", menu_dict="")
@@ -80,8 +84,8 @@ class EmployeeView(BaseMenu, BaseView):
         print(f"Email: {employee.email}")
         print(f"Phone Number: {employee.phone_number}")
 
-    def not_found(self):
-        self.not_found()
+    def not_found(self, var=""):
+        self.not_found(var=var)
 
     def exist_error(self, var):
         return super()._exist_error(var)
@@ -97,3 +101,6 @@ class EmployeeView(BaseMenu, BaseView):
 
     def clean_console(self):
         self._clean_console()
+
+    def display_login(self):
+        return self._display_title("Login")

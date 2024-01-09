@@ -22,36 +22,18 @@ class ReceptionController(BaseController):
         reception_view.follow_instructions()
         time.sleep(SHORT_SLEEP)
         reception_view.clean_console()
-        while True:
-            choice = view.choice_menu()
-            if choice == "1":
-                # Login
-                return ...
-            elif choice == "2":
-                # Signup
-                return ...
-            elif choice == "3":
-                # Exit
-                return ExitController()
+        return employee_controllers.EmployeeLoginController()
 
 
 class HomeController(BaseController):
     def run(self):
-        reception_view.welcome()
-        time.sleep(LONG_SLEEP)
-        view.clean_console()
-        reception_view.follow_instructions()
-        time.sleep(SHORT_SLEEP)
-        view.clean_console()
         while True:
             choice = view.choice_menu()
             if choice == "1":
                 # Employee
-                view.clean_console()
                 return employee_controllers.EmployeeController()
             elif choice == "2":
                 # Client
-                view.clean_console()
                 return client_controllers.ClientController()
             elif choice == "3":
                 # Event

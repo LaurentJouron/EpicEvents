@@ -28,7 +28,7 @@ class EmployeeController(BaseController):
             elif choice == "5":
                 return EmployeeDeleteController()
             elif choice == "6":
-                return EmployeeDisplayAll()
+                return EmployeeDisplayAllController()
             elif choice == "7":
                 return home_controllers.HomeController()
 
@@ -91,8 +91,43 @@ class EmployeeDeleteController(BaseController):
         return EmployeeController()
 
 
-class EmployeeDisplayAll(BaseController):
+class EmployeeDisplayAllController(BaseController):
     def run(self):
         employees = manager.get_all_employee()
         view.display_employee_table(employees=employees)
         return EmployeeController()
+
+
+class EmployeeLoginController(BaseController):
+    def run(self):
+        # Limit the number of tests to avoid an infinite loop
+        max_attempts = 3
+
+        for _ in range(max_attempts):
+            view.display_login()
+            username = view.get_username()
+            confirm_username = manager.get_employee_by_username(
+                username=username
+            )
+
+            if confirm_username:
+                password_hash = manager.get_employee_password_by_username(
+                    username=username
+                )
+                test_decode = view.test_decode_password(
+                    password_hash=password_hash
+                )
+
+                if test_decode:
+                    view.clean_console()
+                    return home_controllers.HomeController()
+                else:
+                    view.not_found(confirm_username)
+                    time.sleep(LONG_SLEEP)
+                    view.clean_console()
+            else:
+                view.not_found(username)
+
+        # If the user reaches the maximum number of unsuccessful attempts
+        view.clean_console()
+        return None

@@ -27,7 +27,7 @@ class EmployeeManager:
             with session.begin():
                 return (
                     session.query(Employee)
-                    .filter_by(username=username)
+                    .filter(Employee.username == username)
                     .first()
                 )
 
@@ -39,6 +39,18 @@ class EmployeeManager:
                     .filter(Employee.id == employee_id)
                     .first()
                 )
+
+    def get_employee_password_by_username(self, username):
+        with Session() as session:
+            with session.begin():
+                employee = (
+                    session.query(Employee)
+                    .filter(Employee.username == username)
+                    .first()
+                )
+                if employee:
+                    return employee.password
+                return None
 
     def get_employee_by_email(self, email):
         with Session() as session:
@@ -52,7 +64,7 @@ class EmployeeManager:
                 for employee in employees:
                     session.expunge(employee)
                     make_transient(employee)
-                return employee
+                return employees
 
     def delete_employee(self, username, email):
         with Session() as session:

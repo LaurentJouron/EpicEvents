@@ -30,7 +30,10 @@ class BaseErrorView:
         self.console.print(f"\n⛔️ {var_msg}", style=ERROR_COLOR, justify=LEFT)
 
     def _not_found(self, var=""):
-        self._message_error(" Not found.")
+        if var != "":
+            self._message_error(" Not found.")
+        else:
+            self._message_error(f" {var} Not found.")
 
     def _invalid_id(self, var=""):
         self.console.print(f" {var} is no valid.")
