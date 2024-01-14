@@ -1,6 +1,3 @@
-import time
-
-from ..utils.contants import SHORT_SLEEP, LONG_SLEEP
 from ..utils.bases.controllers import BaseController
 from ..views import HomeView, ReceptionView, ExitView
 from ..controllers import (
@@ -17,11 +14,7 @@ exit_view = ExitView()
 class ReceptionController(BaseController):
     def run(self):
         reception_view.welcome()
-        time.sleep(LONG_SLEEP)
-        reception_view.clean_console()
         reception_view.follow_instructions()
-        time.sleep(SHORT_SLEEP)
-        reception_view.clean_console()
         return employee_controllers.EmployeeLoginController()
 
 

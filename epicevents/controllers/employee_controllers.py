@@ -5,12 +5,14 @@ from sqlalchemy.exc import IntegrityError
 
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import LONG_SLEEP, SHORT_SLEEP
-from ..models import EmployeeManager
-from ..views import employee_views
+from ..models import EmployeeManager, RoleManager
+from ..views import employee_views, role_views
 from ..controllers import home_controllers
 
 view = employee_views.EmployeeView()
 manager = EmployeeManager()
+role = RoleManager()
+role_view = role_views.RoleView()
 
 
 class EmployeeController(BaseController):
@@ -18,24 +20,21 @@ class EmployeeController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                view.clean_console()
                 return EmployeeCreationController()
             elif choice == "2":
                 return UpdateEmployeeController()
             elif choice == "3":
-                return GetEmployeeUsernameByIdController()
-            elif choice == "4":
-                return GetEmployeeIdByUsernameController()
-            elif choice == "5":
                 return EmployeeDeleteController()
-            elif choice == "6":
+            elif choice == "4":
                 return EmployeeDisplayAllController()
-            elif choice == "7":
+            elif choice == "5":
                 return home_controllers.HomeController()
 
 
 class EmployeeCreationController(BaseController):
     def run(self):
+        roles = role.get_all_roles()
+        role_view.display_roles_table(roles)
         view.display_create_employee()
         employee_data = view.get_employee_data()
         try:
@@ -108,11 +107,9 @@ class EmployeeLoginController(BaseController):
         for _ in range(max_attempts):
             view.display_login()
             username = view.get_username()
-            confirm_username = manager.get_employee_by_username(
-                username=username
-            )
+            get_username = manager.get_employee_by_username(username=username)
 
-            if confirm_username:
+            if get_username:
                 password_hash = manager.get_employee_password_by_username(
                     username=username
                 )
@@ -124,12 +121,10 @@ class EmployeeLoginController(BaseController):
                     view.clean_console()
                     return home_controllers.HomeController()
                 else:
-                    view.not_found(confirm_username)
-                    time.sleep(LONG_SLEEP)
+                    view.not_found()
                     view.clean_console()
             else:
-                view.not_found(username)
+                view.not_found()
 
-        # If the user reaches the maximum number of unsuccessful attempts
         view.clean_console()
         return None

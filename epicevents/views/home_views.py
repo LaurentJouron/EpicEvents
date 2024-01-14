@@ -1,4 +1,3 @@
-from ..utils.bases.menus import BaseMenu
 from ..utils.bases.views import BaseView
 from ..utils.contants import CONFIRMATION_MENU
 
@@ -19,7 +18,7 @@ class ReceptionView(BaseView):
         self._clean_console()
 
 
-class HomeView(BaseMenu, BaseView):
+class HomeView(BaseView):
     home_menu: dict = {
         "1": "Employee",
         "2": "Client",
@@ -30,14 +29,13 @@ class HomeView(BaseMenu, BaseView):
     }
 
     def choice_menu(self):
-        self._display_menu("Home menu", menu_dict=self.home_menu)
-        return self._response_menu(menu_dict=self.home_menu)
+        return self._choice_menu("Home menu", menu_dict=self.home_menu)
 
     def clean_console(self):
         self._clean_console()
 
 
-class ExitView(BaseMenu, BaseView):
+class ExitView(BaseView):
     def exit_program(self):
         exiting = f" EXIT {epic_events} "
         self._display_centered_title(title=exiting, stars=False)

@@ -20,6 +20,25 @@ class RoleManager:
                 if role:
                     role.name = new_name
 
+    def delete_role(self, role_id):
+        with Session() as session:
+            with session.begin():
+                role = session.query(Role).get(role_id)
+                if role:
+                    session.delete(role)
+                    return True
+                else:
+                    return False
+
+    def get_all_roles(self):
+        with Session() as session:
+            with session.begin():
+                roles = session.query(Role).all()
+                for role in roles:
+                    session.expunge(role)
+                    make_transient(role)
+                return roles
+
     def get_role_name_by_id(self, role_id):
         with Session() as session:
             with session.begin():
@@ -35,25 +54,6 @@ class RoleManager:
                 if role:
                     return role.id
                 return None
-
-    def get_all_roles(self):
-        with Session() as session:
-            with session.begin():
-                roles = session.query(Role).all()
-                for role in roles:
-                    session.expunge(role)
-                    make_transient(role)
-                return roles
-
-    def delete_role(self, role_id):
-        with Session() as session:
-            with session.begin():
-                role = session.query(Role).get(role_id)
-                if role:
-                    session.delete(role)
-                    return True
-                else:
-                    return False
 
 
 class Role(Model):

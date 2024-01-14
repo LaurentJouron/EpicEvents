@@ -1,14 +1,13 @@
 from rich.table import Table
 from rich.console import Console
 
-from ..utils.bases.menus import BaseMenu
 from ..utils.bases.views import BaseView
 from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT, NAME
 
 console = Console()
 
 
-class ClientView(BaseMenu, BaseView):
+class ClientView(BaseView):
     client_menu: dict = {
         "1": "Create",
         "2": "Update",
@@ -20,8 +19,7 @@ class ClientView(BaseMenu, BaseView):
     }
 
     def menu_choice(self):
-        self._display_menu("Client menu", menu_dict=self.client_menu)
-        return self._response_menu(menu_dict=self.client_menu)
+        return self._choice_menu("Client menu", menu_dict=self.client_menu)
 
     def get_client_data(self):
         self._display_title("Client information")

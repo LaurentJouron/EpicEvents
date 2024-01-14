@@ -1,8 +1,7 @@
-from ..utils.bases.menus import BaseMenu
 from ..utils.bases.views import BaseView
 
 
-class ContractView(BaseMenu, BaseView):
+class ContractView(BaseView):
     contract_menu: dict = {
         "1": "Create",
         "2": "Update",
@@ -14,8 +13,7 @@ class ContractView(BaseMenu, BaseView):
     }
 
     def menu_choice(self):
-        self._display_menu("Contract menu", menu_dict=self.contract_menu)
-        return self._response_menu(menu_dict=self.contract_menu)
+        return self._choice_menu("Contract menu", menu_dict=self.contract_menu)
 
     def message_error(self, var):
         return self._message_error(var)

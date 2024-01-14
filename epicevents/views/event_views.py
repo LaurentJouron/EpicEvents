@@ -1,8 +1,7 @@
-from ..utils.bases.menus import BaseMenu
 from ..utils.bases.views import BaseView
 
 
-class EventView(BaseMenu, BaseView):
+class EventView(BaseView):
     event_menu: dict = {
         "1": "Create",
         "2": "Update",
@@ -14,8 +13,7 @@ class EventView(BaseMenu, BaseView):
     }
 
     def menu_choice(self):
-        self._display_menu("Event menu", menu_dict=self.event_menu)
-        return self._response_menu(menu_dict=self.event_menu)
+        return self._choice_menu("Event menu", menu_dict=self.event_menu)
 
     def message_error(self, var):
         return self._message_error(var)

@@ -1,4 +1,3 @@
-from ..utils.bases.menus import BaseMenu
 from ..utils.bases.views import BaseView
 from ..utils.contants import (
     RECEPTION_COLOR,
@@ -16,31 +15,28 @@ from rich.console import Console
 console = Console()
 
 
-class RoleView(BaseMenu, BaseView):
+class RoleView(BaseView):
     role_menu: dict = {
         "1": "Create",
         "2": "Update",
-        "3": "Get name by ID",
-        "4": "Get ID by name",
-        "5": "Delete",
-        "6": "All",
-        "7": "Return",
+        "3": "Delete",
+        "4": "All",
+        "5": "Return",
     }
 
     def menu_choice(self):
-        self._display_menu("Role menu", menu_dict=self.role_menu)
-        return self._response_menu(menu_dict=self.role_menu)
+        return self._choice_menu("Role menu", menu_dict=self.role_menu)
 
     def get_name(self):
         self._display_title(NAME)
         return self._get_name()
 
-    def get_id(self):
+    def get_role_id(self):
         self._display_title(IDENT)
         return self._get_id()
 
     def display_roles_table(self, roles):
-        self._display_menu("Role table", menu_dict="")
+        self._display_title("Role table")
         table = Table(
             title="Roles", show_header=True, header_style=RECEPTION_COLOR
         )
