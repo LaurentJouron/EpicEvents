@@ -62,13 +62,9 @@ class EmployeeView(BaseView):
                 employee.last_name,
                 employee.email,
                 employee.phone,
-                employee.role,
+                str(employee.role_id) if employee.role_id else "",
             )
         console.print(table)
-
-    def display_menu(self, menu_dict):
-        self._display_menu(menu_dict=menu_dict)
-        return self._response_menu(menu_dict=menu_dict)
 
     def encoded_password(self, password):
         return pbkdf2_sha256.using(salt_size=64).hash(password)
