@@ -27,13 +27,13 @@ class RoleView(BaseView):
     def menu_choice(self):
         return self._choice_menu("Role menu", menu_dict=self.role_menu)
 
-    def get_name(self):
+    def get_role_name(self):
         self._display_title(NAME)
         return self._get_name()
 
     def get_role_id(self):
         self._display_title(IDENT)
-        return self._get_id()
+        return self._select_id()
 
     def display_roles_table(self, roles):
         self._display_title("Role table")
@@ -55,20 +55,5 @@ class RoleView(BaseView):
     def success_delete(self):
         return self._success_delete()
 
-    def message_error(self, var):
-        return self._message_error(var)
-
     def not_found(self):
         return self._not_found()
-
-    def exist_error(self, var):
-        return super()._exist_error(var)
-
-    def role_information(self, title):
-        return self._display_left_phrase(title=title)
-
-    def invalid_id(self, title):
-        return self._invalid_id(title=title)
-
-    def clean_console(self):
-        self._clean_console()

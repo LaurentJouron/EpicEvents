@@ -32,6 +32,24 @@ class EmployeeManager:
                     .first()
                 )
 
+    def update_employee(self, employee_id, **kwargs):
+        with Session() as session:
+            with session.begin():
+                employee = session.query(Employee).get(employee_id)
+                if employee:
+                    if kwargs["username"] != employee.username:
+                        employee.username = kwargs["username"]
+                    if kwargs["last_name"] != employee.last_name:
+                        employee.last_name = kwargs["last_name"]
+                    if kwargs["email"] != employee.email:
+                        employee.email = kwargs["email"]
+                    if kwargs["phone"] != employee.phone:
+                        employee.phone = kwargs["phone"]
+                    if kwargs["password"] != employee.password:
+                        employee.password = kwargs["password"]
+                    if kwargs["role_id"] != employee.role_id:
+                        employee.role_id = kwargs["role_id"]
+
     def get_employee_by_id(self, employee_id):
         with Session() as session:
             with session.begin():

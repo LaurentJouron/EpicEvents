@@ -47,14 +47,6 @@ class RoleManager:
                     return role.name
                 return None
 
-    def get_role_id_by_name(self, name):
-        with Session() as session:
-            with session.begin():
-                role = session.query(Role).filter(Role.name == name).first()
-                if role:
-                    return role.id
-                return None
-
 
 class Role(Model):
     __tablename__ = "role"

@@ -5,19 +5,15 @@ from .home_controllers import (  # noqa: F401
 )
 from .role_controllers import (  # noqa: F401
     RoleController,
-    CreateRoleController,
-    UpdateRoleController,
-    GetRoleByIdController,
-    GetRoleByNameController,
-    DeleteRoleController,
-    GetAllRoleController,
+    RoleCreationController,
+    RoleUpdateController,
+    RoleDeleteController,
+    RoleDisplayAllController,
 )
 from .employee_controllers import (  # noqa: F401
     EmployeeController,
     EmployeeCreationController,
-    UpdateEmployeeController,
-    GetEmployeeIdByUsernameController,
-    GetEmployeeUsernameByIdController,
+    EmployeeUpdateController,
     EmployeeDeleteController,
     EmployeeDisplayAllController,
     EmployeeLoginController,
@@ -25,30 +21,24 @@ from .employee_controllers import (  # noqa: F401
 
 from .client_controllers import (  # noqa: F401
     ClientController,
-    CreateClientController,
-    UpdateClientController,
-    GetClientCompagnyNameByIdController,
-    GetClientIdByCompagnyNameController,
-    DeleteClientController,
-    GetAllClientController,
+    ClientCreationController,
+    ClientUpdateController,
+    ClientDeleteController,
+    ClientDisplayAllController,
 )
 
 from .event_controllers import (  # noqa: F401
     EventController,
-    CreateEventController,
-    UpdateEventController,
-    GetEventByIdController,
-    GetEventByNameController,
-    DeleteEventController,
-    GetAllEventController,
+    EventCreateController,
+    EventUpdateController,
+    EventDeleteController,
+    EventDisplayAllController,
 )
 
 from .contract_controllers import (  # noqa: F401
     ContractController,
-    CreateContractController,
-    UpdateContractController,
-    GetContractByIdController,
-    GetContractByNameController,
-    DeleteContractController,
-    GetAllContractController,
+    ContractCreateController,
+    ContractUpdateController,
+    ContractDeleteController,
+    ContractDisplayAllController,
 )

@@ -12,52 +12,36 @@ class EventController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                return CreateEventController()
+                return EventCreateController()
 
             elif choice == "2":
-                return UpdateEventController()
+                return EventUpdateController()
 
             elif choice == "3":
-                return GetEventByIdController()
+                return EventDeleteController()
 
             elif choice == "4":
-                return GetEventByNameController()
+                return EventDisplayAllController()
 
             elif choice == "5":
-                return DeleteEventController()
-
-            elif choice == "6":
-                return GetAllEventController()
-
-            elif choice == "7":
                 return home_controllers.HomeController()
 
 
-class CreateEventController(BaseController):
+class EventCreateController(BaseController):
     def run(self):
         ...
 
 
-class UpdateEventController(BaseController):
+class EventUpdateController(BaseController):
     def run(self):
         ...
 
 
-class GetEventByIdController(BaseController):
+class EventDeleteController(BaseController):
     def run(self):
         ...
 
 
-class GetEventByNameController(BaseController):
-    def run(self):
-        ...
-
-
-class DeleteEventController(BaseController):
-    def run(self):
-        ...
-
-
-class GetAllEventController(BaseController):
+class EventDisplayAllController(BaseController):
     def run(self):
         ...

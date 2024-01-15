@@ -2,7 +2,7 @@ from passlib.hash import pbkdf2_sha256
 from rich.table import Table
 from rich.console import Console
 from ..utils.bases.views import BaseView
-from ..utils.contants import RECEPTION_COLOR, BOLD, DIM
+from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT
 
 console = Console()
 
@@ -18,11 +18,6 @@ class EmployeeView(BaseView):
 
     def menu_choice(self):
         return self._choice_menu("Employee menu", menu_dict=self.employee_menu)
-
-    def display_employees(self, employees):
-        for employee in employees:
-            self.display_employee(employee)
-            print("\n" + "=" * 30 + "\n")
 
     def get_employee_data(self):
         role_id = self._select_id()
@@ -73,29 +68,21 @@ class EmployeeView(BaseView):
         password = self._get_password()
         return pbkdf2_sha256.verify(password, password_hash)
 
-    def display_employee(self, employee):
-        print(f"Username: {employee.username}")
-        print(f"Last name: {employee.last_name}")
-        print(f"Email: {employee.email}")
-        print(f"Phone Number: {employee.phone_number}")
+    def get_employee_id(self):
+        self._display_title(IDENT)
+        return self._select_id()
 
     def not_found(self):
         self._not_found()
 
-    def exist_error(self, var):
-        return super()._exist_error(var)
+    def success_delete(self):
+        self._success_delete()
 
-    def delete_succefully(self):
-        self._delete_succefully()
-
-    def updated_succefully(self):
-        self._updated_succefully()
+    def success_update(self):
+        self._success_updated()
 
     def success_creating(self):
         return self._success_creating()
-
-    def clean_console(self):
-        self._clean_console()
 
     def display_login(self):
         return self._display_title("Login")

@@ -19,29 +19,23 @@ class ClientController(BaseController):
             choice = view.menu_choice()
             if choice == "1":
                 view.clean_console()
-                return CreateClientController()
+                return ClientCreationController()
 
             elif choice == "2":
-                return UpdateClientController()
+                return ClientUpdateController()
 
             elif choice == "3":
-                return GetClientCompagnyNameByIdController()
+                return ClientDeleteController()
 
             elif choice == "4":
-                return GetClientIdByCompagnyNameController()
+                view.clean_console()
+                return ClientDisplayAllController()
 
             elif choice == "5":
-                return DeleteClientController()
-
-            elif choice == "6":
-                view.clean_console()
-                return GetAllClientController()
-
-            elif choice == "7":
                 return home_controllers.HomeController()
 
 
-class CreateClientController(BaseController):
+class ClientCreationController(BaseController):
     def run(self):
         client_data = view.get_client_data()
         try:
@@ -65,7 +59,7 @@ class CreateClientController(BaseController):
             ClientController()
 
 
-class UpdateClientController(BaseController):
+class ClientUpdateController(BaseController):
     def run(self):
         clients = manager.get_all_client()
         view.display_client_table(clients)
@@ -87,38 +81,8 @@ class UpdateClientController(BaseController):
             ClientController()
 
 
-class GetClientCompagnyNameByIdController(BaseController):
+class ClientDeleteController(BaseController):
     def run(self):
-        all_client = GetAllClientController()
-        all_client.run()
-        client_id = view.get_id()
-        client_name = manager.get_client_compagny_name_by_id(client_id)
-        if client_name:
-            view.client_information(client_name)
-        else:
-            view.invalid_id(title=client_name)
-        return ClientController()
-
-
-class GetClientIdByCompagnyNameController(BaseController):
-    def run(self):
-        all_client = GetAllClientController()
-        all_client.run()
-        name = view.get_name()
-        client = manager.get_client_id_by_compagny_name(name)
-        if client:
-            view.display_name(client)
-        else:
-            view.not_found()
-        time.sleep(SHORT_SLEEP)
-        view.clean_console()
-        return ClientController()
-
-
-class DeleteClientController(BaseController):
-    def run(self):
-        all_client = GetAllClientController()
-        all_client.run()
         client_id = view.get_id()
         deleted = manager.delete_client(client_id=client_id)
         if deleted:
@@ -130,7 +94,7 @@ class DeleteClientController(BaseController):
         return ClientController()
 
 
-class GetAllClientController(BaseController):
+class ClientDisplayAllController(BaseController):
     def run(self):
         clients = manager.get_all_client()
         view.display_client_table(clients=clients)

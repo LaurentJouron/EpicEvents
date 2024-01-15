@@ -11,11 +11,9 @@ class ClientView(BaseView):
     client_menu: dict = {
         "1": "Create",
         "2": "Update",
-        "3": "Get compagny name by ID",
-        "4": "Get ID by compagny name",
-        "5": "Delete",
-        "6": "All",
-        "7": "Return",
+        "3": "Delete",
+        "4": "All",
+        "5": "Return",
     }
 
     def menu_choice(self):

@@ -12,52 +12,36 @@ class ContractController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                return CreateContractController()
+                return ContractCreateController()
 
             elif choice == "2":
-                return UpdateContractController()
+                return ContractUpdateController()
 
             elif choice == "3":
-                return GetContractByIdController()
+                return ContractDeleteController()
 
             elif choice == "4":
-                return GetContractByNameController()
+                return ContractDisplayAllController()
 
             elif choice == "5":
-                return DeleteContractController()
-
-            elif choice == "6":
-                return GetAllContractController()
-
-            elif choice == "7":
                 return home_controllers.HomeController()
 
 
-class CreateContractController(BaseController):
+class ContractCreateController(BaseController):
     def run(self):
         ...
 
 
-class UpdateContractController(BaseController):
+class ContractUpdateController(BaseController):
     def run(self):
         ...
 
 
-class GetContractByIdController(BaseController):
+class ContractDeleteController(BaseController):
     def run(self):
         ...
 
 
-class GetContractByNameController(BaseController):
-    def run(self):
-        ...
-
-
-class DeleteContractController(BaseController):
-    def run(self):
-        ...
-
-
-class GetAllContractController(BaseController):
+class ContractDisplayAllController(BaseController):
     def run(self):
         ...

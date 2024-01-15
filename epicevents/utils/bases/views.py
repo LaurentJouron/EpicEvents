@@ -49,7 +49,8 @@ class BaseErrorView(BaseManageConsole):
     """
     Base class for displaying error messages.
     This class provides methods for displaying various error messages,
-    such as not found, invalid ID, existence error, delete aborted, menu error, and must be provided.
+    such as not found, invalid ID, existence error, delete aborted, menu error,
+    and must be provided.
     """
 
     def __message_error(self, var: str) -> None:

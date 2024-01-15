@@ -1,8 +1,6 @@
-import time
 import logging
 
 from ..utils.bases.controllers import BaseController
-from ..utils.contants import SHORT_SLEEP, NAME
 from ..models import RoleManager
 from ..views import RoleView
 from ..controllers import home_controllers
@@ -18,31 +16,30 @@ class RoleController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                return CreateRoleController()
+                return RoleCreationController()
 
             elif choice == "2":
-                return UpdateRoleController()
+                return RoleUpdateController()
 
             elif choice == "3":
-                return DeleteRoleController()
+                return RoleDeleteController()
 
             elif choice == "4":
-                return GetAllRoleController()
+                return RoleDisplayAllController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
 
 
-class CreateRoleController(BaseController):
+class RoleCreationController(BaseController):
     def run(self):
-        role_name = view.get_name()
+        role_name = view.get_role_name()
         try:
             manager.add_role(name=role_name)
             view.success_creating()
             return RoleController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
-            view.exist_error(role_name)
             return RoleController()
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
@@ -51,69 +48,41 @@ class CreateRoleController(BaseController):
             RoleController()
 
 
-class UpdateRoleController(BaseController):
+class RoleUpdateController(BaseController):
     def run(self):
         roles = manager.get_all_roles()
         view.display_roles_table(roles)
-        role_id = view.get_id()
+        role_id = view.get_role_id()
         try:
             role_name = manager.get_role_name_by_id(role_id)
             if role_name:
-                view.role_information(NAME)
-                new_name = view.get_name()
+                new_name = view.get_role_name()
                 manager.update_role(role_id, new_name)
                 view.success_update()
             else:
                 view.not_found()
         except Exception as e:
             logging.exception(f"Unexpected error during role update: {e}")
-            view.message_error(str(e))
         finally:
             return RoleController()
 
 
-class GetRoleByIdController(BaseController):
+class RoleDeleteController(BaseController):
     def run(self):
         roles = manager.get_all_roles()
         view.display_roles_table(roles)
-        role_id = view.get_id()
-        role_name = manager.get_role_name_by_id(role_id)
-        if role_name:
-            view.role_information(role_name)
-        else:
-            view.invalid_id()
-        return RoleController()
 
-
-class GetRoleByNameController(BaseController):
-    def run(self):
-        roles = manager.get_all_roles()
-        view.display_roles_table(roles)
-        role_name = view.get_name()
-        role_id = manager.get_role_id_by_name(role_name)
-        if role_id:
-            view.role_information(role_id)
-        else:
-            view.not_found()
-        return RoleController()
-
-
-class DeleteRoleController(BaseController):
-    def run(self):
-        all_role = GetAllRoleController()
-        all_role.run()
         role_id = view.get_role_id()
         deleted = manager.delete_role(role_id=role_id)
         if deleted:
             view.success_delete()
         else:
             view.not_found()
-        time.sleep(SHORT_SLEEP)
-        view.clean_console()
         return RoleController()
 
 
-class GetAllRoleController(BaseController):
+class RoleDisplayAllController(BaseController):
     def run(self):
         roles = manager.get_all_roles()
-        return view.display_roles_table(roles)
+        view.display_roles_table(roles)
+        return RoleController()
