@@ -1,5 +1,7 @@
 import time
 import logging
+import tempfile
+import os
 
 from sqlalchemy.exc import IntegrityError
 
@@ -105,19 +107,47 @@ class EmployeeDisplayAllController(BaseController):
 class EmployeeLoginController(BaseController):
     def run(self):
         max_attempts = 3
+        temp_file_path = None
+
         for _ in range(max_attempts):
             view.display_login()
             username = view.get_username()
-            get_username = manager.get_employee_by_username(username=username)
-            if get_username:
+            employee = manager.get_employee_by_username(username=username)
+
+            if employee:
                 password_hash = manager.get_employee_password_by_username(
                     username=username
                 )
-                decode = view.test_decode_password(password_hash=password_hash)
-                if decode:
+                if view.test_decode_password(password_hash=password_hash):
+                    global role_id, employee_id
+                    role_id = manager.get_employee_role_id_by_username(
+                        username=username
+                    )
+                    employee_id = manager.get_employee_id_by_username(
+                        username=username
+                    )
+
+                    temp_file_path = self.create_temp_file()
+
                     return home_controllers.HomeController()
-                else:
-                    view.not_found()
-            else:
-                view.not_found()
+
+            view.not_found()
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+
         return None
+
+    def create_temp_file(self):
+        temp_file = None
+        try:
+            temp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
+            temp_file.write(f"employee_id={employee_id}\rrole_id={role_id}")
+
+            print(f"Temporary file path: {temp_file.name}")
+            with open(temp_file.name, "r") as file:
+                print(f"Temporary file content:\n{file.read()}")
+
+            return temp_file.name
+        finally:
+            if temp_file:
+                temp_file.close()

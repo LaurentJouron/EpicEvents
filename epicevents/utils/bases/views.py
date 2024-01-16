@@ -144,6 +144,14 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
         """
         return self.__get_item(name="lastname").capitalize()
 
+    def _get_compagny_name(self) -> str:
+        """
+        Get client input for a compagny name.
+        Returns:
+            str: client input for the compagny name.
+        """
+        return self.__get_item(name="compagny name").capitalize()
+
     def _get_name(self) -> str:
         """
         Get user input for a name.
@@ -159,6 +167,22 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
             str: User input for the email.
         """
         return self.__get_item(name="email").lower()
+
+    def _get_address(self) -> str:
+        """
+        Get user input for an address.
+        Returns:
+            str: User input for the address.
+        """
+        return self.__get_item(name="address")
+
+    def _get_information(self) -> str:
+        """
+        Get user input for an information.
+        Returns:
+            str: User input for the information.
+        """
+        return self.__get_item(name="information")
 
     def _get_phone_number(self) -> str:
         """

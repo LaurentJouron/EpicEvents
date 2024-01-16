@@ -41,8 +41,8 @@ class ClientCreationController(BaseController):
         try:
             manager.create_client(**client_data)
             view.success_creating()
-            time.sleep(SHORT_SLEEP)
-            view.clean_console()
+            # time.sleep(SHORT_SLEEP)
+            # view.clean_console()
             return ClientController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")

@@ -1,3 +1,5 @@
+import tempfile
+
 from rich.table import Table
 from rich.console import Console
 
@@ -21,13 +23,27 @@ class ClientView(BaseView):
 
     def get_client_data(self):
         self._display_title("Client information")
-        compagny_name = self._get_answer_item("compagny name").capitalize()
+        compagny_name = self._get_compagny_name()
         username = self._get_username()
         last_name = self._get_lastname()
         email = self._get_email()
         phone = self._get_phone_number()
-        address = self._get_answer_item("address")
-        information = self._get_answer_item("information")
+        address = self._get_address()
+        information = self._get_information()
+
+        temp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
+        with open(temp_file.name, "r") as file:
+            content = file.read()
+            # Recherche de la chaîne "employee_id=" dans le contenu
+            index = content.find("employee_id=")
+            if index != -1:
+                # Extrait la partie après "employee_id="
+                commercial_id = content[index + len("employee_id=") :].strip()
+                print(commercial_id)
+            else:
+                # Initialise commercial_id avec une valeur par défaut si "EMPLOYEE_ID" n'est pas trouvé
+                commercial_id = None
+                print("employee_id non trouvé dans le fichier temporaire.")
 
         return {
             "compagny_name": compagny_name,
@@ -37,6 +53,7 @@ class ClientView(BaseView):
             "phone": phone,
             "address": address,
             "information": information,
+            "commercial_id": commercial_id,
         }
 
     def display_client_table(self, clients):

@@ -22,6 +22,7 @@ class ClientManager:
                     address=kwargs["address"],
                     information=kwargs["information"],
                     creation_date=datetime.now(),
+                    commercial_id=kwargs["commercial_id"],
                 )
                 session.add(new_client)
 

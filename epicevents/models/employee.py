@@ -71,10 +71,29 @@ class EmployeeManager:
                     return employee.password
                 return None
 
-    def get_employee_by_email(self, email):
+    def get_employee_role_id_by_username(self, username):
         with Session() as session:
             with session.begin():
-                session.query(Employee).filter_by(email=email)
+                employee = (
+                    session.query(Employee)
+                    .filter_by(username=username)
+                    .first()
+                )
+                if employee:
+                    return employee.role_id
+                return None
+
+    def get_employee_id_by_username(self, username):
+        with Session() as session:
+            with session.begin():
+                employee = (
+                    session.query(Employee)
+                    .filter_by(username=username)
+                    .first()
+                )
+                if employee:
+                    return employee.id
+                return None
 
     def get_all_employee(self):
         with Session() as session:
