@@ -1,8 +1,8 @@
+from ..contants import SHORT_SLEEP
+
 import time
 import typer
 from rich.console import Console
-
-from ..contants import SHORT_SLEEP
 
 
 class BaseManageConsole:

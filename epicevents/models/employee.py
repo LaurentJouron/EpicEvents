@@ -19,7 +19,7 @@ class EmployeeManager:
                     email=kwargs["email"],
                     phone=kwargs["phone"],
                     password=kwargs["password"],
-                    role_id=kwargs["role_id"],
+                    # role_id=kwargs["role_id"],
                 )
                 session.add(new_employee)
 

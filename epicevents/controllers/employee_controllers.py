@@ -5,9 +5,8 @@ import os
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import SHORT_SLEEP, FILEPATH
 from ..models import EmployeeManager, RoleManager
-from ..views import employee_views, role_views
-from ..controllers import home_controllers
-
+from ..views import employee_views
+from ..controllers import home_controllers, role_controllers
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256
 
@@ -15,7 +14,6 @@ from passlib.hash import pbkdf2_sha256
 view = employee_views.EmployeeView()
 manager = EmployeeManager()
 role_manager = RoleManager()
-role_view = role_views.RoleView()
 
 
 class EmployeeController(BaseController):
@@ -36,11 +34,8 @@ class EmployeeController(BaseController):
 
 class EmployeeCreationController(BaseController):
     def run(self):
-        roles = role_manager.get_all_roles()
-        role_view.display_roles_table(roles)
-
         view.display_create_employee()
-        employee_data = view.get_employee_data()
+        employee_data = self.get_employee_data()
         try:
             manager.create_employee(**employee_data)
             view.success_creating()
@@ -58,6 +53,23 @@ class EmployeeCreationController(BaseController):
         finally:
             EmployeeController()
 
+    def get_employee_data(self):
+        username = view.get_username()
+        last_name = view.get_lastname()
+        email = view.get_email()
+        phone = view.get_phone_number()
+        password = view.encoded_password()
+        # role_controllers.RoleDisplayAllController()
+        # role_id = view.select_id()
+        return {
+            "username": username,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "password": password,
+            # "role_id": role_id,
+        }
+
 
 class EmployeeUpdateController(BaseController):
     def run(self):
@@ -68,13 +80,10 @@ class EmployeeUpdateController(BaseController):
         try:
             employee = manager.get_employee_by_id(employee_id=employee_id)
             if employee:
-                roles = role_manager.get_all_roles()
-                role_view.display_roles_table(roles)
-
-                employee_data = view.get_employee_data()
-                manager.update_employee(
-                    employee_id=employee_id, **employee_data
-                )
+                # employee_data = self.get_employee_data()
+                # manager.update_employee(
+                #     employee_id=employee_id, **employee_data
+                # )
                 view.success_update()
             else:
                 view.not_found()
@@ -82,6 +91,24 @@ class EmployeeUpdateController(BaseController):
             logging.exception(f"Unexpected error during employee update: {e}")
         finally:
             return EmployeeController()
+
+    # def get_employee_data(self):
+    #     username = view.get_username()
+    #     last_name = view.get_lastname()
+    #     email = view.get_email()
+    #     phone = view.get_phone_number()
+    #     password = view.encoded_password()
+    #     roles = role_manager.get_all_roles()
+    #     role_view.display_roles_table(roles)
+    #     role_id = view.select_id()
+    #     return {
+    #         "username": username,
+    #         "last_name": last_name,
+    #         "email": email,
+    #         "phone": phone,
+    #         "password": password,
+    #         "role_id": role_id,
+    #     }
 
 
 class EmployeeDeleteController(BaseController):

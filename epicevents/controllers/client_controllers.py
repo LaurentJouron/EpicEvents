@@ -1,5 +1,7 @@
 import logging
 import time
+
+from epicevents.controllers import employee_controllers
 from ..utils.contants import SHORT_SLEEP
 from ..utils.bases.controllers import BaseController
 from ..models import ClientManager
@@ -40,8 +42,6 @@ class ClientCreationController(BaseController):
         try:
             manager.create_client(**client_data)
             view.success_creating()
-            # time.sleep(SHORT_SLEEP)
-            # view.clean_console()
             return ClientController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
@@ -57,17 +57,39 @@ class ClientCreationController(BaseController):
         finally:
             ClientController()
 
+    def get_client_data(self):
+        view.display_title()
+        compagny_name = view.get_compagny_name()
+        username = view.get_username()
+        last_name = view.get_lastname()()
+        email = view.get_email()
+        phone = view.phone()
+        address = view.get_address()
+        information = view.get_information()
+        employee = employee_controllers.EmployeeLoginController()
+        commercial_id = employee.search_employee_id()
+        return {
+            "compagny_name": compagny_name,
+            "username": username,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "address": address,
+            "information": information,
+            "commercial_id": commercial_id,
+        }
+
 
 class ClientUpdateController(BaseController):
     def run(self):
         clients = manager.get_all_client()
         view.display_client_table(clients)
-        client_id = view.get_id()
+        client_id = view.select_id()
         try:
             client_name = manager.get_client_compagny_name_by_id(client_id)
             if client_name:
-                client_data = view.get_client_data()
-                manager.update_client(client_id, **client_data)
+                # client_data = self.get_client_data()
+                # manager.update_client(client_id, **client_data)
                 view.success_update()
                 return ClientController()
             else:
@@ -78,6 +100,28 @@ class ClientUpdateController(BaseController):
             raise
         finally:
             ClientController()
+
+    # def get_client_data(self):
+    #     view.display_title()
+    #     compagny_name = view.get_compagny_name()
+    #     username = view.get_username()
+    #     last_name = view.get_lastname()()
+    #     email = view.get_email()
+    #     phone = view.phone()
+    #     address = view.get_address()
+    #     information = view.get_information()
+    #     employee = employee_controllers.EmployeeLoginController()
+    #     commercial_id = employee.search_employee_id()
+    #     return {
+    #         "compagny_name": compagny_name,
+    #         "username": username,
+    #         "last_name": last_name,
+    #         "email": email,
+    #         "phone": phone,
+    #         "address": address,
+    #         "information": information,
+    #         "commercial_id": commercial_id,
+    #     }
 
 
 class ClientDeleteController(BaseController):

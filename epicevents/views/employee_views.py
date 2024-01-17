@@ -18,25 +18,24 @@ class EmployeeView(BaseView):
     def menu_choice(self):
         return self._choice_menu("Employee menu", menu_dict=self.employee_menu)
 
-    def get_employee_data(self):
-        role_id = self._select_id()
-        username = self._get_username()
-        last_name = self._get_lastname()
-        email = self._get_email()
-        phone = self._get_phone_number()
-        password = self._get_password()
-        encoded_password = self.encoded_password(password=password)
-        return {
-            "username": username,
-            "last_name": last_name,
-            "email": email,
-            "phone": phone,
-            "password": encoded_password,
-            "role_id": role_id,
-        }
-
     def get_username(self):
         return self._get_username()
+
+    def get_lastname(self):
+        return self._get_lastname()
+
+    def get_email(self):
+        return self._get_email()
+
+    def get_phone_number(self):
+        return self._get_phone_number()
+
+    def encoded_password(self):
+        password = self._get_password()
+        return pbkdf2_sha256.using(salt_size=64).hash(password)
+
+    def select_id(self):
+        return self._select_id
 
     def display_employee_table(self, employees):
         self._display_title("Employee table")
@@ -59,9 +58,6 @@ class EmployeeView(BaseView):
                 str(employee.role_id) if employee.role_id else "",
             )
         console.print(table)
-
-    def encoded_password(self, password):
-        return pbkdf2_sha256.using(salt_size=64).hash(password)
 
     def test_decode_password(self, password_hash):
         password = self._get_password()

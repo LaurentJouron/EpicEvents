@@ -4,12 +4,13 @@ from ..controllers import (
     employee_controllers,
     role_controllers,
     client_controllers,
+    event_controllers,
+    contract_controllers,
 )
 
 view = HomeView()
 reception_view = ReceptionView()
 exit_view = ExitView()
-logout = employee_controllers.EmployeeLogoutController()
 
 
 class ReceptionController(BaseController):
@@ -31,11 +32,11 @@ class HomeController(BaseController):
                 return client_controllers.ClientController()
             elif choice == "3":
                 # Events
-                # return event_controllers.EventController()
+                return event_controllers.EventController()
                 ...
             elif choice == "4":
                 # Contracts
-                # return contract_controllers.ContractController()
+                return contract_controllers.ContractController()
                 ...
             elif choice == "5":
                 # Roles
@@ -49,7 +50,7 @@ class ExitController(BaseController):
         exit_view.exit_program()
         choice = exit_view.choice_menu()
         if choice == "1":
-            logout.run()
+            employee_controllers.EmployeeLogoutController()
             return None
         else:
             return HomeController()

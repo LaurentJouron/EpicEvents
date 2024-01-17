@@ -2,10 +2,8 @@ from rich.table import Table
 from rich.console import Console
 
 from ..utils.bases.views import BaseView
-from ..controllers import employee_controllers
 
 console = Console()
-employee = employee_controllers.EmployeeLoginController()
 
 
 class ClientView(BaseView):
@@ -20,26 +18,29 @@ class ClientView(BaseView):
     def menu_choice(self):
         return self._choice_menu("Client menu", menu_dict=self.client_menu)
 
-    def get_client_data(self):
-        self._display_title("Client information")
-        compagny_name = self._get_compagny_name()
-        username = self._get_username()
-        last_name = self._get_lastname()
-        email = self._get_email()
-        phone = self._get_phone_number()
-        address = self._get_address()
-        information = self._get_information()
-        commercial_id = employee.search_employee_id()
-        return {
-            "compagny_name": compagny_name,
-            "username": username,
-            "last_name": last_name,
-            "email": email,
-            "phone": phone,
-            "address": address,
-            "information": information,
-            "commercial_id": commercial_id,
-        }
+    def display_title(self):
+        return self._display_title("Client information")
+
+    def get_compagny_name(self):
+        return self._get_compagny_name()
+
+    def get_username(self):
+        return self._get_username()
+
+    def get_lastname(self):
+        return self._get_lastname()
+
+    def get_email(self):
+        return self._get_email()
+
+    def get_phone(self):
+        return self._get_phone_number()
+
+    def get_address(self):
+        return self._get_address()
+
+    def get_information(self):
+        return self._get_information()
 
     def display_client_table(self, clients):
         self._display_menu("Client table", menu_dict="")
@@ -73,10 +74,8 @@ class ClientView(BaseView):
             )
         console.print(table)
 
-    def get_id(self):
-        self._display_title("Ident")
-        ident = self._get_id()
-        return ident
+    def select_id(self):
+        return self._select_id()
 
     def get_name(self):
         self._display_title("name")
