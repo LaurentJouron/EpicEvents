@@ -59,7 +59,7 @@ class EmployeeManager:
                     .first()
                 )
 
-    def get_employee_password_by_username(self, username):
+    def password_by_username(self, username):
         with Session() as session:
             with session.begin():
                 employee = (
@@ -71,7 +71,7 @@ class EmployeeManager:
                     return employee.password
                 return None
 
-    def get_employee_role_id_by_username(self, username):
+    def role_id_by_username(self, username):
         with Session() as session:
             with session.begin():
                 employee = (
@@ -83,7 +83,7 @@ class EmployeeManager:
                     return employee.role_id
                 return None
 
-    def get_employee_id_by_username(self, username):
+    def get_id_by_username(self, username):
         with Session() as session:
             with session.begin():
                 employee = (

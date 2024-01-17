@@ -1,15 +1,16 @@
 import time
 import logging
-import tempfile
+import json
 import os
-
-from sqlalchemy.exc import IntegrityError
-
 from ..utils.bases.controllers import BaseController
-from ..utils.contants import SHORT_SLEEP
+from ..utils.contants import SHORT_SLEEP, FILEPATH
 from ..models import EmployeeManager, RoleManager
 from ..views import employee_views, role_views
 from ..controllers import home_controllers
+
+from sqlalchemy.exc import IntegrityError
+from passlib.hash import pbkdf2_sha256
+
 
 view = employee_views.EmployeeView()
 manager = EmployeeManager()
@@ -104,50 +105,109 @@ class EmployeeDisplayAllController(BaseController):
         return EmployeeController()
 
 
+class EmployeeCommercialController(EmployeeController):
+    def run(self):
+        ...
+
+
+class EmployeeGestionController(EmployeeController):
+    def run(self):
+        ...
+
+
+class EmployeeSupportController(EmployeeController):
+    def run(self):
+        ...
+
+
 class EmployeeLoginController(BaseController):
     def run(self):
-        max_attempts = 3
-        temp_file_path = None
+        token = self.search_token()
+        if token != 0:
+            # return self.redirect_employee()
+            return home_controllers.HomeController()
+        else:
+            max_attempts = 3
+            for _ in range(max_attempts):
+                view.display_login()
+                username = view.get_username()
+                employee = manager.get_employee_by_username(username=username)
 
-        for _ in range(max_attempts):
-            view.display_login()
-            username = view.get_username()
-            employee = manager.get_employee_by_username(username=username)
-
-            if employee:
-                password_hash = manager.get_employee_password_by_username(
-                    username=username
-                )
-                if view.test_decode_password(password_hash=password_hash):
-                    global role_id, employee_id
-                    role_id = manager.get_employee_role_id_by_username(
+                if employee:
+                    password_hash = manager.password_by_username(
                         username=username
                     )
-                    employee_id = manager.get_employee_id_by_username(
-                        username=username
-                    )
+                    if view.test_decode_password(password_hash=password_hash):
+                        role_id = manager.role_id_by_username(
+                            username=username
+                        )
+                        employee_id = manager.get_id_by_username(
+                            username=username
+                        )
+                        token = self.create_token(username=username)
+                        data = {
+                            "employee_id": employee_id,
+                            "role_id": role_id,
+                            "token": token,
+                        }
+                        for key, value in data.items():
+                            self.write_on_json_file(key, value)
+                        # return self.redirect_employee()
+                        return home_controllers.HomeController()
+                view.not_found()
+            return None
 
-                    temp_file_path = self.create_temp_file()
-
-                    return home_controllers.HomeController()
-
-            view.not_found()
-        if temp_file_path and os.path.exists(temp_file_path):
-            os.remove(temp_file_path)
-
-        return None
-
-    def create_temp_file(self):
-        temp_file = None
+    def write_on_json_file(self, key, value):
+        if not os.path.exists(FILEPATH):
+            with open(FILEPATH, "w") as f:
+                json.dump({}, f)
         try:
-            temp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
-            temp_file.write(f"employee_id={employee_id}\rrole_id={role_id}")
+            with open(FILEPATH, "r") as f:
+                data = json.load(f)
+        except json.JSONDecodeError:
+            data = {}
+        data[key] = value
+        with open(FILEPATH, "w") as f:
+            json.dump(data, f, indent=4)
 
-            print(f"Temporary file path: {temp_file.name}")
-            with open(temp_file.name, "r") as file:
-                print(f"Temporary file content:\n{file.read()}")
+    def create_token(self, username):
+        return pbkdf2_sha256.using(salt_size=64).hash(username)
 
-            return temp_file.name
-        finally:
-            if temp_file:
-                temp_file.close()
+    def search_token(self):
+        with open(FILEPATH) as f:
+            return json.load(f)["token"]
+
+    def search_employee_id(self):
+        with open(FILEPATH) as f:
+            return json.load(f)["employee_id"]
+
+    # def redirect_employee(self):
+    #     with open(FILEPATH) as f:
+    #         role = json.load(f)["role_id"]
+    #         role = str(role)
+    #         if role == "1":
+    #             # Commercial
+    #             return home_controllers.HomeCommercialController()
+    #         elif role == "2":
+    #             # Gestion
+    #             return home_controllers.HomeGestionController()
+    #         elif role == "3":
+    #             # Support
+    #             return home_controllers.HomeSupportController()
+    #         else:
+    #             view.not_found()
+    #             return
+
+
+class EmployeeLogoutController(BaseController):
+    def run(self):
+        with open(FILEPATH, "w") as f:
+            return json.dump(
+                {
+                    "employee_id": 0,
+                    "role_id": 0,
+                    "token": 0,
+                },
+                f,
+                indent=4,
+            )

@@ -28,51 +28,6 @@ class HomeView(BaseView):
     def choice_menu(self):
         return self._choice_menu("Home menu", menu_dict=self.home_menu)
 
-    def clean_console(self):
-        self._clean_console()
-
-
-class HomeCommercialView(HomeView):
-    commercial_menu: dict = {
-        "1": "Employee",
-        "2": "Client",
-        "3": "Event",
-        "4": "Contract",
-        "5": "Role",
-        "6": "Exit",
-    }
-
-    def choice_menu(self):
-        return self.choice_menu()
-
-
-class HomeGestionView(HomeView):
-    gestion_menu: dict = {
-        "1": "Employee",
-        "2": "Client",
-        "3": "Event",
-        "4": "Contract",
-        "5": "Role",
-        "6": "Exit",
-    }
-
-    def choice_menu(self):
-        return self.choice_menu()
-
-
-class HomeSupportView(HomeView):
-    home_menu: dict = {
-        "1": "Employee",
-        "2": "Client",
-        "3": "Event",
-        "4": "Contract",
-        "5": "Role",
-        "6": "Exit",
-    }
-
-    def choice_menu(self):
-        return self.choice_menu()
-
 
 class ExitView(BaseView):
     def exit_program(self):

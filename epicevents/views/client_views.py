@@ -1,12 +1,11 @@
-import tempfile
-
 from rich.table import Table
 from rich.console import Console
 
 from ..utils.bases.views import BaseView
-from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT, NAME
+from ..controllers import employee_controllers
 
 console = Console()
+employee = employee_controllers.EmployeeLoginController()
 
 
 class ClientView(BaseView):
@@ -30,21 +29,7 @@ class ClientView(BaseView):
         phone = self._get_phone_number()
         address = self._get_address()
         information = self._get_information()
-
-        temp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
-        with open(temp_file.name, "r") as file:
-            content = file.read()
-            # Recherche de la chaîne "employee_id=" dans le contenu
-            index = content.find("employee_id=")
-            if index != -1:
-                # Extrait la partie après "employee_id="
-                commercial_id = content[index + len("employee_id=") :].strip()
-                print(commercial_id)
-            else:
-                # Initialise commercial_id avec une valeur par défaut si "EMPLOYEE_ID" n'est pas trouvé
-                commercial_id = None
-                print("employee_id non trouvé dans le fichier temporaire.")
-
+        commercial_id = employee.search_employee_id()
         return {
             "compagny_name": compagny_name,
             "username": username,
@@ -59,19 +44,19 @@ class ClientView(BaseView):
     def display_client_table(self, clients):
         self._display_menu("Client table", menu_dict="")
         table = Table(
-            title="Client", show_header=True, header_style=RECEPTION_COLOR
+            title="Client", show_header=True, header_style="bold blue"
         )
-        table.add_column("ID", style=DIM)
-        table.add_column("compagny_name", style=BOLD)
-        table.add_column("username", style=BOLD)
-        table.add_column("last_name", style=BOLD)
-        table.add_column("email", style=BOLD)
-        table.add_column("phone", style=BOLD)
-        table.add_column("address", style=BOLD)
-        table.add_column("information", style=BOLD)
-        # table.add_column("creation_date", style=BOLD)
-        # table.add_column("updating_date", style=BOLD)
-        # table.add_column("commercial_id", style=BOLD)
+        table.add_column("ID", style="dim")
+        table.add_column("compagny_name", style="bold")
+        table.add_column("username", style="bold")
+        table.add_column("last_name", style="bold")
+        table.add_column("email", style="bold")
+        table.add_column("phone", style="bold")
+        table.add_column("address", style="bold")
+        table.add_column("information", style="bold")
+        # table.add_column("creation_date", style="bold")
+        # table.add_column("updating_date", style="bold")
+        table.add_column("commercial_id", style="bold")
         for client in clients:
             table.add_row(
                 str(client.id),
@@ -84,17 +69,17 @@ class ClientView(BaseView):
                 client.information,
                 # client.creation_date,
                 # client.updating_date,
-                # client.commercial_id,
+                client.commercial_id,
             )
         console.print(table)
 
     def get_id(self):
-        self._display_title(IDENT)
+        self._display_title("Ident")
         ident = self._get_id()
         return ident
 
     def get_name(self):
-        self._display_title(NAME)
+        self._display_title("name")
         name = self._get_name()
         return name
 

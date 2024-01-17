@@ -2,7 +2,6 @@ from passlib.hash import pbkdf2_sha256
 from rich.table import Table
 from rich.console import Console
 from ..utils.bases.views import BaseView
-from ..utils.contants import RECEPTION_COLOR, BOLD, DIM, IDENT
 
 console = Console()
 
@@ -42,13 +41,13 @@ class EmployeeView(BaseView):
     def display_employee_table(self, employees):
         self._display_title("Employee table")
         table = Table(
-            title="Employee", show_header=True, header_style=RECEPTION_COLOR
+            title="Employee", show_header=True, header_style="bold blue"
         )
-        table.add_column("ID", style=DIM)
-        table.add_column("username", style=BOLD)
-        table.add_column("last_name", style=BOLD)
-        table.add_column("email", style=BOLD)
-        table.add_column("phone", style=BOLD)
+        table.add_column("ID", style="dim")
+        table.add_column("username", style="bold")
+        table.add_column("last_name", style="bold")
+        table.add_column("email", style="bold")
+        table.add_column("phone", style="bold")
         table.add_column("role_id")
         for employee in employees:
             table.add_row(
@@ -69,7 +68,7 @@ class EmployeeView(BaseView):
         return pbkdf2_sha256.verify(password, password_hash)
 
     def get_employee_id(self):
-        self._display_title(IDENT)
+        self._display_title("ident")
         return self._select_id()
 
     def not_found(self):
@@ -89,3 +88,15 @@ class EmployeeView(BaseView):
 
     def display_create_employee(self):
         return self._display_title("Create employee")
+
+
+class EmployeeCommercialView(EmployeeView):
+    ...
+
+
+class EmployeeGestionView(EmployeeView):
+    ...
+
+
+class EmployeeSupportView(EmployeeView):
+    ...

@@ -1,5 +1,4 @@
 import logging
-
 from ..utils.bases.controllers import BaseController
 from ..models import RoleManager
 from ..views import RoleView
@@ -14,7 +13,7 @@ manager = RoleManager()
 class RoleController(BaseController):
     def run(self):
         while True:
-            choice = view.menu_choice()
+            choice = view.choice_menu()
             if choice == "1":
                 return RoleCreationController()
 

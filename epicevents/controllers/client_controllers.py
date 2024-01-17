@@ -1,13 +1,12 @@
 import logging
 import time
-
-from sqlalchemy.exc import IntegrityError
-
 from ..utils.contants import SHORT_SLEEP
 from ..utils.bases.controllers import BaseController
 from ..models import ClientManager
 from ..views import ClientView
 from ..controllers import home_controllers
+
+from sqlalchemy.exc import IntegrityError
 
 view = ClientView()
 manager = ClientManager()
