@@ -1,19 +1,18 @@
-import time
 import logging
 import json
 import os
 from ..utils.bases.controllers import BaseController
-from ..utils.contants import SHORT_SLEEP, FILEPATH
+from ..utils.contants import FILEPATH
 from ..models import EmployeeManager, RoleManager
-from ..views import employee_views
-from ..controllers import home_controllers, role_controllers
+from ..views import employee_views, role_views
+from ..controllers import home_controllers
+
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256
 
 
 view = employee_views.EmployeeView()
 manager = EmployeeManager()
-role_manager = RoleManager()
 
 
 class EmployeeController(BaseController):
@@ -42,13 +41,11 @@ class EmployeeCreationController(BaseController):
             return EmployeeController()
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
-            time.sleep(SHORT_SLEEP)
-            view.clean_console()
+
             return EmployeeController()
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
-            time.sleep(SHORT_SLEEP)
-            view.clean_console()
+
             raise
         finally:
             EmployeeController()
@@ -59,15 +56,20 @@ class EmployeeCreationController(BaseController):
         email = view.get_email()
         phone = view.get_phone_number()
         password = view.encoded_password()
-        # role_controllers.RoleDisplayAllController()
-        # role_id = view.select_id()
+
+        role_manager = RoleManager()
+        role_view = role_views.RoleView()
+        roles = role_manager.get_all_roles()
+        role_view.display_roles_table(roles)
+
+        role_id = view.select_id()
         return {
             "username": username,
             "last_name": last_name,
             "email": email,
             "phone": phone,
             "password": password,
-            # "role_id": role_id,
+            "role_id": role_id,
         }
 
 
@@ -151,7 +153,6 @@ class EmployeeLoginController(BaseController):
     def run(self):
         token = self.search_token()
         if token != 0:
-            # return self.redirect_employee()
             return home_controllers.HomeController()
         else:
             max_attempts = 3
@@ -179,7 +180,6 @@ class EmployeeLoginController(BaseController):
                         }
                         for key, value in data.items():
                             self.write_on_json_file(key, value)
-                        # return self.redirect_employee()
                         return home_controllers.HomeController()
                 view.not_found()
             return None

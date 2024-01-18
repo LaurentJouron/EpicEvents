@@ -35,7 +35,7 @@ class EmployeeView(BaseView):
         return pbkdf2_sha256.using(salt_size=64).hash(password)
 
     def select_id(self):
-        return self._select_id
+        return self._select_id()
 
     def display_employee_table(self, employees):
         self._display_title("Employee table")
