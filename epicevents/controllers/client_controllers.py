@@ -1,7 +1,7 @@
 import logging
 import time
 
-from epicevents.controllers import employee_controllers
+from ..controllers import employee_controllers
 from ..utils.contants import SHORT_SLEEP
 from ..utils.bases.controllers import BaseController
 from ..models import ClientManager
@@ -38,7 +38,7 @@ class ClientController(BaseController):
 
 class ClientCreationController(BaseController):
     def run(self):
-        client_data = view.get_client_data()
+        client_data = self.get_client_data()
         try:
             manager.create_client(**client_data)
             view.success_creating()
@@ -61,13 +61,13 @@ class ClientCreationController(BaseController):
         view.display_title()
         compagny_name = view.get_compagny_name()
         username = view.get_username()
-        last_name = view.get_lastname()()
+        last_name = view.get_lastname()
         email = view.get_email()
-        phone = view.phone()
+        phone = view.get_phone()
         address = view.get_address()
         information = view.get_information()
         employee = employee_controllers.EmployeeLoginController()
-        commercial_id = employee.search_employee_id()
+        commercial_id = employee.login_file_employee_id()
         return {
             "compagny_name": compagny_name,
             "username": username,
@@ -80,7 +80,7 @@ class ClientCreationController(BaseController):
         }
 
 
-class ClientUpdateController(BaseController):
+class ClientUpdateController(ClientCreationController):
     def run(self):
         clients = manager.get_all_client()
         view.display_client_table(clients)
@@ -88,52 +88,31 @@ class ClientUpdateController(BaseController):
         try:
             client_name = manager.get_client_compagny_name_by_id(client_id)
             if client_name:
-                # client_data = self.get_client_data()
-                # manager.update_client(client_id, **client_data)
+                client_data = self.get_client_data()
+                manager.update_client(client_id, **client_data)
                 view.success_update()
                 return ClientController()
             else:
                 view.not_found()
         except Exception as e:
             logging.exception(f"Unexpected error during client update: {e}")
-            view.message_error(str(e))
+            view.not_found()
             raise
         finally:
             ClientController()
 
-    # def get_client_data(self):
-    #     view.display_title()
-    #     compagny_name = view.get_compagny_name()
-    #     username = view.get_username()
-    #     last_name = view.get_lastname()()
-    #     email = view.get_email()
-    #     phone = view.phone()
-    #     address = view.get_address()
-    #     information = view.get_information()
-    #     employee = employee_controllers.EmployeeLoginController()
-    #     commercial_id = employee.search_employee_id()
-    #     return {
-    #         "compagny_name": compagny_name,
-    #         "username": username,
-    #         "last_name": last_name,
-    #         "email": email,
-    #         "phone": phone,
-    #         "address": address,
-    #         "information": information,
-    #         "commercial_id": commercial_id,
-    #     }
-
 
 class ClientDeleteController(BaseController):
     def run(self):
-        client_id = view.get_id()
+        clients = manager.get_all_client()
+        view.display_client_table(clients=clients)
+
+        client_id = view.select_id()
         deleted = manager.delete_client(client_id=client_id)
         if deleted:
             view.success_delete()
         else:
             view.not_found()
-        time.sleep(SHORT_SLEEP)
-        view.clean_console()
         return ClientController()
 
 

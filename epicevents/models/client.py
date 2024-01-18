@@ -1,12 +1,11 @@
 from datetime import datetime
 from typing import List
+from ..database import Model, Session
 
 from sqlalchemy import String, ForeignKey, Text
 from sqlalchemy.types import Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm.session import make_transient
-
-from ..database import Model, Session
 
 
 class ClientManager:
@@ -22,6 +21,7 @@ class ClientManager:
                     address=kwargs["address"],
                     information=kwargs["information"],
                     creation_date=datetime.now(),
+                    updating_date=datetime.now(),
                     commercial_id=kwargs["commercial_id"],
                 )
                 session.add(new_client)

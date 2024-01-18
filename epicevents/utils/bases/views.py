@@ -206,7 +206,9 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
         Returns:
             str: User input for the number.
         """
-        return self.__get_item(name="number")
+        number = self.__get_item(name="number")
+        self._clean_console()
+        return number
 
     def _select_id(self) -> int:
         """
@@ -216,6 +218,14 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
         """
         ident = self.__get_item(name="ID")
         return int(ident)
+
+    def _get_amount(self, type) -> int:
+        """
+        Get contract input for an amount.
+        Returns:
+            int: Contract input for the amount.
+        """
+        return self.__get_item(name=f"{type} amount")
 
     def _delete_item(self) -> None:
         """Handle deletion confirmation."""

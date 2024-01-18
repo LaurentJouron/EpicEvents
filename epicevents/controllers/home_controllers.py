@@ -50,7 +50,8 @@ class ExitController(BaseController):
         exit_view.exit_program()
         choice = exit_view.choice_menu()
         if choice == "1":
-            employee_controllers.EmployeeLogoutController()
+            logout = employee_controllers.EmployeeLogoutController()
+            logout.run()
             return None
         else:
             return HomeController()

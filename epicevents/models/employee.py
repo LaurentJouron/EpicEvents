@@ -23,7 +23,7 @@ class EmployeeManager:
                 )
                 session.add(new_employee)
 
-    def get_employee_by_username(self, username):
+    def get_by_username(self, username):
         with Session() as session:
             with session.begin():
                 return (
@@ -59,7 +59,7 @@ class EmployeeManager:
                     .first()
                 )
 
-    def password_by_username(self, username):
+    def get_password(self, username):
         with Session() as session:
             with session.begin():
                 employee = (

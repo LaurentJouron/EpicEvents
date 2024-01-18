@@ -43,7 +43,7 @@ class ClientView(BaseView):
         return self._get_information()
 
     def display_client_table(self, clients):
-        self._display_menu("Client table", menu_dict="")
+        self._display_title("Client table")
         table = Table(
             title="Client", show_header=True, header_style="bold blue"
         )
@@ -70,7 +70,7 @@ class ClientView(BaseView):
                 client.information,
                 # client.creation_date,
                 # client.updating_date,
-                client.commercial_id,
+                str(client.commercial_id),
             )
         console.print(table)
 
