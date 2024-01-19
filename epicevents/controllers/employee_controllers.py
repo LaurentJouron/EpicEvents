@@ -117,21 +117,6 @@ class EmployeeDisplayAllController(BaseController):
         return EmployeeController()
 
 
-class EmployeeCommercialController(EmployeeController):
-    def run(self):
-        ...
-
-
-class EmployeeGestionController(EmployeeController):
-    def run(self):
-        ...
-
-
-class EmployeeSupportController(EmployeeController):
-    def run(self):
-        ...
-
-
 class EmployeeLoginController(BaseController):
     def run(self):
         token = self.search_token()

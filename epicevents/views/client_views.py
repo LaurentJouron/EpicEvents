@@ -43,7 +43,6 @@ class ClientView(BaseView):
         return self._get_information()
 
     def display_client_table(self, clients):
-        self._display_title("Client table")
         table = Table(
             title="Client", show_header=True, header_style="bold blue"
         )

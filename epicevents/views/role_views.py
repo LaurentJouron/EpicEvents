@@ -28,7 +28,6 @@ class RoleView(BaseView):
         return self._select_id()
 
     def display_roles_table(self, roles):
-        self._display_title("Role table")
         table = Table(
             title="Roles", show_header=True, header_style="bold blue"
         )

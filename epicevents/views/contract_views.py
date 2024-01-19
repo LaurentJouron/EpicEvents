@@ -52,7 +52,6 @@ class ContractView(BaseView):
         return self._get_amount(type=type)
 
     def display_contract_table(self, contracts):
-        self._display_title("Contract table")
         table = Table(
             title="Contract", show_header=True, header_style="bold blue"
         )
@@ -73,6 +72,6 @@ class ContractView(BaseView):
                 # contract.creation_date,
                 # contract.status,
                 str(contract.gestion_id),
-                # contract.event_id,
+                # str(contract.event_id),
             )
         console.print(table)

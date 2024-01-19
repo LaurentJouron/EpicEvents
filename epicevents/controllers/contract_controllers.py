@@ -52,7 +52,7 @@ class ContractCreateController(BaseController):
         name = view.get_name()
         total_amount = view.get_amount("total")
         outstanding_amount = view.get_amount("outstanding")
-        status = False
+        status = True
         employee = employee_controllers.EmployeeLoginController()
         gestion_id = employee.login_file_employee_id()
         return {

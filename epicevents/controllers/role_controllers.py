@@ -83,4 +83,5 @@ class RoleDeleteController(BaseController):
 class RoleDisplayAllController(BaseController):
     def run(self):
         roles = manager.get_all_roles()
-        return view.display_roles_table(roles)
+        view.display_roles_table(roles)
+        return RoleController()

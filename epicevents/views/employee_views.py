@@ -38,7 +38,6 @@ class EmployeeView(BaseView):
         return self._select_id()
 
     def display_employee_table(self, employees):
-        self._display_title("Employee table")
         table = Table(
             title="Employee", show_header=True, header_style="bold blue"
         )
