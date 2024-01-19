@@ -1,12 +1,12 @@
-import logging
-import time
-
 from ..controllers import employee_controllers
 from ..utils.contants import SHORT_SLEEP
 from ..utils.bases.controllers import BaseController
 from ..models import ClientManager
 from ..views import ClientView
 from ..controllers import home_controllers
+import logging
+import time
+
 
 from sqlalchemy.exc import IntegrityError
 

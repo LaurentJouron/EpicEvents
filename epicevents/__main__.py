@@ -1,8 +1,8 @@
-import typer
-
 from .database import Model, engine
 from .views.home_views import ExitView
 from .controllers import ReceptionController
+import typer
+
 
 exit_view = ExitView()
 

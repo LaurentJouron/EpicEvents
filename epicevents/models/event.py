@@ -1,7 +1,7 @@
+from ..database import Model, Session
+
 from sqlalchemy import ForeignKey, Date, Text, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from ..database import Model, Session
 
 
 class EventManager:

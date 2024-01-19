@@ -18,6 +18,9 @@ class ContractView(BaseView):
     def menu_choice(self):
         return self._choice_menu("Contract menu", menu_dict=self.contract_menu)
 
+    def display_create_contract(self):
+        return self._display_title("Create contract")
+
     def message_error(self, var):
         return self._message_error(var)
 
@@ -45,8 +48,8 @@ class ContractView(BaseView):
     def select_id(self):
         return self._select_id()
 
-    def display_create_contract(self):
-        return self._display_title("Create contract")
+    def display_title(self):
+        return self._display_title("Create event")
 
     def get_amount(self, type):
         return self._get_amount(type=type)
@@ -59,8 +62,8 @@ class ContractView(BaseView):
         table.add_column("name", style="bold")
         table.add_column("total_amount", style="bold")
         table.add_column("outstanding_amount", style="bold")
-        # table.add_column("creation_date", style="bold")
-        # table.add_column("status", style="bold")
+        table.add_column("creation_date", style="bold")
+        table.add_column("status", style="bold")
         table.add_column("gestion_id", style="bold")
         # table.add_column("event_id", style="bold")
         for contract in contracts:
@@ -69,8 +72,8 @@ class ContractView(BaseView):
                 contract.name,
                 contract.total_amount,
                 contract.outstanding_amount,
-                # contract.creation_date,
-                # contract.status,
+                str(contract.creation_date),
+                str(contract.status),
                 str(contract.gestion_id),
                 # str(contract.event_id),
             )

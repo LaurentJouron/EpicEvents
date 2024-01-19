@@ -1,8 +1,8 @@
-import logging
 from ..utils.bases.controllers import BaseController
 from ..models import RoleManager
 from ..views import RoleView
 from ..controllers import home_controllers
+import logging
 
 from sqlalchemy.exc import IntegrityError
 

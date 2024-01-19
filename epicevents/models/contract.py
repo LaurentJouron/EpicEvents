@@ -1,9 +1,9 @@
-from datetime import datetime
+from ..database import Model, Session
+
+from datetime import date
 from sqlalchemy import String, Date, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm.session import make_transient
-
-from ..database import Model, Session
 
 
 class ContractManager:
@@ -14,7 +14,7 @@ class ContractManager:
                     name=kwargs["name"],
                     total_amount=kwargs["total_amount"],
                     outstanding_amount=kwargs["outstanding_amount"],
-                    creation_date=datetime.now(),
+                    creation_date=date.today(),
                     status=kwargs["status"],
                     gestion_id=kwargs["gestion_id"],
                     # event_id=kwargs["event_id"],

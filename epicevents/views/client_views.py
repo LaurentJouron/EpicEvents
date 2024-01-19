@@ -1,7 +1,8 @@
+from ..utils.bases.views import BaseView
+
 from rich.table import Table
 from rich.console import Console
 
-from ..utils.bases.views import BaseView
 
 console = Console()
 
@@ -47,28 +48,26 @@ class ClientView(BaseView):
             title="Client", show_header=True, header_style="bold blue"
         )
         table.add_column("ID", style="dim")
-        table.add_column("compagny_name", style="bold")
-        table.add_column("username", style="bold")
-        table.add_column("last_name", style="bold")
+        table.add_column("compagny", style="bold")
+        table.add_column("full name", style="bold")
         table.add_column("email", style="bold")
         table.add_column("phone", style="bold")
         table.add_column("address", style="bold")
         table.add_column("information", style="bold")
-        # table.add_column("creation_date", style="bold")
-        # table.add_column("updating_date", style="bold")
+        table.add_column("creation", style="bold")
+        table.add_column("updating", style="bold")
         table.add_column("commercial_id", style="bold")
         for client in clients:
             table.add_row(
                 str(client.id),
                 client.compagny_name,
-                client.username,
-                client.last_name,
+                f"{client.username} {client.last_name}",
                 client.email,
                 client.phone,
                 client.address,
                 client.information,
-                # client.creation_date,
-                # client.updating_date,
+                str(client.creation_date),
+                str(client.updating_date),
                 str(client.commercial_id),
             )
         console.print(table)

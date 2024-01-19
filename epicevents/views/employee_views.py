@@ -1,7 +1,8 @@
+from ..utils.bases.views import BaseView
+
 from passlib.hash import pbkdf2_sha256
 from rich.table import Table
 from rich.console import Console
-from ..utils.bases.views import BaseView
 
 console = Console()
 
@@ -43,15 +44,13 @@ class EmployeeView(BaseView):
         )
         table.add_column("ID", style="dim")
         table.add_column("username", style="bold")
-        table.add_column("last_name", style="bold")
         table.add_column("email", style="bold")
         table.add_column("phone", style="bold")
         table.add_column("role_id")
         for employee in employees:
             table.add_row(
                 str(employee.id),
-                employee.username,
-                employee.last_name,
+                f"{employee.username} {employee.last_name}",
                 employee.email,
                 employee.phone,
                 str(employee.role_id) if employee.role_id else "",
@@ -63,7 +62,6 @@ class EmployeeView(BaseView):
         return pbkdf2_sha256.verify(password, password_hash)
 
     def get_employee_id(self):
-        self._display_title("ident")
         return self._select_id()
 
     def not_found(self):
@@ -83,15 +81,3 @@ class EmployeeView(BaseView):
 
     def display_create_employee(self):
         return self._display_title("Create employee")
-
-
-class EmployeeCommercialView(EmployeeView):
-    ...
-
-
-class EmployeeGestionView(EmployeeView):
-    ...
-
-
-class EmployeeSupportView(EmployeeView):
-    ...

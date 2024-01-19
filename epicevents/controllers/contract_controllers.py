@@ -1,9 +1,9 @@
-import logging
 from ..controllers import employee_controllers
 from ..utils.bases.controllers import BaseController
 from ..models import ContractManager
 from ..views import ContractView
 from ..controllers import home_controllers
+import logging
 
 from sqlalchemy.exc import IntegrityError
 

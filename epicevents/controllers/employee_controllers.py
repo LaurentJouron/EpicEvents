@@ -1,11 +1,11 @@
-import logging
-import json
-import os
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import FILEPATH
 from ..models import EmployeeManager, RoleManager
 from ..views import employee_views, role_views
 from ..controllers import home_controllers
+import logging
+import json
+import os
 
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256

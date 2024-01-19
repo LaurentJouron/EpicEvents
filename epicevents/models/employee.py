@@ -1,12 +1,12 @@
+from ..database import Model, Session
+from ..models.client import Client
+
 from sqlalchemy import String, ForeignKey
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm.session import make_transient
 from typing import List
-
-from ..database import Model, Session
-from ..models.client import Client
 
 
 class EmployeeManager:
@@ -93,6 +93,18 @@ class EmployeeManager:
                 )
                 if employee:
                     return employee.id
+                return None
+
+    def get_username_and_lastname_by_id(self, employee_id):
+        with Session() as session:
+            with session.begin():
+                employee = (
+                    session.query(Employee)
+                    .filter_by(employee_id=employee_id)
+                    .first()
+                )
+                if employee:
+                    return f"{employee.username} {employee.last_name}"
                 return None
 
     def get_all_employee(self):

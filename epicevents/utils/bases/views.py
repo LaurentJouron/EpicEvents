@@ -1,7 +1,7 @@
 from ..contants import SHORT_SLEEP
-
 import time
 import typer
+
 from rich.console import Console
 
 
@@ -206,9 +206,7 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
         Returns:
             str: User input for the number.
         """
-        number = self.__get_item(name="number")
-        self._clean_console()
-        return number
+        return self.__get_item(name="number")
 
     def _select_id(self) -> int:
         """
@@ -226,6 +224,14 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
             int: Contract input for the amount.
         """
         return self.__get_item(name=f"{type} amount")
+
+    def _get_date(self, type) -> int:
+        """
+        Get input for an date.
+        Returns:
+            date: input for the date.
+        """
+        return self.__get_item(name=f"{type} date ('AAAA-MM-JJ')")
 
     def _delete_item(self) -> None:
         """Handle deletion confirmation."""

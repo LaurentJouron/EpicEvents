@@ -1,7 +1,7 @@
-from datetime import datetime
-from typing import List
 from ..database import Model, Session
 
+from datetime import date
+from typing import List
 from sqlalchemy import String, ForeignKey, Text
 from sqlalchemy.types import Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -20,8 +20,8 @@ class ClientManager:
                     phone=kwargs["phone"],
                     address=kwargs["address"],
                     information=kwargs["information"],
-                    creation_date=datetime.now(),
-                    updating_date=datetime.now(),
+                    creation_date=date.today(),
+                    updating_date=date.today(),
                     commercial_id=kwargs["commercial_id"],
                 )
                 session.add(new_client)
@@ -45,14 +45,14 @@ class ClientManager:
                         client.address = kwargs["address"]
                     if kwargs["information"] != client.information:
                         client.information = kwargs["information"]
-                    client.updating_date = datetime.now()
+                    client.updating_date = date.today()
 
     def get_client_compagny_name_by_id(self, client_id):
         with Session() as session:
             with session.begin():
                 client = session.query(Client).get(client_id)
                 if client:
-                    return client.compagny_name
+                    return client.username
                 return None
 
     def get_client_id_by_compagny_name(self, compagny_name):
