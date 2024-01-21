@@ -5,7 +5,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class EventManager:
-    def add_event(self, **kwargs):
+    # CRUD
+    def create(self, **kwargs):
         with Session() as session:
             with session.begin():
                 new_event = Event(
@@ -22,6 +23,22 @@ class EventManager:
                 )
                 session.add(new_event)
 
+    def read(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def update(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    def delete(self):
+        with Session() as session:
+            with session.begin():
+                ...
+
+    # REQUESTS
     def get_event_by_start_date(self, start_date):
         with Session() as session:
             with session.begin():
@@ -36,11 +53,8 @@ class EventManager:
             with session.begin():
                 return session.query(Event).get(event_id)
 
-    def get_all_event(self):
-        with Session() as session:
-            return session.query(Event).all()
 
-
+# MODELS
 class Event(Model):
     __tablename__ = "event"
     id: Mapped[int] = mapped_column(primary_key=True)

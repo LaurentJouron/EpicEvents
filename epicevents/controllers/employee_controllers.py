@@ -1,7 +1,8 @@
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import FILEPATH
 from ..models import EmployeeManager, RoleManager
-from ..views import employee_views, role_views
+from ..views.employee_views import EmployeeView
+from ..views.role_views import RoleView
 from ..controllers import home_controllers
 import logging
 import json
@@ -11,51 +12,31 @@ from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256
 
 
-view = employee_views.EmployeeView()
+views = EmployeeView()
 manager = EmployeeManager()
 
 
 class EmployeeController(BaseController):
     def run(self):
         while True:
-            choice = view.menu_choice()
+            choice = views.menu_choice()
             if choice == "1":
-                return EmployeeCreationController()
+                return EmployeeCreateController()
             elif choice == "2":
-                return EmployeeUpdateController()
+                return EmployeeReadController()
             elif choice == "3":
-                return EmployeeDeleteController()
+                return EmployeeUpdateController()
             elif choice == "4":
-                return EmployeeDisplayAllController()
+                return EmployeeDeleteController()
             elif choice == "5":
                 return home_controllers.HomeController()
 
-
-class EmployeeCreationController(BaseController):
-    def run(self):
-        view.display_create_employee()
-        employee_data = self.get_employee_data()
-        try:
-            manager.create_employee(**employee_data)
-            view.success_creating()
-            return EmployeeController()
-        except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
-
-            return EmployeeController()
-        except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
-
-            raise
-        finally:
-            EmployeeController()
-
-    def get_employee_data(self):
-        username = view.get_username()
-        last_name = view.get_lastname()
-        email = view.get_email()
-        phone = view.get_phone_number()
-        password = view.encoded_password()
+    def get_data(self):
+        username = views.get_username()
+        last_name = views.get_lastname()
+        email = views.get_email()
+        phone = views.get_phone()
+        password = views.encoded_password()
         role_id = self.get_role_id()
         return {
             "username": username,
@@ -68,56 +49,74 @@ class EmployeeCreationController(BaseController):
 
     def get_role_id(self):
         role_manager = RoleManager()
-        role_view = role_views.RoleView()
-        roles = role_manager.get_all_roles()
-        role_view.display_roles_table(roles)
-        return view.select_id()
+        role_view = RoleView()
+        roles = role_manager.read()
+        role_view.display_table(roles)
+        return views.select_id()
 
 
-class EmployeeUpdateController(EmployeeCreationController):
+class EmployeeCreateController(EmployeeController):
     def run(self):
-        employees = manager.get_all_employee()
-        view.display_employee_table(employees=employees)
-
-        employee_id = view.get_employee_id()
+        views.display_title("Create employee")
+        data = self.get_data()
         try:
-            employee = manager.get_employee_by_id(employee_id=employee_id)
+            manager.create(**data)
+            views.success_creating()
+            return EmployeeController()
+        except IntegrityError as e:
+            logging.error(f"IntegrityError: {e}")
+
+            return EmployeeController()
+        except Exception as e:
+            logging.exception(f"Unexpected error: {e}")
+
+            raise
+        finally:
+            EmployeeController()
+
+
+class EmployeeReadController(EmployeeController):
+    def run(self):
+        employees = manager.read()
+        views.display_table(employees=employees)
+        return EmployeeController()
+
+
+class EmployeeUpdateController(EmployeeController):
+    def run(self):
+        employees = manager.read()
+        views.display_table(employees=employees)
+
+        employee_id = views.select_id()
+        try:
+            employee = manager.get_by_id(employee_id=employee_id)
             if employee:
-                employee_data = self.get_employee_data()
-                manager.update_employee(
-                    employee_id=employee_id, **employee_data
-                )
-                view.success_update()
+                employee_data = self.get_data()
+                manager.update(employee_id=employee_id, **employee_data)
+                views.success_update()
             else:
-                view.not_found()
+                views.not_found()
         except Exception as e:
             logging.exception(f"Unexpected error during employee update: {e}")
         finally:
             return EmployeeController()
 
 
-class EmployeeDeleteController(BaseController):
+class EmployeeDeleteController(EmployeeController):
     def run(self):
-        employees = manager.get_all_employee()
-        view.display_employee_table(employees=employees)
+        employees = manager.read()
+        views.display_table(employees=employees)
 
-        employee_id = view.get_employee_id()
-        deleted = manager.delete_employee(employee_id=employee_id)
+        employee_id = views.select_id()
+        deleted = manager.delete(employee_id=employee_id)
         if deleted:
-            view.success_delete()
+            views.success_delete()
         else:
-            view.not_found()
+            views.not_found()
         return EmployeeController()
 
 
-class EmployeeDisplayAllController(BaseController):
-    def run(self):
-        employees = manager.get_all_employee()
-        view.display_employee_table(employees=employees)
-        return EmployeeController()
-
-
-class EmployeeLoginController(BaseController):
+class EmployeeLoginController(EmployeeController):
     def run(self):
         token = self.search_token()
         if token != 0:
@@ -125,21 +124,21 @@ class EmployeeLoginController(BaseController):
         else:
             max_attempts = 3
             for _ in range(max_attempts):
-                view.display_login()
-                username = view.get_username()
+                views.display_title("Login")
+                username = views.get_username()
                 employee = manager.get_by_username(username=username)
 
                 if employee:
                     password_hash = manager.get_password(username=username)
-                    if view.test_decode_password(password_hash=password_hash):
+                    if views.test_decode_password(password_hash=password_hash):
                         data = self.get_data_log(username=username)
                         for key, value in data.items():
-                            self.write_on_json_file(key, value)
+                            self.write_login_file(key, value)
                         return home_controllers.HomeController()
-                view.not_found()
+                views.not_found()
             return None
 
-    def write_on_json_file(self, key, value):
+    def write_login_file(self, key, value):
         if not os.path.exists(FILEPATH):
             with open(FILEPATH, "w") as f:
                 json.dump({}, f)
@@ -152,6 +151,10 @@ class EmployeeLoginController(BaseController):
         with open(FILEPATH, "w") as f:
             json.dump(data, f, indent=4)
 
+    def login_file(self):
+        with open(FILEPATH) as f:
+            return json.load(f)["employee_id"]
+
     def create_token(self, username):
         return pbkdf2_sha256.using(salt_size=64).hash(username)
 
@@ -159,12 +162,8 @@ class EmployeeLoginController(BaseController):
         with open(FILEPATH) as f:
             return json.load(f)["token"]
 
-    def login_file_employee_id(self):
-        with open(FILEPATH) as f:
-            return json.load(f)["employee_id"]
-
     def get_data_log(self, username):
-        role_id = manager.role_id_by_username(username=username)
+        role_id = manager.get_role_id_by_username(username=username)
         employee_id = manager.get_id_by_username(username=username)
         token = self.create_token(username=username)
         return {
@@ -173,25 +172,8 @@ class EmployeeLoginController(BaseController):
             "token": token,
         }
 
-    def redirect_employee(self):
-        with open(FILEPATH) as f:
-            role = json.load(f)["role_id"]
-            role = str(role)
-            if role == "1":
-                # Commercial
-                return home_controllers.HomeCommercialController()
-            elif role == "2":
-                # Gestion
-                return home_controllers.HomeGestionController()
-            elif role == "3":
-                # Support
-                return home_controllers.HomeSupportController()
-            else:
-                view.not_found()
-                return
 
-
-class EmployeeLogoutController(BaseController):
+class EmployeeLogoutController(EmployeeController):
     def run(self):
         with open(FILEPATH, "w") as f:
             return json.dump(

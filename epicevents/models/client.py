@@ -9,7 +9,8 @@ from sqlalchemy.orm.session import make_transient
 
 
 class ClientManager:
-    def create_client(self, **kwargs):
+    # CRUD
+    def create(self, **kwargs):
         with Session() as session:
             with session.begin():
                 new_client = Client(
@@ -26,7 +27,16 @@ class ClientManager:
                 )
                 session.add(new_client)
 
-    def update_client(self, client_id, **kwargs):
+    def read(self):
+        with Session() as session:
+            with session.begin():
+                clients = session.query(Client).all()
+                for client in clients:
+                    session.expunge(client)
+                    make_transient(client)
+                return clients
+
+    def update(self, client_id, **kwargs):
         with Session() as session:
             with session.begin():
                 client = session.query(Client).get(client_id)
@@ -47,7 +57,18 @@ class ClientManager:
                         client.information = kwargs["information"]
                     client.updating_date = date.today()
 
-    def get_client_compagny_name_by_id(self, client_id):
+    def delete(self, client_id):
+        with Session() as session:
+            with session.begin():
+                client = session.query(Client).get(client_id)
+                if client:
+                    session.delete(client)
+                    return True
+                else:
+                    return False
+
+    # REQUESTS
+    def get_compagny_name_by_id(self, client_id):
         with Session() as session:
             with session.begin():
                 client = session.query(Client).get(client_id)
@@ -55,7 +76,7 @@ class ClientManager:
                     return client.username
                 return None
 
-    def get_client_id_by_compagny_name(self, compagny_name):
+    def get_id_by_compagny_name(self, compagny_name):
         with Session() as session:
             with session.begin():
                 client = (
@@ -67,47 +88,8 @@ class ClientManager:
                     return client.id
                 return None
 
-    def get_client_by_username(self, username):
-        with Session() as session:
-            with session.begin():
-                return session.query(Client).filter_by(username=username)
 
-    def get_client_by_email(self, email):
-        with Session() as session:
-            with session.begin():
-                client = session.query(Client).get(email=email)
-                if client:
-                    return client.id
-                return None
-
-    def get_client_by_phone(self, phone):
-        with Session() as session:
-            with session.begin():
-                client = session.query(Client).get(phone=phone)
-                if client:
-                    return client.id
-                return None
-
-    def get_all_client(self):
-        with Session() as session:
-            with session.begin():
-                clients = session.query(Client).all()
-                for client in clients:
-                    session.expunge(client)
-                    make_transient(client)
-                return clients
-
-    def delete_client(self, client_id):
-        with Session() as session:
-            with session.begin():
-                client = session.query(Client).get(client_id)
-                if client:
-                    session.delete(client)
-                    return True
-                else:
-                    return False
-
-
+# MODELS
 class Client(Model):
     __tablename__ = "client"
 

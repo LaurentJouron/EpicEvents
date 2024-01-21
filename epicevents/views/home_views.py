@@ -26,7 +26,7 @@ class HomeView(BaseView):
     }
 
     def choice_menu(self):
-        return self._choice_menu("Home menu", menu_dict=self.home_menu)
+        return self._choice_menu("Home menu", menu=self.home_menu)
 
 
 class ExitView(BaseView):
@@ -39,6 +39,4 @@ class ExitView(BaseView):
         self._display_centered_title(title=phrase, stars=False)
 
     def choice_menu(self):
-        return self._choice_menu(
-            "Confirm exiting", menu_dict=CONFIRMATION_MENU
-        )
+        return self._choice_menu("Confirm exiting", menu=CONFIRMATION_MENU)

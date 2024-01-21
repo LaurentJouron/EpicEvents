@@ -1,16 +1,15 @@
 from ..database import Model, Session
 from ..models.client import Client
 
-from sqlalchemy import String, ForeignKey
-from sqlalchemy import Table
-from sqlalchemy import Column
+from sqlalchemy import String, ForeignKey, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm.session import make_transient
 from typing import List
 
 
 class EmployeeManager:
-    def create_employee(self, **kwargs):
+    # CRUD
+    def create(self, **kwargs):
         with Session() as session:
             with session.begin():
                 new_employee = Employee(
@@ -23,16 +22,16 @@ class EmployeeManager:
                 )
                 session.add(new_employee)
 
-    def get_by_username(self, username):
+    def read(self):
         with Session() as session:
             with session.begin():
-                return (
-                    session.query(Employee)
-                    .filter(Employee.username == username)
-                    .first()
-                )
+                employees = session.query(Employee).all()
+                for employee in employees:
+                    session.expunge(employee)
+                    make_transient(employee)
+                return employees
 
-    def update_employee(self, employee_id, **kwargs):
+    def update(self, employee_id, **kwargs):
         with Session() as session:
             with session.begin():
                 employee = session.query(Employee).get(employee_id)
@@ -50,7 +49,27 @@ class EmployeeManager:
                     if kwargs["role_id"] != employee.role_id:
                         employee.role_id = kwargs["role_id"]
 
-    def get_employee_by_id(self, employee_id):
+    def delete(self, employee_id):
+        with Session() as session:
+            with session.begin():
+                employee = session.query(Employee).get(employee_id)
+                if employee:
+                    session.delete(employee)
+                    return True
+                else:
+                    return False
+
+    # REQUESTS
+    def get_by_username(self, username):
+        with Session() as session:
+            with session.begin():
+                return (
+                    session.query(Employee)
+                    .filter(Employee.username == username)
+                    .first()
+                )
+
+    def get_by_id(self, employee_id):
         with Session() as session:
             with session.begin():
                 return (
@@ -71,7 +90,7 @@ class EmployeeManager:
                     return employee.password
                 return None
 
-    def role_id_by_username(self, username):
+    def get_role_id_by_username(self, username):
         with Session() as session:
             with session.begin():
                 employee = (
@@ -107,26 +126,8 @@ class EmployeeManager:
                     return f"{employee.username} {employee.last_name}"
                 return None
 
-    def get_all_employee(self):
-        with Session() as session:
-            with session.begin():
-                employees = session.query(Employee).all()
-                for employee in employees:
-                    session.expunge(employee)
-                    make_transient(employee)
-                return employees
 
-    def delete_employee(self, employee_id):
-        with Session() as session:
-            with session.begin():
-                employee = session.query(Employee).get(employee_id)
-                if employee:
-                    session.delete(employee)
-                    return True
-                else:
-                    return False
-
-
+# MODELS
 employee_event = Table(
     "employee_event",
     Model.metadata,

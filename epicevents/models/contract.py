@@ -7,7 +7,8 @@ from sqlalchemy.orm.session import make_transient
 
 
 class ContractManager:
-    def create_contract(self, **kwargs):
+    # CRUD
+    def create(self, **kwargs):
         with Session() as session:
             with session.begin():
                 new_contract = Contract(
@@ -20,6 +21,15 @@ class ContractManager:
                     # event_id=kwargs["event_id"],
                 )
                 session.add(new_contract)
+
+    def read(self):
+        with Session() as session:
+            with session.begin():
+                contracts = session.query(Contract).all()
+                for contract in contracts:
+                    session.expunge(contract)
+                    make_transient(contract)
+                return contracts
 
     def update(self, contract_id, **kwargs):
         with Session() as session:
@@ -37,32 +47,12 @@ class ContractManager:
                         contract.outstanding_amount = kwargs[
                             "outstanding_amount"
                         ]
-                    # if kwargs["creation_date"] != contract.creation_date:
-                    #     contract.creation_date = kwargs["creation_date"]
                     if kwargs["gestion_id"] != contract.gestion_id:
                         contract.gestion_id = kwargs["gestion_id"]
                     # if kwargs["event_id"] != contract.event_id:
                     #     contract.event_id = kwargs["event_id"]
 
-    def get_by_id(self, contract_id):
-        with Session() as session:
-            with session.begin():
-                return (
-                    session.query(Contract)
-                    .filter(Contract.id == contract_id)
-                    .first()
-                )
-
-    def get_all_contract(self):
-        with Session() as session:
-            with session.begin():
-                contracts = session.query(Contract).all()
-                for contract in contracts:
-                    session.expunge(contract)
-                    make_transient(contract)
-                return contracts
-
-    def delete_contract(self, contract_id):
+    def delete(self, contract_id):
         with Session() as session:
             with session.begin():
                 contract = session.query(Contract).get(contract_id)
@@ -72,7 +62,18 @@ class ContractManager:
                 else:
                     return False
 
+    # REQUESTS
+    def get_by_id(self, contract_id):
+        with Session() as session:
+            with session.begin():
+                return (
+                    session.query(Contract)
+                    .filter(Contract.id == contract_id)
+                    .first()
+                )
 
+
+# MODELS
 class Contract(Model):
     __tablename__ = "contract"
 

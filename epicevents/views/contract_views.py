@@ -1,4 +1,5 @@
 from ..utils.bases.views import BaseView
+from ..utils.contants import MENU
 
 from rich.table import Table
 from rich.console import Console
@@ -7,19 +8,8 @@ console = Console()
 
 
 class ContractView(BaseView):
-    contract_menu: dict = {
-        "1": "Create",
-        "2": "Update",
-        "3": "Delete",
-        "4": "All",
-        "5": "Return",
-    }
-
     def menu_choice(self):
-        return self._choice_menu("Contract menu", menu_dict=self.contract_menu)
-
-    def display_create_contract(self):
-        return self._display_title("Create contract")
+        return self._choice_menu("Contract menu", menu=MENU)
 
     def message_error(self, var):
         return self._message_error(var)
@@ -54,7 +44,7 @@ class ContractView(BaseView):
     def get_amount(self, type):
         return self._get_amount(type=type)
 
-    def display_contract_table(self, contracts):
+    def display_table(self, contracts):
         table = Table(
             title="Contract", show_header=True, header_style="bold blue"
         )

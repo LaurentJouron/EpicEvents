@@ -1,19 +1,10 @@
 from ..utils.bases.views import BaseView
+from ..utils.contants import MENU
 
 
 class EventView(BaseView):
-    event_menu: dict = {
-        "1": "Create",
-        "2": "Update",
-        "3": "Get by ID",
-        "4": "Get by name",
-        "5": "Delete",
-        "6": "All",
-        "7": "Return",
-    }
-
     def menu_choice(self):
-        return self._choice_menu("Event menu", menu_dict=self.event_menu)
+        return self._choice_menu("Event menu", menu=MENU)
 
     def display_title(self):
         return self._display_title("Create events")

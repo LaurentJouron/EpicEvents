@@ -1,4 +1,5 @@
 from ..utils.bases.views import BaseView
+from ..utils.contants import MENU
 
 from rich.table import Table
 from rich.console import Console
@@ -8,16 +9,8 @@ console = Console()
 
 
 class ClientView(BaseView):
-    client_menu: dict = {
-        "1": "Create",
-        "2": "Update",
-        "3": "Delete",
-        "4": "All",
-        "5": "Return",
-    }
-
     def menu_choice(self):
-        return self._choice_menu("Client menu", menu_dict=self.client_menu)
+        return self._choice_menu("Client menu", menu=MENU)
 
     def display_title(self):
         return self._display_title("Client information")
@@ -43,7 +36,7 @@ class ClientView(BaseView):
     def get_information(self):
         return self._get_information()
 
-    def display_client_table(self, clients):
+    def display_table(self, clients):
         table = Table(
             title="Client", show_header=True, header_style="bold blue"
         )

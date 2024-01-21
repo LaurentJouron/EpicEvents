@@ -1,8 +1,9 @@
-from epicevents.views import employee_views
 from ..utils.bases.controllers import BaseController
 from ..models import EventManager, ClientManager, EmployeeManager
-from ..views import EventView, client_views
-from ..controllers import home_controllers, employee_controllers
+from ..views import EventView
+from ..views.client_views import ClientView
+from ..views.employee_views import EmployeeView
+from ..controllers import home_controllers
 
 view = EventView()
 manager = EventManager()
@@ -16,19 +17,33 @@ class EventController(BaseController):
                 return EventCreateController()
 
             elif choice == "2":
-                return EventUpdateController()
+                return EventReadController()
 
             elif choice == "3":
-                return EventDeleteController()
+                return EventUpdateController()
 
             elif choice == "4":
-                return EventDisplayAllController()
+                return EventDeleteController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
 
+    def get_client_id(self):
+        client_manager = ClientManager()
+        client_view = ClientView()
+        clients = client_manager.get_all_client()
+        client_view.display_client_table(clients)
+        return view.select_id()
 
-class EventCreateController(BaseController):
+    def get_employee_id(self):
+        employee_manager = EmployeeManager()
+        employees = employee_manager.get_all_employee()
+        employee_view = EmployeeView()
+        employee_view.display_employee_table(employees=employees)
+        return view.select_id()
+
+
+class EventCreateController(EventController):
     def run(self):
         view.display_title()
         name = view.get_name()
@@ -54,31 +69,17 @@ class EventCreateController(BaseController):
             "support_id": support_id,
         }
 
-    def get_client_id(self):
-        client_manager = ClientManager()
-        client_view = client_views.ClientView()
-        clients = client_manager.get_all_client()
-        client_view.display_client_table(clients)
-        return view.select_id()
 
-    def get_employee_id(self):
-        employee_manager = EmployeeManager()
-        employee_view = employee_views.EmployeeView()
-        employees = employee_manager.get_all_employee()
-        employee_view.display_employee_table(employees=employees)
-        return view.select_id()
-
-
-class EventUpdateController(BaseController):
+class EventReadController(EventController):
     def run(self):
         ...
 
 
-class EventDeleteController(BaseController):
+class EventUpdateController(EventController):
     def run(self):
         ...
 
 
-class EventDisplayAllController(BaseController):
+class EventDeleteController(EventController):
     def run(self):
         ...

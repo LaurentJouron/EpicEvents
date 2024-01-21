@@ -5,40 +5,41 @@ from .home_controllers import (  # noqa: F401
 )
 from .role_controllers import (  # noqa: F401
     RoleController,
-    RoleCreationController,
+    RoleCreateController,
+    RoleReadController,
     RoleUpdateController,
     RoleDeleteController,
-    RoleDisplayAllController,
 )
 from .employee_controllers import (  # noqa: F401
     EmployeeController,
-    EmployeeCreationController,
+    EmployeeCreateController,
+    EmployeeReadController,
     EmployeeUpdateController,
     EmployeeDeleteController,
-    EmployeeDisplayAllController,
     EmployeeLoginController,
+    EmployeeLogoutController,
 )
 
 from .client_controllers import (  # noqa: F401
     ClientController,
-    ClientCreationController,
+    ClientCreateController,
+    ClientReadController,
     ClientUpdateController,
     ClientDeleteController,
-    ClientDisplayAllController,
 )
 
 from .event_controllers import (  # noqa: F401
     EventController,
     EventCreateController,
+    EventReadController,
     EventUpdateController,
     EventDeleteController,
-    EventDisplayAllController,
 )
 
 from .contract_controllers import (  # noqa: F401
     ContractController,
     ContractCreateController,
+    ContractReadController,
     ContractUpdateController,
     ContractDeleteController,
-    ContractDisplayAllController,
 )

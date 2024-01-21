@@ -1,4 +1,5 @@
 from ..utils.bases.views import BaseView
+from ..utils.contants import MENU
 
 from passlib.hash import pbkdf2_sha256
 from rich.table import Table
@@ -8,37 +9,25 @@ console = Console()
 
 
 class EmployeeView(BaseView):
-    employee_menu: dict = {
-        "1": "Create",
-        "2": "Update",
-        "3": "Delete",
-        "4": "All",
-        "5": "Return",
-    }
+    def menu_choice(self) -> str:
+        return self._choice_menu("Employee menu", menu=MENU)
 
-    def menu_choice(self):
-        return self._choice_menu("Employee menu", menu_dict=self.employee_menu)
-
-    def get_username(self):
+    def get_username(self) -> str:
         return self._get_username()
 
-    def get_lastname(self):
+    def get_lastname(self) -> str:
         return self._get_lastname()
 
-    def get_email(self):
+    def get_email(self) -> str:
         return self._get_email()
 
-    def get_phone_number(self):
+    def get_phone(self) -> str:
         return self._get_phone_number()
 
-    def encoded_password(self):
-        password = self._get_password()
-        return pbkdf2_sha256.using(salt_size=64).hash(password)
-
-    def select_id(self):
+    def select_id(self) -> int:
         return self._select_id()
 
-    def display_employee_table(self, employees):
+    def display_table(self, employees: list["Employee"]):
         table = Table(
             title="Employee", show_header=True, header_style="bold blue"
         )
@@ -57,27 +46,26 @@ class EmployeeView(BaseView):
             )
         console.print(table)
 
-    def test_decode_password(self, password_hash):
+    def encoded_password(self) -> str:
+        password = self._get_password()
+        return pbkdf2_sha256.using(salt_size=64).hash(password)
+
+    def test_decode_password(self, password_hash: str) -> bool:
+        self.display_title("Password")
         password = self._get_password()
         return pbkdf2_sha256.verify(password, password_hash)
 
-    def get_employee_id(self):
-        return self._select_id()
-
     def not_found(self):
-        self._not_found()
+        return self._not_found()
 
     def success_delete(self):
-        self._success_delete()
+        return self._success_delete()
 
     def success_update(self):
-        self._success_updated()
+        return self._success_updated()
 
-    def success_creating(self):
+    def success_creating(self) -> str:
         return self._success_creating()
 
-    def display_login(self):
-        return self._display_title("Login")
-
-    def display_create_employee(self):
-        return self._display_title("Create employee")
+    def display_title(self, title: str):
+        return self._display_title(title)

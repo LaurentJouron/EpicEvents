@@ -35,11 +35,11 @@ ___________
 <table>
   <tr>
     <td align="center">
-      <a href=https://www.python.org/">
+      <a href="https://www.python.org/">
         <img width="200px"
           src="https://www.python.org/static/img/python-logo.png" /><br />
         <sub><b>Téléchargez Python</b></sub></a><br />
-      <a href=https://www.python.org/" title="Téléchargez Python" ></a> 
+      <a href="https://www.python.org/" title="Téléchargez Python" ></a> 
     </td>
 </table>
 
@@ -49,17 +49,10 @@ ___________
 <h1 align="center">EDI</h1>
 
 
-<p align="left">L'EDI utilisé pour la programmation est Pycharm et Visual Studio Code.
+<p align="left">L'EDI utilisé pour la programmation est Visual Studio Code.
 
 <table>
   <tr>
-    <td align="center">
-      <a href=https://www.jetbrains.com/fr-fr/pycharm/download/#section=windows">
-        <img width="100px"
-          src="https://upload.wikimedia.org/wikipedia/commons/1/1d/PyCharm_Icon.svg" /><br />
-        <sub><b>Téléchargez Pycharm</b></sub></a><br />
-      <a href=https://www.jetbrains.com/fr-fr/pycharm/download/#section=windows" title="Téléchargez Pycharm" ></a> 
-    </td>
     <td align="center">
       <a href="https://visualstudio.microsoft.com/fr/">
         <img width="130px"
@@ -93,6 +86,33 @@ Activer l'environnement de travail (environnement virtuel) avec
 
 Lancez l'application avec cette commande
   * ``python -m epicevents``
+
+___________
+
+
+<h1 align="center">Détails urilisateurs</h1>
+
+* 3 rôles ont étés créés:
+  * ``1: Commercial``
+  * ``2: Gestion``
+  * ``3: Support``
+
+* Des collaborateurs ont étés crées. Pour se connecter avec leur profil, il faut taper leur prenom et tous ont le même mot de passe sont: TEST .
+
+  - Commercial (1)
+    * ``Louis``
+    * ``Virginie``
+    * ``Thierno``
+
+  - Gestion (2)
+    * ``Laurent``
+    * ``Maxime``
+    * ``Frederic``
+
+  - Support (3)
+    * ``Antoine``
+    * ``Stephane``
+    * ``Gilles``
 
 ___________
 

@@ -1,56 +1,50 @@
 from ..utils.bases.controllers import BaseController
 from ..views import HomeView, ReceptionView, ExitView
-from ..controllers import (
-    employee_controllers,
-    role_controllers,
-    client_controllers,
-    event_controllers,
-    contract_controllers,
+from ..controllers.role_controllers import RoleController
+from ..controllers.client_controllers import ClientController
+from ..controllers.event_controllers import EventController
+from ..controllers.contract_controllers import ContractController
+from ..controllers.employee_controllers import (
+    EmployeeController,
+    EmployeeLoginController,
+    EmployeeLogoutController,
 )
-
-view = HomeView()
-reception_view = ReceptionView()
-exit_view = ExitView()
 
 
 class ReceptionController(BaseController):
     def run(self):
+        reception_view = ReceptionView()
         reception_view.welcome()
         reception_view.follow_instructions()
-        return employee_controllers.EmployeeLoginController()
+        return EmployeeLoginController()
 
 
 class HomeController(BaseController):
     def run(self):
         while True:
-            choice = view.choice_menu()
+            home_view = HomeView()
+            choice = home_view.choice_menu()
             if choice == "1":
-                # Employee
-                return employee_controllers.EmployeeController()
+                return EmployeeController()
             elif choice == "2":
-                # Client
-                return client_controllers.ClientController()
+                return ClientController()
             elif choice == "3":
-                # Events
-                return event_controllers.EventController()
-                ...
+                return EventController()
             elif choice == "4":
-                # Contracts
-                return contract_controllers.ContractController()
-                ...
+                return ContractController()
             elif choice == "5":
-                # Roles
-                return role_controllers.RoleController()
+                return RoleController()
             elif choice == "6":
                 return ExitController()
 
 
 class ExitController(BaseController):
     def run(self):
+        exit_view = ExitView()
         exit_view.exit_program()
         choice = exit_view.choice_menu()
         if choice == "1":
-            logout = employee_controllers.EmployeeLogoutController()
+            logout = EmployeeLogoutController()
             logout.run()
             return None
         else:
