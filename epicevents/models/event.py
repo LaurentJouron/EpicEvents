@@ -19,7 +19,6 @@ class EventManager:
                     client_id=kwargs["client_id"],
                     commercial_id=kwargs["commercial_id"],
                     support_id=kwargs["support_id"],
-                    contract_id=kwargs["contract_id"],
                 )
                 session.add(new_event)
 

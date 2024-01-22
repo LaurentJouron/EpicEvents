@@ -1,13 +1,18 @@
 from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
 
+from rich.table import Table
+from rich.console import Console
+
+console = Console()
+
 
 class EventView(BaseView):
     def menu_choice(self):
         return self._choice_menu("Event menu", menu=MENU)
 
-    def display_title(self):
-        return self._display_title("Create events")
+    def display_title(self, title):
+        return self._display_title(title=title)
 
     def get_name(self):
         return self._get_name()
@@ -41,3 +46,35 @@ class EventView(BaseView):
 
     def exist_error(self, var):
         return super()._exist_error(var)
+
+    def get_amount(self, type):
+        return self._get_amount(type=type)
+
+    def display_table(self, events):
+        table = Table(
+            title="Events", show_header=True, header_style="bold blue"
+        )
+        table.add_column("ID", style="dim")
+        table.add_column("name", style="bold")
+        table.add_column("start_date", style="bold")
+        table.add_column("end_date", style="bold")
+        table.add_column("address", style="bold")
+        table.add_column("attendees", style="bold")
+        table.add_column("notes", style="bold")
+        table.add_column("client_id", style="bold")
+        table.add_column("commercial_id", style="bold")
+        table.add_column("support_id", style="bold")
+        for event in events:
+            table.add_row(
+                str(event.id),
+                event.name,
+                event.start_date,
+                event.end_date,
+                event.address,
+                event.attendees,
+                event.notes,
+                str(event.client_id),
+                str(event.commercial_id),
+                str(event.support_id),
+            )
+        console.print(table)

@@ -18,7 +18,6 @@ class ContractManager:
                     creation_date=date.today(),
                     status=kwargs["status"],
                     gestion_id=kwargs["gestion_id"],
-                    # event_id=kwargs["event_id"],
                 )
                 session.add(new_contract)
 

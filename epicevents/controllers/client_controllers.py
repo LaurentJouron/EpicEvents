@@ -18,15 +18,17 @@ class ClientController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                view.clean_console()
                 return ClientCreateController()
+
             elif choice == "4":
-                view.clean_console()
                 return ClientReadController()
+
             elif choice == "2":
                 return ClientUpdateController()
+
             elif choice == "3":
                 return ClientDeleteController()
+
             elif choice == "5":
                 return home_controllers.HomeController()
 
@@ -60,17 +62,15 @@ class ClientCreateController(ClientController):
             manager.create(**data)
             view.success_creating()
             return ClientController()
+
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
-            view.exist_error(data)
-            time.sleep(SHORT_SLEEP)
-            view.clean_console()
             return ClientController()
+
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
-            time.sleep(SHORT_SLEEP)
-            view.clean_console()
             raise
+
         finally:
             ClientController()
 
@@ -87,6 +87,7 @@ class ClientUpdateController(ClientController):
         clients = manager.read()
         view.display_table(clients)
         client_id = view.select_id()
+
         try:
             name = manager.get_compagny_name_by_id(client_id)
             if name:
@@ -96,6 +97,7 @@ class ClientUpdateController(ClientController):
                 return ClientController()
             else:
                 view.not_found()
+
         except Exception as e:
             logging.exception(f"Unexpected error during client update: {e}")
             view.not_found()

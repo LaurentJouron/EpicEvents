@@ -38,8 +38,8 @@ class ContractView(BaseView):
     def select_id(self):
         return self._select_id()
 
-    def display_title(self):
-        return self._display_title("Create event")
+    def display_title(self, title):
+        return self._display_title(title=title)
 
     def get_amount(self, type):
         return self._get_amount(type=type)
@@ -55,7 +55,6 @@ class ContractView(BaseView):
         table.add_column("creation_date", style="bold")
         table.add_column("status", style="bold")
         table.add_column("gestion_id", style="bold")
-        # table.add_column("event_id", style="bold")
         for contract in contracts:
             table.add_row(
                 str(contract.id),
@@ -65,6 +64,5 @@ class ContractView(BaseView):
                 str(contract.creation_date),
                 str(contract.status),
                 str(contract.gestion_id),
-                # str(contract.event_id),
             )
         console.print(table)

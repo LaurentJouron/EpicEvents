@@ -37,12 +37,15 @@ class RoleCreateController(RoleController):
             manager.create(name=name)
             view.success_creating()
             return RoleController()
+
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
             return RoleController()
+
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
             raise
+
         finally:
             RoleController()
 
@@ -61,12 +64,14 @@ class RoleUpdateController(RoleController):
         role_id = view.select_id()
         try:
             role_name = manager.get_name_by_id(role_id)
+
             if role_name:
                 new_name = view.get_name()
                 manager.update(role_id, new_name)
                 view.success_update()
             else:
                 view.not_found()
+
         except Exception as e:
             logging.exception(f"Unexpected error during role update: {e}")
         finally:
@@ -80,6 +85,7 @@ class RoleDeleteController(RoleController):
 
         role_id = view.select_id()
         deleted = manager.delete(role_id=role_id)
+
         if deleted:
             view.success_delete()
         else:

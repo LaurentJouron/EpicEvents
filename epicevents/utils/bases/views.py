@@ -50,6 +50,9 @@ class BaseErrorView(BaseManageConsole):
     def _must_be_provided(self) -> None:
         self.__message_error(" This element must be filled in.")
 
+    def _not_have_right(self) -> None:
+        self.__message_error(" You do not have the rights")
+
 
 class BaseAnswerView(BaseSuccessView, BaseErrorView):
     def __get_answer(self, prompt: str) -> str:

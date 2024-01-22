@@ -24,6 +24,9 @@ class EmployeeView(BaseView):
     def get_phone(self) -> str:
         return self._get_phone_number()
 
+    def not_have_right(self) -> str:
+        return self.not_have_right()
+
     def select_id(self) -> int:
         return self._select_id()
 

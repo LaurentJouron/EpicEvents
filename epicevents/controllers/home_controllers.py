@@ -24,16 +24,22 @@ class HomeController(BaseController):
         while True:
             home_view = HomeView()
             choice = home_view.choice_menu()
+
             if choice == "1":
                 return EmployeeController()
+
             elif choice == "2":
                 return ClientController()
+
             elif choice == "3":
                 return EventController()
+
             elif choice == "4":
                 return ContractController()
+
             elif choice == "5":
                 return RoleController()
+
             elif choice == "6":
                 return ExitController()
 
@@ -43,6 +49,7 @@ class ExitController(BaseController):
         exit_view = ExitView()
         exit_view.exit_program()
         choice = exit_view.choice_menu()
+
         if choice == "1":
             logout = EmployeeLogoutController()
             logout.run()
