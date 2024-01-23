@@ -57,6 +57,8 @@ class ClientCreateController(ClientController):
     def run(self):
         login_role = EmployeeLoginController()
         role = login_role.read_login_file()
+
+        # Création uniquement si rôle = Commercial
         if role["role_id"] == 1:
             data = self.get_data()
             try:
@@ -90,12 +92,15 @@ class ClientUpdateController(ClientController):
     def run(self):
         employee = EmployeeLoginController()
         employee = employee.read_login_file()
+        # Modification uniquement si rôle = Commercial
         if employee["role_id"] == 1:
             clients = manager.read()
             view.display_table(clients)
             client_id = view.select_id()
             try:
                 commercial = manager.get_commercial_by_id(client_id)
+
+                # Modification uniquement si le commercial a créé le client
                 if employee["employee_id"] == commercial:
                     if commercial:
                         data = self.get_data()
@@ -125,6 +130,8 @@ class ClientDeleteController(ClientController):
     def run(self):
         login_role = EmployeeLoginController()
         role = login_role.read_login_file()
+
+        # Suppression impossible
         if role["role_id"] == 0:
             clients = manager.read()
             view.display_table(clients=clients)

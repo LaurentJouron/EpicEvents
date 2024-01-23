@@ -9,6 +9,9 @@ class BaseManageConsole:
     def _clean_console(self) -> None:
         self.console.clear()
 
+    def _display_title(self, title: str) -> None:
+        self.console.rule(f"[bold blue]{title}")
+
 
 class BaseSuccessView(BaseManageConsole):
     def _success_message(self, var: str) -> None:
@@ -62,6 +65,7 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
                 self._must_be_provided()
                 time.sleep(SHORT_SLEEP)
             else:
+                # self._clean_console()
                 return item
 
     def _get_username(self) -> str:
@@ -137,6 +141,3 @@ class BaseView(BaseAnswerView, BaseMenu):
         self.console.print(title_str, style="bold blue", justify="center")
         time.sleep(SHORT_SLEEP)
         self._clean_console()
-
-    def _display_title(self, title: str) -> None:
-        self.console.rule(f"[bold blue]{title}")

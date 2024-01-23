@@ -54,7 +54,6 @@ class EmployeeView(BaseView):
         return pbkdf2_sha256.using(salt_size=64).hash(password)
 
     def test_decode_password(self, password_hash: str) -> bool:
-        self.display_title("Password")
         password = self._get_password()
         return pbkdf2_sha256.verify(password, password_hash)
 

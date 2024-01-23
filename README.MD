@@ -92,27 +92,54 @@ ___________
 
 <h1 align="center">Détails urilisateurs</h1>
 
-* 3 rôles ont étés créés:
-  * ``1: Commercial``
-  * ``2: Gestion``
-  * ``3: Support``
+* 3 rôles ont étés créés.
+* Des collaborateurs ont étés crées pour chacun de ces rôles. Pour se connecter avec leur profil, il faut saisir leur prenom et mot de passe: TEST .
+* Les collaborateurs ont créés des évènements (clients, contrats et evenements) selon leur possibilitée et le besoin de la société.
+<h4>Les chiffres devant correspondent à l'ID dans la base de donnée.</h4>
 
-* Des collaborateurs ont étés crées. Pour se connecter avec leur profil, il faut taper leur prenom et tous ont le même mot de passe sont: TEST .
+___
+<h3 align="center">1: Commercial</h3>
 
-  - Commercial (1)
-    * ``Louis``
-    * ``Virginie``
-    * ``Thierno``
+  * ``6: Louis``
+    * ``1: Orange``
+    * ``2: Free``
+    * ``3: Google``
 
-  - Gestion (2)
-    * ``Laurent``
-    * ``Maxime``
-    * ``Frederic``
+  * ``9: Virginie``
+    * ``4: Python``
+    * ``5: Java``
+    * ``9: SQL``
 
-  - Support (3)
-    * ``Antoine``
-    * ``Stephane``
-    * ``Gilles``
+  * ``12: Thierno``
+    * ``6: Ubuntu``
+    * ``7: Windows``
+    * ``8: Apple``
+
+___
+<h3 align="center">2: Gestion</h3>
+
+  * ``3: Laurent``
+    * ``1: Orange end of year party``
+    * ``2: Free end of year party``
+    * ``3: Google end of year party``
+
+  * ``7: Maxime``
+    * ``4: Python end of year party``
+    * ``5: Java end of year party``
+    * ``6: Ubuntu end of year party``
+
+  * ``10: Frederic``
+    * ``7: Windows end of year party``
+    * ``8: Apple end of year party``
+    * ``9: SQL end of year party``
+
+
+___
+<h3 align="center">3: Support</h3>
+
+  * ``5: Antoine``
+  * ``8: Stephane``
+  * ``11: Gilles``
 
 ___________
 

@@ -64,6 +64,8 @@ class EmployeeCreateController(EmployeeController):
         view.display_title("Create employee")
         login_role = EmployeeLoginController()
         role = login_role.read_login_file()
+
+        # Création uniquement si rôle = Gestion
         if role["role_id"] == 3:
             data = self.get_data()
             try:
@@ -96,6 +98,8 @@ class EmployeeUpdateController(EmployeeController):
     def run(self):
         login_role = EmployeeLoginController()
         role = login_role.read_login_file()
+
+        # Modifier uniquement si rôle = Gestion
         if role["role_id"] == 3:
             employees = manager.read()
             view.display_table(employees=employees)
@@ -126,6 +130,8 @@ class EmployeeDeleteController(EmployeeController):
     def run(self):
         login_role = EmployeeLoginController()
         role = login_role.read_login_file()
+
+        # Suppression uniquement si rôle = Gestion
         if role["role_id"] == 3:
             employees = manager.read()
             view.display_table(employees=employees)
