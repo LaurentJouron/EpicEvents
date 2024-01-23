@@ -68,12 +68,12 @@ class ClientManager:
                     return False
 
     # REQUESTS
-    def get_compagny_name_by_id(self, client_id):
+    def get_commercial_by_id(self, client_id):
         with Session() as session:
             with session.begin():
                 client = session.query(Client).get(client_id)
                 if client:
-                    return client.username
+                    return client.commercial_id
                 return None
 
     def get_id_by_compagny_name(self, compagny_name):

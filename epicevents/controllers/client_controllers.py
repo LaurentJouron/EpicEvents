@@ -1,11 +1,9 @@
-from ..utils.contants import SHORT_SLEEP
 from ..utils.bases.controllers import BaseController
 from ..models import ClientManager
 from ..views import ClientView
 from ..controllers.employee_controllers import EmployeeLoginController
 from ..controllers import home_controllers
 import logging
-import time
 
 from sqlalchemy.exc import IntegrityError
 
@@ -20,13 +18,13 @@ class ClientController(BaseController):
             if choice == "1":
                 return ClientCreateController()
 
-            elif choice == "4":
+            elif choice == "2":
                 return ClientReadController()
 
-            elif choice == "2":
+            elif choice == "3":
                 return ClientUpdateController()
 
-            elif choice == "3":
+            elif choice == "4":
                 return ClientDeleteController()
 
             elif choice == "5":
@@ -57,22 +55,28 @@ class ClientController(BaseController):
 
 class ClientCreateController(ClientController):
     def run(self):
-        data = self.get_data()
-        try:
-            manager.create(**data)
-            view.success_creating()
+        login_role = EmployeeLoginController()
+        role = login_role.read_login_file()
+        if role["role_id"] == 1:
+            data = self.get_data()
+            try:
+                manager.create(**data)
+                view.success_creating()
+                return ClientController()
+
+            except IntegrityError as e:
+                logging.error(f"IntegrityError: {e}")
+                return ClientController()
+
+            except Exception as e:
+                logging.exception(f"Unexpected error: {e}")
+                raise
+
+            finally:
+                ClientController()
+        else:
+            view.not_have_right()
             return ClientController()
-
-        except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
-            return ClientController()
-
-        except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
-            raise
-
-        finally:
-            ClientController()
 
 
 class ClientReadController(ClientController):
@@ -84,37 +88,54 @@ class ClientReadController(ClientController):
 
 class ClientUpdateController(ClientController):
     def run(self):
-        clients = manager.read()
-        view.display_table(clients)
-        client_id = view.select_id()
+        employee = EmployeeLoginController()
+        employee = employee.read_login_file()
+        if employee["role_id"] == 1:
+            clients = manager.read()
+            view.display_table(clients)
+            client_id = view.select_id()
+            try:
+                commercial = manager.get_commercial_by_id(client_id)
+                if employee["employee_id"] == commercial:
+                    if commercial:
+                        data = self.get_data()
+                        manager.update(client_id, **data)
+                        view.success_update()
+                        return ClientController()
+                    else:
+                        view.not_found()
+                else:
+                    view.not_have_right()
+                    return ClientController()
 
-        try:
-            name = manager.get_compagny_name_by_id(client_id)
-            if name:
-                data = self.get_data()
-                manager.update(client_id, **data)
-                view.success_update()
-                return ClientController()
-            else:
+            except Exception as e:
+                logging.exception(
+                    f"Unexpected error during client update: {e}"
+                )
                 view.not_found()
-
-        except Exception as e:
-            logging.exception(f"Unexpected error during client update: {e}")
-            view.not_found()
-            raise
-        finally:
-            ClientController()
+                raise
+            finally:
+                ClientController()
+        else:
+            view.not_have_right()
+            return ClientController()
 
 
 class ClientDeleteController(ClientController):
     def run(self):
-        clients = manager.read()
-        view.display_table(clients=clients)
+        login_role = EmployeeLoginController()
+        role = login_role.read_login_file()
+        if role["role_id"] == 0:
+            clients = manager.read()
+            view.display_table(clients=clients)
 
-        client_id = view.select_id()
-        deleted = manager.delete(client_id=client_id)
-        if deleted:
-            view.success_delete()
+            client_id = view.select_id()
+            deleted = manager.delete(client_id=client_id)
+            if deleted:
+                view.success_delete()
+            else:
+                view.not_found()
+            return ClientController()
         else:
-            view.not_found()
-        return ClientController()
+            view.not_have_right()
+            return ClientController()

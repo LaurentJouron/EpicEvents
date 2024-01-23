@@ -36,6 +36,9 @@ class ClientView(BaseView):
     def get_information(self):
         return self._get_information()
 
+    def not_have_right(self) -> str:
+        return self._not_have_right()
+
     def display_table(self, clients):
         table = Table(
             title="Client", show_header=True, header_style="bold blue"

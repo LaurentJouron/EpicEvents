@@ -62,21 +62,27 @@ class EmployeeController(BaseController):
 class EmployeeCreateController(EmployeeController):
     def run(self):
         view.display_title("Create employee")
-        data = self.get_data()
-        try:
-            manager.create(**data)
-            view.success_creating()
-            return EmployeeController()
+        login_role = EmployeeLoginController()
+        role = login_role.read_login_file()
+        if role["role_id"] == 3:
+            data = self.get_data()
+            try:
+                manager.create(**data)
+                view.success_creating()
+                return EmployeeController()
 
-        except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
-            return EmployeeController()
+            except IntegrityError as e:
+                logging.error(f"IntegrityError: {e}")
+                return EmployeeController()
 
-        except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
-            raise
-        finally:
-            EmployeeController()
+            except Exception as e:
+                logging.exception(f"Unexpected error: {e}")
+                raise
+            finally:
+                EmployeeController()
+        else:
+            view.not_have_right()
+            return EmployeeController()
 
 
 class EmployeeReadController(EmployeeController):
@@ -88,38 +94,52 @@ class EmployeeReadController(EmployeeController):
 
 class EmployeeUpdateController(EmployeeController):
     def run(self):
-        employees = manager.read()
-        view.display_table(employees=employees)
-        employee_id = view.select_id()
+        login_role = EmployeeLoginController()
+        role = login_role.read_login_file()
+        if role["role_id"] == 3:
+            employees = manager.read()
+            view.display_table(employees=employees)
+            employee_id = view.select_id()
 
-        try:
-            employee = manager.get_by_id(employee_id=employee_id)
+            try:
+                employee = manager.get_by_id(employee_id=employee_id)
 
-            if employee:
-                employee_data = self.get_data()
-                manager.update(employee_id=employee_id, **employee_data)
-                view.success_update()
-            else:
-                view.not_found()
+                if employee:
+                    employee_data = self.get_data()
+                    manager.update(employee_id=employee_id, **employee_data)
+                    view.success_update()
+                else:
+                    view.not_found()
 
-        except Exception as e:
-            logging.exception(f"Unexpected error during employee update: {e}")
-        finally:
+            except Exception as e:
+                logging.exception(
+                    f"Unexpected error during employee update: {e}"
+                )
+            finally:
+                return EmployeeController()
+        else:
+            view.not_have_right()
             return EmployeeController()
 
 
 class EmployeeDeleteController(EmployeeController):
     def run(self):
-        employees = manager.read()
-        view.display_table(employees=employees)
-        employee_id = view.select_id()
-        deleted = manager.delete(employee_id=employee_id)
+        login_role = EmployeeLoginController()
+        role = login_role.read_login_file()
+        if role["role_id"] == 3:
+            employees = manager.read()
+            view.display_table(employees=employees)
+            employee_id = view.select_id()
+            deleted = manager.delete(employee_id=employee_id)
 
-        if deleted:
-            view.success_delete()
+            if deleted:
+                view.success_delete()
+            else:
+                view.not_found()
+            return EmployeeController()
         else:
-            view.not_found()
-        return EmployeeController()
+            view.not_have_right()
+            return EmployeeController()
 
 
 class EmployeeLoginController(EmployeeController):
@@ -162,6 +182,17 @@ class EmployeeLoginController(EmployeeController):
 
         with open(FILEPATH, "w") as f:
             json.dump(data, f, indent=4)
+
+    def read_login_file(self):
+        if not os.path.exists(FILEPATH):
+            return {}
+
+        try:
+            with open(FILEPATH, "r") as f:
+                data = json.load(f)
+        except json.JSONDecodeError:
+            return {}
+        return data
 
     def login_file(self):
         with open(FILEPATH) as f:

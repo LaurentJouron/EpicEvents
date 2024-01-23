@@ -27,9 +27,6 @@ class EmployeeManager:
             with session.begin():
                 employees = session.query(Employee).all()
                 for employee in employees:
-                    print(employee.id)
-                    if employee.id == 7:
-                        print(employee.username)
                     session.expunge(employee)
                     make_transient(employee)
                 return employees
