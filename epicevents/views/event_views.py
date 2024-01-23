@@ -8,12 +8,11 @@ console = Console()
 
 
 class EventView(BaseView):
+    # MENU
     def menu_choice(self):
         return self._choice_menu("Event menu", menu=MENU)
 
-    def display_title(self, title):
-        return self._display_title(title=title)
-
+    # ANSWER
     def get_name(self):
         return self._get_name()
 
@@ -29,26 +28,12 @@ class EventView(BaseView):
     def get_notes(self):
         return self._get_information()
 
-    def message_error(self, var):
-        return self._message_error(var)
-
-    def success_message(self):
-        return self._success_message()
-
-    def success_update(self):
-        return self._success_updated()
-
     def select_id(self):
         return self._select_id()
 
-    def not_found(self):
-        self._not_found()
-
-    def exist_error(self, var):
-        return super()._exist_error(var)
-
-    def get_amount(self, type):
-        return self._get_amount(type=type)
+    # DISPLAY
+    def display_title(self, title):
+        return self._display_title(title=title)
 
     def display_table(self, events):
         table = Table(
@@ -78,3 +63,20 @@ class EventView(BaseView):
                 str(event.support_id),
             )
         console.print(table)
+
+    # SUCCESS
+    def success_message(self):
+        return self._success_message()
+
+    def success_update(self):
+        return self._success_updated()
+
+    def success_creating(self):
+        return self._success_creating()
+
+    # ERROR
+    def error_not_found(self):
+        self._not_found()
+
+    def error_not_have_right(self) -> str:
+        return self._not_have_right()

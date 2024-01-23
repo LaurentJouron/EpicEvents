@@ -70,7 +70,7 @@ class RoleUpdateController(RoleController):
                 manager.update(role_id, new_name)
                 view.success_update()
             else:
-                view.not_found()
+                view.error_not_found()
 
         except Exception as e:
             logging.exception(f"Unexpected error during role update: {e}")
@@ -89,5 +89,5 @@ class RoleDeleteController(RoleController):
         if deleted:
             view.success_delete()
         else:
-            view.not_found()
+            view.error_not_found()
         return RoleController()

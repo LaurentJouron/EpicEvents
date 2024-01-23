@@ -2,6 +2,7 @@ from ..database import Model, Session
 
 from sqlalchemy import ForeignKey, Date, Text, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm.session import make_transient
 
 
 class EventManager:
@@ -17,15 +18,17 @@ class EventManager:
                     attendees=kwargs["attendees"],
                     notes=kwargs["notes"],
                     client_id=kwargs["client_id"],
-                    commercial_id=kwargs["commercial_id"],
-                    support_id=kwargs["support_id"],
                 )
                 session.add(new_event)
 
     def read(self):
         with Session() as session:
             with session.begin():
-                ...
+                events = session.query(Event).all()
+                for event in events:
+                    session.expunge(event)
+                    make_transient(event)
+                return events
 
     def update(self):
         with Session() as session:

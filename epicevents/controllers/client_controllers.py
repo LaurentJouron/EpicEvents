@@ -77,7 +77,7 @@ class ClientCreateController(ClientController):
             finally:
                 ClientController()
         else:
-            view.not_have_right()
+            view.error_not_have_right()
             return ClientController()
 
 
@@ -108,21 +108,21 @@ class ClientUpdateController(ClientController):
                         view.success_update()
                         return ClientController()
                     else:
-                        view.not_found()
+                        view.error_not_found()
                 else:
-                    view.not_have_right()
+                    view.error_not_have_right()
                     return ClientController()
 
             except Exception as e:
                 logging.exception(
                     f"Unexpected error during client update: {e}"
                 )
-                view.not_found()
+                view.error_not_found()
                 raise
             finally:
                 ClientController()
         else:
-            view.not_have_right()
+            view.error_not_have_right()
             return ClientController()
 
 
@@ -141,8 +141,8 @@ class ClientDeleteController(ClientController):
             if deleted:
                 view.success_delete()
             else:
-                view.not_found()
+                view.error_not_found()
             return ClientController()
         else:
-            view.not_have_right()
+            view.error_not_have_right()
             return ClientController()

@@ -71,12 +71,24 @@ class ContractManager:
                     .first()
                 )
 
+    def get_status_by_id(self, contract_id):
+        with Session() as session:
+            with session.begin():
+                contract = (
+                    session.query(Contract)
+                    .filter(Contract.id == contract_id)
+                    .first()
+                )
+                if contract:
+                    return contract.status
+                return None
+
 
 # MODELS
 class Contract(Model):
     __tablename__ = "contract"
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
     total_amount: Mapped[str] = mapped_column(String(50))
     outstanding_amount: Mapped[str] = mapped_column(String(50))

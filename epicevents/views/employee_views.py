@@ -9,9 +9,11 @@ console = Console()
 
 
 class EmployeeView(BaseView):
+    # MENU
     def menu_choice(self) -> str:
         return self._choice_menu("Employee menu", menu=MENU)
 
+    # ANSWER
     def get_username(self) -> str:
         return self._get_username()
 
@@ -24,11 +26,12 @@ class EmployeeView(BaseView):
     def get_phone(self) -> str:
         return self._get_phone_number()
 
-    def not_have_right(self) -> str:
-        return self._not_have_right()
-
     def select_id(self) -> int:
         return self._select_id()
+
+    # DISPLAY
+    def display_title(self, title: str):
+        return self._display_title(title)
 
     def display_table(self, employees: list["Employee"]):
         table = Table(
@@ -49,17 +52,7 @@ class EmployeeView(BaseView):
             )
         console.print(table)
 
-    def encoded_password(self) -> str:
-        password = self._get_password()
-        return pbkdf2_sha256.using(salt_size=64).hash(password)
-
-    def test_decode_password(self, password_hash: str) -> bool:
-        password = self._get_password()
-        return pbkdf2_sha256.verify(password, password_hash)
-
-    def not_found(self):
-        return self._not_found()
-
+    # SUCCESS
     def success_delete(self):
         return self._success_delete()
 
@@ -69,5 +62,18 @@ class EmployeeView(BaseView):
     def success_creating(self) -> str:
         return self._success_creating()
 
-    def display_title(self, title: str):
-        return self._display_title(title)
+    # ERROR
+    def error_not_have_right(self) -> str:
+        return self._not_have_right()
+
+    def error_not_found(self):
+        return self._not_found()
+
+    # PASSWORD FUNCTIONS
+    def encoded_password(self) -> str:
+        password = self._get_password()
+        return pbkdf2_sha256.using(salt_size=64).hash(password)
+
+    def test_decode_password(self, password_hash: str) -> bool:
+        password = self._get_password()
+        return pbkdf2_sha256.verify(password, password_hash)

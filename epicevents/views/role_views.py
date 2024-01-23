@@ -8,17 +8,18 @@ console = Console()
 
 
 class RoleView(BaseView):
+    # MENU
     def choice_menu(self):
         return self._choice_menu("Role menu", menu=MENU)
 
+    # ANSWER
     def get_name(self):
-        self._display_title("name")
         return self._get_name()
 
     def select_id(self):
-        self._display_title("ident")
         return self._select_id()
 
+    # DISPLAY
     def display_table(self, roles):
         table = Table(
             title="Roles", show_header=True, header_style="bold blue"
@@ -29,6 +30,7 @@ class RoleView(BaseView):
             table.add_row(str(role.id), role.name)
         console.print(table)
 
+    # SUCCESS
     def success_creating(self):
         return self._success_creating()
 
@@ -38,5 +40,6 @@ class RoleView(BaseView):
     def success_delete(self):
         return self._success_delete()
 
-    def not_found(self):
+    # ERROR
+    def error_not_found(self):
         return self._not_found()

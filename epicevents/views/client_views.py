@@ -4,17 +4,15 @@ from ..utils.contants import MENU
 from rich.table import Table
 from rich.console import Console
 
-
 console = Console()
 
 
 class ClientView(BaseView):
+    # MENU
     def menu_choice(self):
         return self._choice_menu("Client menu", menu=MENU)
 
-    def display_title(self):
-        return self._display_title("Client information")
-
+    # ANSWER
     def get_compagny_name(self):
         return self._get_compagny_name()
 
@@ -36,8 +34,12 @@ class ClientView(BaseView):
     def get_information(self):
         return self._get_information()
 
-    def not_have_right(self) -> str:
-        return self._not_have_right()
+    def select_id(self):
+        return self._select_id()
+
+    # DISPLAY
+    def display_title(self):
+        return self._display_title("Client information")
 
     def display_table(self, clients):
         table = Table(
@@ -68,20 +70,7 @@ class ClientView(BaseView):
             )
         console.print(table)
 
-    def select_id(self):
-        return self._select_id()
-
-    def get_name(self):
-        self._display_title("name")
-        name = self._get_name()
-        return name
-
-    def client_information(self, title):
-        return self._display_left_phrase(title=title)
-
-    def message_error(self, var):
-        return self._message_error(var)
-
+    # SUCCESS
     def success_creating(self):
         return self._success_creating()
 
@@ -91,20 +80,9 @@ class ClientView(BaseView):
     def success_delete(self):
         return self._success_delete()
 
-    def not_found(self):
+    # ERROR
+    def error_not_have_right(self) -> str:
+        return self._not_have_right()
+
+    def error_not_found(self):
         self._not_found()
-
-    def exist_error(self, var):
-        return super()._exist_error(var)
-
-    def display_name(self, name):
-        return self._display_left_phrase(title=name)
-
-    def role_information(self, title):
-        return self._display_left_phrase(title=title)
-
-    def invalid_id(self, title):
-        return self._invalid_id(title=title)
-
-    def clean_console(self):
-        self._clean_console()

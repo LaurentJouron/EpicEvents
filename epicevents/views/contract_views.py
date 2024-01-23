@@ -8,36 +8,18 @@ console = Console()
 
 
 class ContractView(BaseView):
+    # MENU
     def menu_choice(self):
         return self._choice_menu("Contract menu", menu=MENU)
 
-    def message_error(self, var):
-        return self._message_error(var)
-
+    # ANSWER
     def get_name(self):
         return self._get_name()
-
-    def success_creating(self):
-        return self._success_creating()
-
-    def success_message(self):
-        return self._success_message()
-
-    def success_update(self):
-        return self._success_updated()
-
-    def success_delete(self):
-        return self._success_delete()
-
-    def not_found(self):
-        self._not_found()
-
-    def exist_error(self, var):
-        return super()._exist_error(var)
 
     def select_id(self):
         return self._select_id()
 
+    # DISPLAY
     def display_title(self, title):
         return self._display_title(title=title)
 
@@ -66,3 +48,26 @@ class ContractView(BaseView):
                 str(contract.gestion_id),
             )
         console.print(table)
+
+    # SUCCESS
+    def success_creating(self):
+        return self._success_creating()
+
+    def success_message(self):
+        return self._success_message()
+
+    def success_update(self):
+        return self._success_updated()
+
+    def success_delete(self):
+        return self._success_delete()
+
+    # ERROR
+    def message_error(self, var):
+        return self._message_error(var)
+
+    def not_found(self):
+        self._not_found()
+
+    def exist_error(self, var):
+        return super()._exist_error(var)

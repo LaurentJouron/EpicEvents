@@ -66,7 +66,7 @@ class EmployeeCreateController(EmployeeController):
         role = login_role.read_login_file()
 
         # Création uniquement si rôle = Gestion
-        if role["role_id"] == 3:
+        if role["role_id"] == 2:
             data = self.get_data()
             try:
                 manager.create(**data)
@@ -100,7 +100,7 @@ class EmployeeUpdateController(EmployeeController):
         role = login_role.read_login_file()
 
         # Modifier uniquement si rôle = Gestion
-        if role["role_id"] == 3:
+        if role["role_id"] == 2:
             employees = manager.read()
             view.display_table(employees=employees)
             employee_id = view.select_id()
@@ -113,7 +113,7 @@ class EmployeeUpdateController(EmployeeController):
                     manager.update(employee_id=employee_id, **employee_data)
                     view.success_update()
                 else:
-                    view.not_found()
+                    view.error_not_found()
 
             except Exception as e:
                 logging.exception(
@@ -122,7 +122,7 @@ class EmployeeUpdateController(EmployeeController):
             finally:
                 return EmployeeController()
         else:
-            view.not_have_right()
+            view.error_not_have_right()
             return EmployeeController()
 
 
@@ -132,7 +132,7 @@ class EmployeeDeleteController(EmployeeController):
         role = login_role.read_login_file()
 
         # Suppression uniquement si rôle = Gestion
-        if role["role_id"] == 3:
+        if role["role_id"] == 2:
             employees = manager.read()
             view.display_table(employees=employees)
             employee_id = view.select_id()
@@ -171,7 +171,7 @@ class EmployeeLoginController(EmployeeController):
                         for key, value in data.items():
                             self.write_login_file(key, value)
                         return home_controllers.HomeController()
-                view.not_found()
+                view.error_not_found()
             return None
 
     def write_login_file(self, key, value):
