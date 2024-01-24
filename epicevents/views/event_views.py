@@ -1,8 +1,10 @@
 from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
 
+from datetime import datetime
 from rich.table import Table
 from rich.console import Console
+
 
 console = Console()
 
@@ -12,12 +14,11 @@ class EventView(BaseView):
     def menu_choice(self):
         return self._choice_menu("Event menu", menu=MENU)
 
+    # /END_MENU
+
     # ANSWER
     def get_name(self):
         return self._get_name()
-
-    def get_date(self, type):
-        return self._get_date(type=type)
 
     def get_address(self):
         return self._get_address()
@@ -30,6 +31,25 @@ class EventView(BaseView):
 
     def select_id(self):
         return self._select_id()
+
+    # date
+
+    def get_date(self, prompt):
+        while True:
+            date_str = input(f"{prompt} date (dd-mm-aaaa): ").strip()
+            try:
+                # Convertir la chaîne en objet datetime
+                date_obj = datetime.strptime(date_str, "%d-%m-%Y")
+                if date_obj < datetime.now():
+                    print("Veuillez rentrer une date ultérieur à aujourd'hui.")
+                    continue
+                # Formater la date en chaîne de caractères au format souhaité
+                formatted_date = date_obj.strftime("%Y-%m-%d")
+                return formatted_date
+            except ValueError:
+                print("Veuillez utiliser le format dd-mm-aaaa.")
+
+    # /END_ANSWER
 
     # DISPLAY
     def display_title(self, title):
@@ -64,6 +84,8 @@ class EventView(BaseView):
             )
         console.print(table)
 
+    # /END_DISPLAY
+
     # SUCCESS
     def success_message(self):
         return self._success_message()
@@ -74,9 +96,13 @@ class EventView(BaseView):
     def success_creating(self):
         return self._success_creating()
 
+    # /END_SUCCESS
+
     # ERROR
     def error_not_found(self):
         self._not_found()
 
     def error_not_have_right(self) -> str:
         return self._not_have_right()
+
+    # /END_ERROR

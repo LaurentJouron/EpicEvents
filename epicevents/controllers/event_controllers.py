@@ -1,3 +1,4 @@
+from click import prompt
 from ..utils.bases.controllers import BaseController
 from ..models import EventManager, ClientManager, EmployeeManager
 from ..models.contract import ContractManager
@@ -37,8 +38,8 @@ class EventController(BaseController):
     def get_data(self):
         view.display_title("Create events")
         name = view.get_name()
-        start_date = view.get_date(type="start")
-        end_date = view.get_date(type="end")
+        start = view.get_date(prompt="Start")
+        end = view.get_date(prompt="End")
         address = view.get_address()
         view.display_title("Attendees")
         attendees = view.get_number()
@@ -47,8 +48,8 @@ class EventController(BaseController):
         contract_id = self.get_contract_id()
         return {
             "name": name,
-            "start_date": start_date,
-            "end_date": end_date,
+            "start_date": start,
+            "end_date": end,
             "address": address,
             "attendees": attendees,
             "notes": notes,

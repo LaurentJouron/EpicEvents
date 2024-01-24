@@ -1,7 +1,9 @@
 from ..contants import SHORT_SLEEP
+import re
 import time
 import typer
 
+from datetime import datetime
 from rich.console import Console
 
 
@@ -56,6 +58,15 @@ class BaseErrorView(BaseManageConsole):
     def _not_have_right(self) -> None:
         self.__message_error(" You do not have the rights")
 
+    def _format_date_error(self):
+        self.__message_error("Please use ddmmaaaa format.")
+
+    def _earlier_invalid_date(self):
+        self.__message_error("Please enter a date not earlier than today.")
+
+    def _invalid_end_date(self):
+        self.__message_error("End date should not be earlier than start date.")
+
 
 class BaseAnswerView(BaseSuccessView, BaseErrorView):
     def __get_answer(self, prompt: str) -> str:
@@ -105,9 +116,6 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
     def _get_amount(self, type) -> int:
         return self.__get_answer(prompt=f"{type} amount")
 
-    def _get_date(self, type) -> int:
-        return self.__get_answer(prompt=f"{type} date ('AAAA-MM-JJ')")
-
     def _delete_item(self) -> None:
         delete = typer.confirm("Are you sure you want to delete it ?")
         if not delete:
@@ -116,7 +124,7 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
         self._success_delete()
 
 
-class BaseMenu:
+class BaseMenu(BaseManageConsole):
     def __display_menu(self, title: str, menu: dict) -> None:
         self.console.rule(f"[bold blue]{title}")
         for key in menu:
@@ -130,7 +138,9 @@ class BaseMenu:
 
     def _choice_menu(self, menu_name: str, menu: dict) -> str:
         self.__display_menu(menu_name, menu=menu)
-        return self.__response_menu(menu=menu)
+        choice = self.__response_menu(menu=menu)
+        self._clean_console()
+        return choice
 
 
 class BaseView(BaseAnswerView, BaseMenu):
