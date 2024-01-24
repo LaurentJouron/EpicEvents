@@ -1,9 +1,7 @@
 from ..contants import SHORT_SLEEP
-import re
 import time
 import typer
 
-from datetime import datetime
 from rich.console import Console
 
 
@@ -59,12 +57,14 @@ class BaseErrorView(BaseManageConsole):
         self.__message_error(" You do not have the rights")
 
     def _format_date_error(self):
-        self.__message_error("Please use ddmmaaaa format.")
+        self.__message_error("Please use the format (dd-mm-yyyy)")
 
     def _earlier_invalid_date(self):
-        self.__message_error("Please enter a date not earlier than today.")
+        self.__message_error(
+            "Please enter a date later or equal to the first."
+        )
 
-    def _invalid_end_date(self):
+    def _later_today(self):
         self.__message_error("End date should not be earlier than start date.")
 
 

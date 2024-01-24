@@ -38,8 +38,7 @@ class EventController(BaseController):
     def get_data(self):
         view.display_title("Create events")
         name = view.get_name()
-        start = view.get_date(prompt="Start")
-        end = view.get_date(prompt="End")
+        start_date, end_date = view.get_valid_date_range()
         address = view.get_address()
         view.display_title("Attendees")
         attendees = view.get_number()
@@ -48,8 +47,8 @@ class EventController(BaseController):
         contract_id = self.get_contract_id()
         return {
             "name": name,
-            "start_date": start,
-            "end_date": end,
+            "start_date": start_date,
+            "end_date": end_date,
             "address": address,
             "attendees": attendees,
             "notes": notes,

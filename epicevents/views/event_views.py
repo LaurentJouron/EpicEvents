@@ -32,22 +32,29 @@ class EventView(BaseView):
     def select_id(self):
         return self._select_id()
 
-    # date
+    def get_valid_date_range(self):
+        start_date = self.get_date("Enter start")
+        while True:
+            end_date = self.get_date("Enter end")
+            if datetime.strptime(end_date, "%Y-%m-%d") >= datetime.strptime(
+                start_date, "%Y-%m-%d"
+            ):
+                return start_date, end_date
+            else:
+                self._earlier_invalid_date()
 
     def get_date(self, prompt):
         while True:
-            date_str = input(f"{prompt} date (dd-mm-aaaa): ").strip()
+            date_str = input(f"{prompt} date (dd-mm-yyy): ").strip()
             try:
-                # Convertir la chaîne en objet datetime
                 date_obj = datetime.strptime(date_str, "%d-%m-%Y")
                 if date_obj < datetime.now():
-                    print("Veuillez rentrer une date ultérieur à aujourd'hui.")
+                    self._later_today()
                     continue
-                # Formater la date en chaîne de caractères au format souhaité
                 formatted_date = date_obj.strftime("%Y-%m-%d")
                 return formatted_date
             except ValueError:
-                print("Veuillez utiliser le format dd-mm-aaaa.")
+                self._format_date_error()
 
     # /END_ANSWER
 
