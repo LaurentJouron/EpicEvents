@@ -1,5 +1,5 @@
 {
-    "employee_id": 3,
-    "role_id": 2,
-    "token": "$pbkdf2-sha256$29000$tRbCmLMW4jwHIKR0DiGk9B5j7J0zhpDSWsvZe..dEyJkLIUQAoAQQmiNUUqJsVaKUUoJIeRcyzln7N2bE2IsJQ$jq1m.J0ieAftcprxcJsZhcTuV8O2sSWB/yyCWiFCX7E"
+    "employee_id": 0,
+    "role_id": 0,
+    "token": 0
 }

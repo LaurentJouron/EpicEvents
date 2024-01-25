@@ -107,9 +107,9 @@ class Client(Model):
     creation_date: Mapped[Date] = mapped_column(Date)
     updating_date: Mapped[Date] = mapped_column(Date, nullable=True)
 
-    commercial_id: Mapped[int] = mapped_column(
+    employee_id: Mapped[int] = mapped_column(
         ForeignKey("employee.id"), nullable=True
     )
-    commercial: Mapped["Employee"] = relationship(back_populates="client")
+    employee: Mapped["Employee"] = relationship(back_populates="client")
 
     event: Mapped[List["Event"]] = relationship(back_populates="client")

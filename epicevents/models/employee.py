@@ -149,7 +149,7 @@ class Employee(Model):
     role_id: Mapped[int] = mapped_column(ForeignKey("role.id"), nullable=True)
     role: Mapped["Role"] = relationship(back_populates="employee")
 
-    client: Mapped[List["Client"]] = relationship(back_populates="commercial")
+    client: Mapped[List["Client"]] = relationship(back_populates="employee")
 
     event: Mapped[List["Event"]] = relationship(secondary=employee_event)
 

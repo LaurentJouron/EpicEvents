@@ -54,13 +54,13 @@ class ContractController(BaseController):
         outstanding_amount = view.get_amount("outstanding")
         status = True
         employee = EmployeeLoginController()
-        gestion_id = employee.login_file()
+        employee_id = employee.login_file()
         return {
             "name": name,
             "total_amount": total_amount,
             "outstanding_amount": outstanding_amount,
             "status": status,
-            "gestion_id": gestion_id,
+            "employee_id": employee_id,
         }
 
 

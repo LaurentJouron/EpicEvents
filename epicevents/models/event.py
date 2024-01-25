@@ -70,6 +70,3 @@ class Event(Model):
 
     client_id: Mapped[int] = mapped_column(ForeignKey("client.id"))
     client: Mapped["Client"] = relationship(back_populates="event")
-
-    contract_id: Mapped[int] = mapped_column(ForeignKey("contract.id"))
-    contract: Mapped["Contract"] = relationship(back_populates="event")

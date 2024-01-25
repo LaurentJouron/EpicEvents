@@ -17,7 +17,7 @@ class ContractManager:
                     outstanding_amount=kwargs["outstanding_amount"],
                     creation_date=date.today(),
                     status=kwargs["status"],
-                    gestion_id=kwargs["gestion_id"],
+                    employee_id=kwargs["employee_id"],
                 )
                 session.add(new_contract)
 
@@ -46,10 +46,8 @@ class ContractManager:
                         contract.outstanding_amount = kwargs[
                             "outstanding_amount"
                         ]
-                    if kwargs["gestion_id"] != contract.gestion_id:
-                        contract.gestion_id = kwargs["gestion_id"]
-                    # if kwargs["event_id"] != contract.event_id:
-                    #     contract.event_id = kwargs["event_id"]
+                    if kwargs["employee_id"] != contract.employee_id:
+                        contract.employee_id = kwargs["employee_id"]
 
     def delete(self, contract_id):
         with Session() as session:
@@ -95,7 +93,7 @@ class Contract(Model):
     creation_date: Mapped[Date] = mapped_column(Date)
     status: Mapped[bool] = mapped_column(default=False)
 
-    gestion_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
-    gestion: Mapped["Employee"] = relationship(back_populates="gestion")
+    employee_id: Mapped[int] = mapped_column(ForeignKey("employee.id"))
+    employee: Mapped["Employee"] = relationship(back_populates="gestion")
 
     event: Mapped["Event"] = relationship(back_populates="contract")
