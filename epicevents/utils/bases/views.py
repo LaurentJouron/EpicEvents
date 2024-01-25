@@ -116,6 +116,9 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
     def _get_amount(self, type) -> int:
         return self.__get_answer(prompt=f"{type} amount")
 
+    def _get_date(self, item) -> str:
+        return self.__get_answer(prompt=f"{item} date (dd-mm-yyyy)").strip()
+
     def _delete_item(self) -> None:
         delete = typer.confirm("Are you sure you want to delete it ?")
         if not delete:

@@ -1,4 +1,3 @@
-from click import prompt
 from ..utils.bases.controllers import BaseController
 from ..models import EventManager, ClientManager, EmployeeManager
 from ..models.contract import ContractManager
@@ -44,6 +43,7 @@ class EventController(BaseController):
         attendees = view.get_number()
         notes = view.get_notes()
         client_id = self.get_client_id()
+
         contract_id = self.get_contract_id()
         return {
             "name": name,

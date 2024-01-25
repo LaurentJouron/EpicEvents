@@ -18,6 +18,7 @@ class EventManager:
                     attendees=kwargs["attendees"],
                     notes=kwargs["notes"],
                     client_id=kwargs["client_id"],
+                    contract_id=kwargs["contract_id"],
                 )
                 session.add(new_event)
 

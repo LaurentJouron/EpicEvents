@@ -32,29 +32,26 @@ class EventView(BaseView):
     def select_id(self):
         return self._select_id()
 
-    def get_valid_date_range(self):
-        start_date = self.get_date("Enter start")
+    def get_date(self, item):
         while True:
-            end_date = self.get_date("Enter end")
-            if datetime.strptime(end_date, "%Y-%m-%d") >= datetime.strptime(
-                start_date, "%Y-%m-%d"
-            ):
+            date_str = self._get_date(item=item)
+            try:
+                date_obj = datetime.strptime(date_str, "%d-%m-%Y").date()
+                if date_obj < datetime.now().date():
+                    self._later_today()
+                    continue
+                return date_obj
+            except ValueError:
+                self._format_date_error()
+
+    def get_valid_date_range(self):
+        start_date = self.get_date(item="Start")
+        while True:
+            end_date = self.get_date(item="End")
+            if end_date >= start_date:
                 return start_date, end_date
             else:
                 self._earlier_invalid_date()
-
-    def get_date(self, prompt):
-        while True:
-            date_str = input(f"{prompt} date (dd-mm-yyy): ").strip()
-            try:
-                date_obj = datetime.strptime(date_str, "%d-%m-%Y")
-                if date_obj < datetime.now():
-                    self._later_today()
-                    continue
-                formatted_date = date_obj.strftime("%Y-%m-%d")
-                return formatted_date
-            except ValueError:
-                self._format_date_error()
 
     # /END_ANSWER
 
@@ -74,8 +71,8 @@ class EventView(BaseView):
         table.add_column("attendees", style="bold")
         table.add_column("notes", style="bold")
         table.add_column("client_id", style="bold")
-        table.add_column("commercial_id", style="bold")
-        table.add_column("support_id", style="bold")
+        # table.add_column("commercial_id", style="bold")
+        # table.add_column("support_id", style="bold")
         for event in events:
             table.add_row(
                 str(event.id),
@@ -86,8 +83,8 @@ class EventView(BaseView):
                 event.attendees,
                 event.notes,
                 str(event.client_id),
-                str(event.commercial_id),
-                str(event.support_id),
+                # str(event.commercial_id),
+                # str(event.support_id),
             )
         console.print(table)
 
