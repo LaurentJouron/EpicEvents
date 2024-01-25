@@ -1,4 +1,5 @@
 from ..utils.bases.controllers import BaseController
+from ..utils.contants import GESTION, SUPPORT, ADMIN
 from ..models import ContractManager
 from ..views import ContractView
 from ..controllers.employee_controllers import EmployeeLoginController
@@ -13,16 +14,37 @@ manager = ContractManager()
 
 class ContractController(BaseController):
     def run(self):
+        employee_login = EmployeeLoginController()
+        employee = employee_login.read_login_file()
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                return ContractCreateController()
+                # Création uniquement si rôle = Gestion
+                if employee["role_id"] == GESTION:
+                    return ContractCreateController()
+                else:
+                    view.not_have_right()
+                    return ContractController()
+
             elif choice == "2":
                 return ContractReadController()
+
             elif choice == "3":
-                return ContractUpdateController()
+                # Modification uniquement si différent de Support
+                if employee["role_id"] != SUPPORT:
+                    return ContractUpdateController()
+                else:
+                    view.not_have_right()
+                    return ContractController()
+
             elif choice == "4":
-                return ContractDeleteController()
+                # Suppression uniquement si rôle = Admin
+                if employee["role_id"] == ADMIN:
+                    return ContractDeleteController()
+                else:
+                    view.not_have_right()
+                    return ContractController()
+
             elif choice == "5":
                 return home_controllers.HomeController()
 
@@ -45,32 +67,23 @@ class ContractController(BaseController):
 class ContractCreateController(ContractController):
     def run(self):
         view.display_title("Create contract")
+        data = self.get_data()
 
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
-
-        # Création uniquement si rôle = Gestion
-        if role["role_id"] == 3:
-            data = self.get_data()
-
-            try:
-                manager.create(**data)
-                view.success_creating()
-                return ContractController()
-
-            except IntegrityError as e:
-                logging.error(f"IntegrityError: {e}")
-                return ContractController()
-
-            except Exception as e:
-                logging.exception(f"Unexpected error: {e}")
-                raise
-
-            finally:
-                ContractController()
-        else:
-            view.not_have_right()
+        try:
+            manager.create(**data)
+            view.success_creating()
             return ContractController()
+
+        except IntegrityError as e:
+            logging.error(f"IntegrityError: {e}")
+            return ContractController()
+
+        except Exception as e:
+            logging.exception(f"Unexpected error: {e}")
+            raise
+
+        finally:
+            ContractController()
 
 
 class ContractReadController(ContractController):
@@ -82,35 +95,26 @@ class ContractReadController(ContractController):
 
 class ContractUpdateController(ContractController):
     def run(self):
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
+        contracts = manager.read()
+        view.display_table(contracts=contracts)
+        contract_id = view.select_id()
+        try:
+            name = manager.get_by_id(contract_id=contract_id)
 
-        # Modifier uniquement si pas Support
-        if role["role_id"] != 2:
-            contracts = manager.read()
-            view.display_table(contracts=contracts)
-            contract_id = view.select_id()
-            try:
-                name = manager.get_by_id(contract_id=contract_id)
-
-                if name:
-                    data = self.get_data()
-                    manager.update(contract_id=contract_id, **data)
-                    view.success_update()
-                    return ContractController()
-                else:
-                    view.not_found()
-            except Exception as e:
-                logging.exception(
-                    f"Unexpected error during contract update: {e}"
-                )
+            # Droits à rajouter sur commercial et gestion
+            if name:
+                data = self.get_data()
+                manager.update(contract_id=contract_id, **data)
+                view.success_update()
+                return ContractController()
+            else:
                 view.not_found()
-                raise
-            finally:
-                ContractController()
-        else:
-            view.not_have_right()
-            return ContractController()
+        except Exception as e:
+            logging.exception(f"Unexpected error during contract update: {e}")
+            view.not_found()
+            raise
+        finally:
+            ContractController()
 
 
 class ContractDeleteController(ContractController):

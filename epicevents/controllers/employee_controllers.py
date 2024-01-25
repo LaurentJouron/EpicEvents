@@ -1,5 +1,5 @@
 from ..utils.bases.controllers import BaseController
-from ..utils.contants import FILEPATH
+from ..utils.contants import FILEPATH, GESTION
 from ..models import EmployeeManager, RoleManager
 from ..views.employee_views import EmployeeView
 from ..views.role_views import RoleView
@@ -18,19 +18,36 @@ manager = EmployeeManager()
 
 class EmployeeController(BaseController):
     def run(self):
+        employee_login = EmployeeLoginController()
+        employee = employee_login.read_login_file()
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                return EmployeeCreateController()
+                # Création uniquement si rôle = Gestion
+                if employee["role_id"] == GESTION:
+                    return EmployeeCreateController()
+                else:
+                    view.error_not_have_right()
+                    return EmployeeController()
 
             elif choice == "2":
                 return EmployeeReadController()
 
             elif choice == "3":
-                return EmployeeUpdateController()
+                # Modification uniquement si rôle = Gestion
+                if employee["role_id"] == GESTION:
+                    return EmployeeUpdateController()
+                else:
+                    view.error_not_have_right()
+                    return EmployeeController()
 
             elif choice == "4":
-                return EmployeeDeleteController()
+                # Suppression uniquement si rôle = Gestion
+                if employee["role_id"] == GESTION:
+                    return EmployeeDeleteController()
+                else:
+                    view.error_not_have_right()
+                    return EmployeeController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
@@ -62,29 +79,21 @@ class EmployeeController(BaseController):
 class EmployeeCreateController(EmployeeController):
     def run(self):
         view.display_title("Create employee")
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
-
-        # Création uniquement si rôle = Gestion
-        if role["role_id"] == 2:
-            data = self.get_data()
-            try:
-                manager.create(**data)
-                view.success_creating()
-                return EmployeeController()
-
-            except IntegrityError as e:
-                logging.error(f"IntegrityError: {e}")
-                return EmployeeController()
-
-            except Exception as e:
-                logging.exception(f"Unexpected error: {e}")
-                raise
-            finally:
-                EmployeeController()
-        else:
-            view.not_have_right()
+        data = self.get_data()
+        try:
+            manager.create(**data)
+            view.success_creating()
             return EmployeeController()
+
+        except IntegrityError as e:
+            logging.error(f"IntegrityError: {e}")
+            return EmployeeController()
+
+        except Exception as e:
+            logging.exception(f"Unexpected error: {e}")
+            raise
+        finally:
+            EmployeeController()
 
 
 class EmployeeReadController(EmployeeController):
@@ -96,56 +105,38 @@ class EmployeeReadController(EmployeeController):
 
 class EmployeeUpdateController(EmployeeController):
     def run(self):
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
+        employees = manager.read()
+        view.display_table(employees=employees)
+        employee_id = view.select_id()
 
-        # Modifier uniquement si rôle = Gestion
-        if role["role_id"] == 2:
-            employees = manager.read()
-            view.display_table(employees=employees)
-            employee_id = view.select_id()
+        try:
+            employee = manager.get_by_id(employee_id=employee_id)
 
-            try:
-                employee = manager.get_by_id(employee_id=employee_id)
+            if employee:
+                employee_data = self.get_data()
+                manager.update(employee_id=employee_id, **employee_data)
+                view.success_update()
+            else:
+                view.error_not_found()
 
-                if employee:
-                    employee_data = self.get_data()
-                    manager.update(employee_id=employee_id, **employee_data)
-                    view.success_update()
-                else:
-                    view.error_not_found()
-
-            except Exception as e:
-                logging.exception(
-                    f"Unexpected error during employee update: {e}"
-                )
-            finally:
-                return EmployeeController()
-        else:
-            view.error_not_have_right()
+        except Exception as e:
+            logging.exception(f"Unexpected error during employee update: {e}")
+        finally:
             return EmployeeController()
 
 
 class EmployeeDeleteController(EmployeeController):
     def run(self):
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
+        employees = manager.read()
+        view.display_table(employees=employees)
+        employee_id = view.select_id()
+        deleted = manager.delete(employee_id=employee_id)
 
-        # Suppression uniquement si rôle = Gestion
-        if role["role_id"] == 2:
-            employees = manager.read()
-            view.display_table(employees=employees)
-            employee_id = view.select_id()
-            deleted = manager.delete(employee_id=employee_id)
-
-            if deleted:
-                view.success_delete()
-            else:
-                view.not_found()
-            return EmployeeController()
+        if deleted:
+            view.success_delete()
         else:
-            view.not_have_right()
-            return EmployeeController()
+            view.not_found()
+        return EmployeeController()
 
 
 class EmployeeLoginController(EmployeeController):

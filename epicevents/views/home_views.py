@@ -28,6 +28,9 @@ class HomeView(BaseView):
     def choice_menu(self):
         return self._choice_menu("Home menu", menu=self.home_menu)
 
+    def error_not_have_right(self) -> str:
+        return self._not_have_right()
+
 
 class ExitView(BaseView):
     def exit_program(self):

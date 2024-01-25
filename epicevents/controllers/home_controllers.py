@@ -10,6 +10,8 @@ from ..controllers.employee_controllers import (
     EmployeeLogoutController,
 )
 
+view = HomeView()
+
 
 class ReceptionController(BaseController):
     def run(self):
@@ -38,7 +40,13 @@ class HomeController(BaseController):
                 return ContractController()
 
             elif choice == "5":
-                return RoleController()
+                employee_login_role = EmployeeLoginController()
+                employee = employee_login_role.read_login_file()
+                if employee["role_id"] == 0:
+                    return RoleController()
+                else:
+                    view.error_not_have_right()
+                    return HomeController()
 
             elif choice == "6":
                 return ExitController()

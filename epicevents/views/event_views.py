@@ -77,10 +77,10 @@ class EventView(BaseView):
             table.add_row(
                 str(event.id),
                 event.name,
-                event.start_date,
-                event.end_date,
+                str(event.start_date),
+                str(event.end_date),
                 event.address,
-                event.attendees,
+                str(event.attendees),
                 event.notes,
                 str(event.client_id),
                 # str(event.commercial_id),

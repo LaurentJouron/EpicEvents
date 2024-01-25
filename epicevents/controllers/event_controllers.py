@@ -1,4 +1,5 @@
 from ..utils.bases.controllers import BaseController
+from ..utils.contants import COMMERCIAL, ADMIN
 from ..models import EventManager, ClientManager, EmployeeManager
 from ..models.contract import ContractManager
 from ..views import EventView
@@ -17,6 +18,8 @@ manager = EventManager()
 
 class EventController(BaseController):
     def run(self):
+        employee_login = EmployeeLoginController()
+        employee = employee_login.read_login_file()
         while True:
             choice = view.menu_choice()
             if choice == "1":
@@ -26,10 +29,20 @@ class EventController(BaseController):
                 return EventReadController()
 
             elif choice == "3":
-                return EventUpdateController()
+                # Modification uniquement si rôle = Commercial
+                if employee["role_id"] == COMMERCIAL:
+                    return EventUpdateController()
+                else:
+                    view.error_not_have_right()
+                    return EventController()
 
             elif choice == "4":
-                return EventDeleteController()
+                # Suppression uniquement si rôle = Admin
+                if employee["role_id"] == ADMIN:
+                    return EventDeleteController()
+                else:
+                    view.error_not_have_right()
+                    return EventController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
@@ -108,58 +121,40 @@ class EventReadController(EventController):
 
 class EventUpdateController(EventController):
     def run(self):
-        employee = EmployeeLoginController()
-        employee = employee.read_login_file()
-        # Modification uniquement si rôle = Commercial
-        if employee["role_id"] == 1:
-            contract_id = self.get_contract_id()
-            try:
-                contract = manager.get_status_by_id(contract_id)
-                print(contract)
+        contract_id = self.get_contract_id()
+        try:
+            contract = manager.get_status_by_id(contract_id)
 
-                # Modification possible uniquement pour le commercial
-                if contract["status"] is True:
-                    if contract:
-                        data = self.get_data()
-                        manager.update(contract_id, **data)
-                        view.success_update()
-                        return EventController()
-                    else:
-                        view.error_not_found()
-                else:
-                    view.error_not_have_right()
+            # Modification possible uniquement pour le commercial
+            if contract["status"] is True:
+                if contract:
+                    data = self.get_data()
+                    manager.update(contract_id, **data)
+                    view.success_update()
                     return EventController()
+                else:
+                    view.error_not_found()
+            else:
+                view.error_not_have_right()
+                return EventController()
 
-            except Exception as e:
-                logging.exception(
-                    f"Unexpected error during client update: {e}"
-                )
-                view.error_not_found()
-                raise
-            finally:
-                EventController()
-        else:
-            view.error_not_have_right()
-            return EventController()
+        except Exception as e:
+            logging.exception(f"Unexpected error during client update: {e}")
+            view.error_not_found()
+            raise
+        finally:
+            EventController()
 
 
 class EventDeleteController(EventController):
     def run(self):
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
+        events = manager.read()
+        view.display_table(events=events)
 
-        # Suppression impossible
-        if role["role_id"] == 0:
-            events = manager.read()
-            view.display_table(events=events)
-
-            client_id = view.select_id()
-            deleted = manager.delete(client_id=client_id)
-            if deleted:
-                view.success_delete()
-            else:
-                view.error_not_found()
-            return EventController()
+        client_id = view.select_id()
+        deleted = manager.delete(client_id=client_id)
+        if deleted:
+            view.success_delete()
         else:
-            view.error_not_have_right()
-            return EventController()
+            view.error_not_found()
+        return EventController()

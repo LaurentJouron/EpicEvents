@@ -1,4 +1,5 @@
 from ..utils.bases.controllers import BaseController
+from ..utils.contants import COMMERCIAL, ADMIN
 from ..models import ClientManager
 from ..views import ClientView
 from ..controllers.employee_controllers import EmployeeLoginController
@@ -10,22 +11,40 @@ from sqlalchemy.exc import IntegrityError
 view = ClientView()
 manager = ClientManager()
 
+employee_login = EmployeeLoginController()
+employee = employee_login.read_login_file()
+
 
 class ClientController(BaseController):
     def run(self):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                return ClientCreateController()
+                # Création uniquement si rôle = Commercial
+                if employee["role_id"] == COMMERCIAL:
+                    return ClientCreateController()
+                else:
+                    view.error_not_have_right()
+                    return ClientController()
 
             elif choice == "2":
                 return ClientReadController()
 
             elif choice == "3":
-                return ClientUpdateController()
+                # Modification uniquement si rôle = Commercial
+                if employee["role_id"] == COMMERCIAL:
+                    return ClientUpdateController()
+                else:
+                    view.error_not_have_right()
+                    return ClientController()
 
             elif choice == "4":
-                return ClientDeleteController()
+                # Suppression impossible
+                if employee["role_id"] == ADMIN:
+                    return ClientDeleteController()
+                else:
+                    view.error_not_have_right()
+                    return ClientController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
@@ -55,30 +74,22 @@ class ClientController(BaseController):
 
 class ClientCreateController(ClientController):
     def run(self):
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
-
-        # Création uniquement si rôle = Commercial
-        if role["role_id"] == 1:
-            data = self.get_data()
-            try:
-                manager.create(**data)
-                view.success_creating()
-                return ClientController()
-
-            except IntegrityError as e:
-                logging.error(f"IntegrityError: {e}")
-                return ClientController()
-
-            except Exception as e:
-                logging.exception(f"Unexpected error: {e}")
-                raise
-
-            finally:
-                ClientController()
-        else:
-            view.error_not_have_right()
+        data = self.get_data()
+        try:
+            manager.create(**data)
+            view.success_creating()
             return ClientController()
+
+        except IntegrityError as e:
+            logging.error(f"IntegrityError: {e}")
+            return ClientController()
+
+        except Exception as e:
+            logging.exception(f"Unexpected error: {e}")
+            raise
+
+        finally:
+            ClientController()
 
 
 class ClientReadController(ClientController):
@@ -90,60 +101,42 @@ class ClientReadController(ClientController):
 
 class ClientUpdateController(ClientController):
     def run(self):
-        employee = EmployeeLoginController()
-        employee = employee.read_login_file()
-        # Modification uniquement si rôle = Commercial
-        if employee["role_id"] == 1:
-            clients = manager.read()
-            view.display_table(clients)
-            client_id = view.select_id()
-            try:
-                commercial = manager.get_commercial_by_id(client_id)
-
-                if commercial:
-                    # Modification uniquement si le commercial a créé le client
-                    if employee["employee_id"] == commercial:
-                        data = self.get_data()
-                        manager.update(client_id, **data)
-                        view.success_update()
-                        return ClientController()
-                    else:
-                        view.error_not_have_right()
-                        return ClientController()
-                else:
-                    view.error_not_found()
+        clients = manager.read()
+        view.display_table(clients)
+        client_id = view.select_id()
+        try:
+            commercial = manager.get_commercial_by_id(client_id)
+            if commercial:
+                # Modification uniquement si le commercial a créé le client
+                if employee["employee_id"] == commercial:
+                    data = self.get_data()
+                    manager.update(client_id, **data)
+                    view.success_update()
                     return ClientController()
-
-            except Exception as e:
-                logging.exception(
-                    f"Unexpected error during client update: {e}"
-                )
+                else:
+                    view.error_not_have_right()
+                    return ClientController()
+            else:
                 view.error_not_found()
-                raise
-            finally:
-                ClientController()
-        else:
-            view.error_not_have_right()
-            return ClientController()
+                return ClientController()
+
+        except Exception as e:
+            logging.exception(f"Unexpected error during client update: {e}")
+            view.error_not_found()
+            raise
+        finally:
+            ClientController()
 
 
 class ClientDeleteController(ClientController):
     def run(self):
-        login_role = EmployeeLoginController()
-        role = login_role.read_login_file()
+        clients = manager.read()
+        view.display_table(clients=clients)
 
-        # Suppression impossible
-        if role["role_id"] == 0:
-            clients = manager.read()
-            view.display_table(clients=clients)
-
-            client_id = view.select_id()
-            deleted = manager.delete(client_id=client_id)
-            if deleted:
-                view.success_delete()
-            else:
-                view.error_not_found()
-            return ClientController()
+        client_id = view.select_id()
+        deleted = manager.delete(client_id=client_id)
+        if deleted:
+            view.success_delete()
         else:
-            view.error_not_have_right()
-            return ClientController()
+            view.error_not_found()
+        return ClientController()
