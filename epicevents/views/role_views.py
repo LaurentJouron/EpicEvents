@@ -43,3 +43,6 @@ class RoleView(BaseView):
     # ERROR
     def error_not_found(self):
         return self._not_found()
+
+    def error_not_have_right(self):
+        return self._not_have_right()

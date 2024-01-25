@@ -2,6 +2,8 @@ from ..utils.bases.controllers import BaseController
 from ..models import RoleManager
 from ..views import RoleView
 from ..controllers import home_controllers
+from ..controllers.employee_controllers import EmployeeLoginController
+
 import logging
 
 from sqlalchemy.exc import IntegrityError
@@ -32,22 +34,30 @@ class RoleController(BaseController):
 
 class RoleCreateController(RoleController):
     def run(self):
-        name = view.get_name()
-        try:
-            manager.create(name=name)
-            view.success_creating()
+        login_role = EmployeeLoginController()
+        role = login_role.read_login_file()
+
+        # Suppression impossible
+        if role["role_id"] == 0:
+            name = view.get_name()
+            try:
+                manager.create(name=name)
+                view.success_creating()
+                return RoleController()
+
+            except IntegrityError as e:
+                logging.error(f"IntegrityError: {e}")
+                return RoleController()
+
+            except Exception as e:
+                logging.exception(f"Unexpected error: {e}")
+                raise
+
+            finally:
+                RoleController()
+        else:
+            view.error_not_have_right()
             return RoleController()
-
-        except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
-            return RoleController()
-
-        except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
-            raise
-
-        finally:
-            RoleController()
 
 
 class RoleReadController(RoleController):

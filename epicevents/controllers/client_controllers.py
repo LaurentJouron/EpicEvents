@@ -100,17 +100,18 @@ class ClientUpdateController(ClientController):
             try:
                 commercial = manager.get_commercial_by_id(client_id)
 
-                # Modification uniquement si le commercial a créé le client
-                if employee["employee_id"] == commercial:
-                    if commercial:
+                if commercial:
+                    # Modification uniquement si le commercial a créé le client
+                    if employee["employee_id"] == commercial:
                         data = self.get_data()
                         manager.update(client_id, **data)
                         view.success_update()
                         return ClientController()
                     else:
-                        view.error_not_found()
+                        view.error_not_have_right()
+                        return ClientController()
                 else:
-                    view.error_not_have_right()
+                    view.error_not_found()
                     return ClientController()
 
             except Exception as e:
