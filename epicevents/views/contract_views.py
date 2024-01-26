@@ -32,20 +32,20 @@ class ContractView(BaseView):
         )
         table.add_column("ID", style="dim")
         table.add_column("name", style="bold")
-        table.add_column("total_amount", style="bold")
-        table.add_column("outstanding_amount", style="bold")
-        table.add_column("creation_date", style="bold")
+        table.add_column("total amount", style="bold")
+        table.add_column("pending amount", style="bold")
+        table.add_column("creation date", style="bold")
         table.add_column("status", style="bold")
-        table.add_column("gestion_id", style="bold")
+        table.add_column("employee_id", style="bold")
         for contract in contracts:
             table.add_row(
                 str(contract.id),
                 contract.name,
                 contract.total_amount,
-                contract.outstanding_amount,
+                contract.pending_amount,
                 str(contract.creation_date),
                 str(contract.status),
-                str(contract.gestion_id),
+                str(contract.employee_id),
             )
         console.print(table)
 
@@ -63,6 +63,10 @@ class ContractView(BaseView):
         return self._success_delete()
 
     # ERROR
+
+    def error_not_have_right(self) -> str:
+        return self._not_have_right()
+
     def message_error(self, var):
         return self._message_error(var)
 

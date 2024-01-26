@@ -54,7 +54,7 @@ class ClientView(BaseView):
         table.add_column("information", style="bold")
         table.add_column("creation", style="bold")
         table.add_column("updating", style="bold")
-        table.add_column("commercial_id", style="bold")
+        table.add_column("employee_id", style="bold")
         for client in clients:
             table.add_row(
                 str(client.id),
@@ -66,7 +66,7 @@ class ClientView(BaseView):
                 client.information,
                 str(client.creation_date),
                 str(client.updating_date),
-                str(client.commercial_id),
+                str(client.employee_id),
             )
         console.print(table)
 

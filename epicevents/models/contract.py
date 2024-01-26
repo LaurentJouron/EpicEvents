@@ -14,7 +14,7 @@ class ContractManager:
                 new_contract = Contract(
                     name=kwargs["name"],
                     total_amount=kwargs["total_amount"],
-                    outstanding_amount=kwargs["outstanding_amount"],
+                    pending_amount=kwargs["pending_amount"],
                     creation_date=date.today(),
                     status=kwargs["status"],
                     employee_id=kwargs["employee_id"],
@@ -39,13 +39,8 @@ class ContractManager:
                         contract.name = kwargs["name"]
                     if kwargs["total_amount"] != contract.total_amount:
                         contract.total_amount = kwargs["total_amount"]
-                    if (
-                        kwargs["outstanding_amount"]
-                        != contract.outstanding_amount
-                    ):
-                        contract.outstanding_amount = kwargs[
-                            "outstanding_amount"
-                        ]
+                    if kwargs["pending_amount"] != contract.pending_amount:
+                        contract.pending_amount = kwargs["pending_amount"]
                     if kwargs["employee_id"] != contract.employee_id:
                         contract.employee_id = kwargs["employee_id"]
 
@@ -89,7 +84,7 @@ class Contract(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
     total_amount: Mapped[str] = mapped_column(String(50))
-    outstanding_amount: Mapped[str] = mapped_column(String(50))
+    pending_amount: Mapped[str] = mapped_column(String(50))
     creation_date: Mapped[Date] = mapped_column(Date)
     status: Mapped[bool] = mapped_column(default=False)
 

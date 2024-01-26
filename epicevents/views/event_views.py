@@ -17,9 +17,6 @@ class EventView(BaseView):
     # /END_MENU
 
     # ANSWER
-    def get_name(self):
-        return self._get_name()
-
     def get_address(self):
         return self._get_address()
 

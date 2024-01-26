@@ -19,30 +19,30 @@ class ContractController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                # Création uniquement si rôle = Gestion
-                if employee["role_id"] == GESTION:
+                # Création uniquement si department = Gestion
+                if employee["department_id"] == GESTION:
                     return ContractCreateController()
                 else:
-                    view.not_have_right()
+                    view.error_not_have_right()
                     return ContractController()
 
             elif choice == "2":
                 return ContractReadController()
 
             elif choice == "3":
-                # Modification uniquement si différent de Support
-                if employee["role_id"] != SUPPORT:
+                # Modification posswible uniquement si différent de Support
+                if employee["department_id"] != SUPPORT:
                     return ContractUpdateController()
                 else:
-                    view.not_have_right()
+                    view.error_not_have_right()
                     return ContractController()
 
             elif choice == "4":
-                # Suppression uniquement si rôle = Admin
-                if employee["role_id"] == ADMIN:
+                # Suppression uniquement si department = Admin
+                if employee["department_id"] == ADMIN:
                     return ContractDeleteController()
                 else:
-                    view.not_have_right()
+                    view.error_not_have_right()
                     return ContractController()
 
             elif choice == "5":
@@ -51,14 +51,14 @@ class ContractController(BaseController):
     def get_data(self):
         name = view.get_name()
         total_amount = view.get_amount("total")
-        outstanding_amount = view.get_amount("outstanding")
+        pending_amount = view.get_amount("pending")
         status = True
         employee = EmployeeLoginController()
         employee_id = employee.login_file()
         return {
             "name": name,
             "total_amount": total_amount,
-            "outstanding_amount": outstanding_amount,
+            "pending_amount": pending_amount,
             "status": status,
             "employee_id": employee_id,
         }

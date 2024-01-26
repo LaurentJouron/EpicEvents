@@ -100,46 +100,45 @@ ___________
 ___
 <h3 align="center">1: Commercial</h3>
 
-  * ``6: Louis``
+  * ``3: Louis``
     * ``1: Orange``
     * ``2: Free``
     * ``3: Google``
 
-  * ``9: Virginie``
-    * ``4: Python``
-    * ``5: Java``
-    * ``9: SQL``
+  * ``6: Virginie``
+    * ``4: Ubuntu``
+    * ``5: Windows``
+    * ``6: Apple``
 
-  * ``12: Thierno``
-    * ``6: Ubuntu``
-    * ``7: Windows``
-    * ``8: Apple``
+  * ``9: Thierno``
+    * ``7: Python``
+    * ``8: Java``
+    * ``9: SQL``
 
 ___
 <h3 align="center">2: Gestion</h3>
 
-  * ``3: Laurent``
+  * ``1: Laurent``
     * ``1: Orange end of year party``
     * ``2: Free end of year party``
     * ``3: Google end of year party``
 
-  * ``7: Maxime``
-    * ``4: Python end of year party``
-    * ``5: Java end of year party``
-    * ``6: Ubuntu end of year party``
+  * ``4: Maxime``
+    * ``4: Ubuntu end of year party``
+    * ``5: Windows end of year party``
+    * ``6: Apple end of year party``
 
-  * ``10: Frederic``
-    * ``7: Windows end of year party``
-    * ``8: Apple end of year party``
+  * ``7: Frederic``
+    * ``7: Python end of year party``
+    * ``8: Java end of year party``
     * ``9: SQL end of year party``
-
 
 ___
 <h3 align="center">3: Support</h3>
 
-  * ``5: Antoine``
-  * ``8: Stephane``
-  * ``11: Gilles``
+  * ``2: Antoine``
+  * ``5: Stephane``
+  * ``8: Gilles``
 
 ___________
 

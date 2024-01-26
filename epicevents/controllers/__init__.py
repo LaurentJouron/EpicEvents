@@ -3,12 +3,12 @@ from .home_controllers import (  # noqa: F401
     HomeController,
     ExitController,
 )
-from .role_controllers import (  # noqa: F401
-    RoleController,
-    RoleCreateController,
-    RoleReadController,
-    RoleUpdateController,
-    RoleDeleteController,
+from .department_controllers import (  # noqa: F401
+    DepartmentController,
+    DepartmentCreateController,
+    DepartmentReadController,
+    DepartmentUpdateController,
+    DepartmentDeleteController,
 )
 from .employee_controllers import (  # noqa: F401
     EmployeeController,

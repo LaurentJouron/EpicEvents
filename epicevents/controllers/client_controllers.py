@@ -11,17 +11,16 @@ from sqlalchemy.exc import IntegrityError
 view = ClientView()
 manager = ClientManager()
 
-employee_login = EmployeeLoginController()
-employee = employee_login.read_login_file()
-
 
 class ClientController(BaseController):
     def run(self):
+        employee_login = EmployeeLoginController()
+        employee = employee_login.read_login_file()
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                # Création uniquement si rôle = Commercial
-                if employee["role_id"] == COMMERCIAL:
+                # Création uniquement si departement == Commercial
+                if employee["department_id"] == COMMERCIAL:
                     return ClientCreateController()
                 else:
                     view.error_not_have_right()
@@ -31,16 +30,16 @@ class ClientController(BaseController):
                 return ClientReadController()
 
             elif choice == "3":
-                # Modification uniquement si rôle = Commercial
-                if employee["role_id"] == COMMERCIAL:
+                # Modification uniquement si département == Commercial
+                if employee["department_id"] == COMMERCIAL:
                     return ClientUpdateController()
                 else:
                     view.error_not_have_right()
                     return ClientController()
 
             elif choice == "4":
-                # Suppression impossible
-                if employee["role_id"] == ADMIN:
+                # Suppression uniquement si departement == Admin
+                if employee["department_id"] == ADMIN:
                     return ClientDeleteController()
                 else:
                     view.error_not_have_right()
@@ -59,7 +58,7 @@ class ClientController(BaseController):
         address = view.get_address()
         information = view.get_information()
         employee = EmployeeLoginController()
-        commercial_id = employee.login_file()
+        employee_id = employee.login_file()
         return {
             "compagny_name": compagny_name,
             "username": username,
@@ -68,7 +67,7 @@ class ClientController(BaseController):
             "phone": phone,
             "address": address,
             "information": information,
-            "commercial_id": commercial_id,
+            "employee_id": employee_id,
         }
 
 
@@ -107,6 +106,8 @@ class ClientUpdateController(ClientController):
         try:
             commercial = manager.get_commercial_by_id(client_id)
             if commercial:
+                employee_login = EmployeeLoginController()
+                employee = employee_login.read_login_file()
                 # Modification uniquement si le commercial a créé le client
                 if employee["employee_id"] == commercial:
                     data = self.get_data()

@@ -29,16 +29,16 @@ class EventController(BaseController):
                 return EventReadController()
 
             elif choice == "3":
-                # Modification uniquement si rôle = Commercial
-                if employee["role_id"] == COMMERCIAL:
+                # Modification uniquement si departement == Commercial
+                if employee["department_id"] == COMMERCIAL:
                     return EventUpdateController()
                 else:
                     view.error_not_have_right()
                     return EventController()
 
             elif choice == "4":
-                # Suppression uniquement si rôle = Admin
-                if employee["role_id"] == ADMIN:
+                # Suppression uniquement si departement == Admin
+                if employee["department_id"] == ADMIN:
                     return EventDeleteController()
                 else:
                     view.error_not_have_right()
@@ -56,7 +56,6 @@ class EventController(BaseController):
         attendees = view.get_number()
         notes = view.get_notes()
         client_id = self.get_client_id()
-
         contract_id = self.get_contract_id()
         return {
             "name": name,
@@ -66,7 +65,6 @@ class EventController(BaseController):
             "attendees": attendees,
             "notes": notes,
             "client_id": client_id,
-            # "support_id": support_id,
             "contract_id": contract_id,
         }
 

@@ -7,7 +7,7 @@ from rich.console import Console
 console = Console()
 
 
-class RoleView(BaseView):
+class DepartmentView(BaseView):
     # MENU
     def choice_menu(self):
         return self._choice_menu("Role menu", menu=MENU)
@@ -20,14 +20,14 @@ class RoleView(BaseView):
         return self._select_id()
 
     # DISPLAY
-    def display_table(self, roles):
+    def display_table(self, departments):
         table = Table(
-            title="Roles", show_header=True, header_style="bold blue"
+            title="Departments", show_header=True, header_style="bold blue"
         )
         table.add_column("ID", style="dim")
         table.add_column("name", style="bold")
-        for role in roles:
-            table.add_row(str(role.id), role.name)
+        for department in departments:
+            table.add_row(str(department.id), department.name)
         console.print(table)
 
     # SUCCESS

@@ -18,7 +18,7 @@ class EmployeeManager:
                     email=kwargs["email"],
                     phone=kwargs["phone"],
                     password=kwargs["password"],
-                    role_id=kwargs["role_id"],
+                    department_id=kwargs["department_id"],
                 )
                 session.add(new_employee)
 
@@ -46,8 +46,8 @@ class EmployeeManager:
                         employee.phone = kwargs["phone"]
                     if kwargs["password"] != employee.password:
                         employee.password = kwargs["password"]
-                    if kwargs["role_id"] != employee.role_id:
-                        employee.role_id = kwargs["role_id"]
+                    if kwargs["department_id"] != employee.department_id:
+                        employee.department_id = kwargs["department_id"]
 
     def delete(self, employee_id):
         with Session() as session:
@@ -90,7 +90,7 @@ class EmployeeManager:
                     return employee.password
                 return None
 
-    def get_role_id_by_username(self, username):
+    def get_department_id_by_username(self, username):
         with Session() as session:
             with session.begin():
                 employee = (
@@ -99,7 +99,7 @@ class EmployeeManager:
                     .first()
                 )
                 if employee:
-                    return employee.role_id
+                    return employee.department_id
                 return None
 
     def get_id_by_username(self, username):
@@ -146,11 +146,13 @@ class Employee(Model):
     phone: Mapped[str] = mapped_column(String(20), unique=True)
     password: Mapped[str] = mapped_column(String(500))
 
-    role_id: Mapped[int] = mapped_column(ForeignKey("role.id"), nullable=True)
-    role: Mapped["Role"] = relationship(back_populates="employee")
+    department_id: Mapped[int] = mapped_column(
+        ForeignKey("department.id"), nullable=True
+    )
+    department: Mapped["Department"] = relationship(back_populates="employee")
 
     client: Mapped[List["Client"]] = relationship(back_populates="employee")
 
     event: Mapped[List["Event"]] = relationship(secondary=employee_event)
 
-    gestion: Mapped[List["Contract"]] = relationship(back_populates="gestion")
+    gestion: Mapped[List["Contract"]] = relationship(back_populates="employee")

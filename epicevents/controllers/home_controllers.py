@@ -1,6 +1,7 @@
 from ..utils.bases.controllers import BaseController
+from ..utils.contants import ADMIN
 from ..views import HomeView, ReceptionView, ExitView
-from ..controllers.role_controllers import RoleController
+from ..controllers.department_controllers import DepartmentController
 from ..controllers.client_controllers import ClientController
 from ..controllers.event_controllers import EventController
 from ..controllers.contract_controllers import ContractController
@@ -40,10 +41,10 @@ class HomeController(BaseController):
                 return ContractController()
 
             elif choice == "5":
-                employee_login_role = EmployeeLoginController()
-                employee = employee_login_role.read_login_file()
-                if employee["role_id"] == 0:
-                    return RoleController()
+                employee_login_department = EmployeeLoginController()
+                employee = employee_login_department.read_login_file()
+                if employee["department_id"] == ADMIN:
+                    return DepartmentController()
                 else:
                     view.error_not_have_right()
                     return HomeController()

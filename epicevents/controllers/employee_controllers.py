@@ -1,8 +1,8 @@
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import FILEPATH, GESTION
-from ..models import EmployeeManager, RoleManager
+from ..models import EmployeeManager, DepartmentManager
 from ..views.employee_views import EmployeeView
-from ..views.role_views import RoleView
+from ..views.department_views import DepartmentView
 from ..controllers import home_controllers
 import logging
 import json
@@ -23,8 +23,8 @@ class EmployeeController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                # Création uniquement si rôle = Gestion
-                if employee["role_id"] == GESTION:
+                # Création uniquement si departement == Gestion
+                if employee["department_id"] == GESTION:
                     return EmployeeCreateController()
                 else:
                     view.error_not_have_right()
@@ -34,16 +34,16 @@ class EmployeeController(BaseController):
                 return EmployeeReadController()
 
             elif choice == "3":
-                # Modification uniquement si rôle = Gestion
-                if employee["role_id"] == GESTION:
+                # Modification uniquement si departement == Gestion
+                if employee["department_id"] == GESTION:
                     return EmployeeUpdateController()
                 else:
                     view.error_not_have_right()
                     return EmployeeController()
 
             elif choice == "4":
-                # Suppression uniquement si rôle = Gestion
-                if employee["role_id"] == GESTION:
+                # Suppression uniquement si departement == Gestion
+                if employee["department_id"] == GESTION:
                     return EmployeeDeleteController()
                 else:
                     view.error_not_have_right()
@@ -58,21 +58,21 @@ class EmployeeController(BaseController):
         email = view.get_email()
         phone = view.get_phone()
         password = view.encoded_password()
-        role_id = self.get_role_id()
+        department_id = self.get_department_id()
         return {
             "username": username,
             "last_name": last_name,
             "email": email,
             "phone": phone,
             "password": password,
-            "role_id": role_id,
+            "department_id": department_id,
         }
 
-    def get_role_id(self):
-        role_manager = RoleManager()
-        role_view = RoleView()
-        roles = role_manager.read()
-        role_view.display_table(roles)
+    def get_department_id(self):
+        department_manager = DepartmentManager()
+        department_view = DepartmentView()
+        departments = department_manager.read()
+        department_view.display_table(departments)
         return view.select_id()
 
 
@@ -143,7 +143,7 @@ class EmployeeLoginController(EmployeeController):
     def run(self):
         token = self.search_token()
 
-        if token != 0:
+        if token != "":
             return home_controllers.HomeController()
         else:
             max_attempts = 3
@@ -203,12 +203,14 @@ class EmployeeLoginController(EmployeeController):
             return json.load(f)["token"]
 
     def get_data_log(self, username):
-        role_id = manager.get_role_id_by_username(username=username)
+        department_id = manager.get_department_id_by_username(
+            username=username
+        )
         employee_id = manager.get_id_by_username(username=username)
         token = self.create_token(username=username)
         return {
             "employee_id": employee_id,
-            "role_id": role_id,
+            "department_id": department_id,
             "token": token,
         }
 
@@ -219,8 +221,8 @@ class EmployeeLogoutController(EmployeeController):
             return json.dump(
                 {
                     "employee_id": 0,
-                    "role_id": 0,
-                    "token": 0,
+                    "department_id": 0,
+                    "token": "",
                 },
                 f,
                 indent=4,

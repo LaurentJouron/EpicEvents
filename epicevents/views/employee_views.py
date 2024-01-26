@@ -41,14 +41,14 @@ class EmployeeView(BaseView):
         table.add_column("username", style="bold")
         table.add_column("email", style="bold")
         table.add_column("phone", style="bold")
-        table.add_column("role_id")
+        table.add_column("department_id")
         for employee in employees:
             table.add_row(
                 str(employee.id),
                 f"{employee.username} {employee.last_name}",
                 employee.email,
                 employee.phone,
-                str(employee.role_id) if employee.role_id else "",
+                str(employee.department_id) if employee.department_id else "",
             )
         console.print(table)
 
