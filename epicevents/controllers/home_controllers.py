@@ -15,6 +15,20 @@ view = HomeView()
 
 
 class ReceptionController(BaseController):
+    """
+    Represents the reception controller of the application.
+
+    Controls the flow of the reception view.
+    Displays a welcome message and instructions to the user.
+    Returns the EmployeeLoginController to handle employee login.
+
+    Args:
+        self
+
+    Returns:
+        The EmployeeLoginController instance
+    """
+
     def run(self):
         reception_view = ReceptionView()
         reception_view.welcome()
@@ -23,6 +37,20 @@ class ReceptionController(BaseController):
 
 
 class HomeController(BaseController):
+    """
+    Represents the home controller of the application.
+
+    Controls the flow of the home view.
+    Displays the home menu and handles user choices.
+    Returns the corresponding controller based on the user's choice.
+
+    Args:
+        self
+
+    Returns:
+        The corresponding controller instance based on the user's choice
+    """
+
     def run(self):
         while True:
             home_view = HomeView()
@@ -41,27 +69,39 @@ class HomeController(BaseController):
                 return ContractController()
 
             elif choice == "5":
-                employee_login_department = EmployeeLoginController()
-                employee = employee_login_department.read_login_file()
+                employee_login = EmployeeLoginController()
+                employee = employee_login.read_login_file()
                 if employee["department_id"] == ADMIN:
                     return DepartmentController()
-                else:
-                    view.error_not_have_right()
-                    return HomeController()
+                view.error_not_have_right()
+                return HomeController()
 
             elif choice == "6":
                 return ExitController()
 
 
 class ExitController(BaseController):
+    """
+    Represents the exit controller of the application.
+
+    Controls the flow of the exit view.
+    Displays an exit message and handles user choices.
+    Returns the HomeController or None based on the user's choice.
+
+    Args:
+        self
+
+    Returns:
+        The HomeController instance or None
+    """
+
     def run(self):
         exit_view = ExitView()
         exit_view.exit_program()
         choice = exit_view.choice_menu()
 
-        if choice == "1":
-            logout = EmployeeLogoutController()
-            logout.run()
-            return None
-        else:
+        if choice != "1":
             return HomeController()
+        logout = EmployeeLogoutController()
+        logout.run()
+        return None

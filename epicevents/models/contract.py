@@ -33,8 +33,7 @@ class ContractManager:
     def update(self, contract_id, **kwargs):
         with Session() as session:
             with session.begin():
-                contract = session.query(Contract).get(contract_id)
-                if contract:
+                if contract := session.query(Contract).get(contract_id):
                     if kwargs["name"] != contract.name:
                         contract.name = kwargs["name"]
                     if kwargs["total_amount"] != contract.total_amount:
@@ -47,8 +46,7 @@ class ContractManager:
     def delete(self, contract_id):
         with Session() as session:
             with session.begin():
-                contract = session.query(Contract).get(contract_id)
-                if contract:
+                if contract := session.query(Contract).get(contract_id):
                     session.delete(contract)
                     return True
                 else:
@@ -58,23 +56,14 @@ class ContractManager:
     def get_by_id(self, contract_id):
         with Session() as session:
             with session.begin():
-                return (
+                if contract := (
                     session.query(Contract)
                     .filter(Contract.id == contract_id)
                     .first()
-                )
-
-    def get_status_by_id(self, contract_id):
-        with Session() as session:
-            with session.begin():
-                contract = (
-                    session.query(Contract)
-                    .filter(Contract.id == contract_id)
-                    .first()
-                )
-                if contract:
-                    return contract.status
-                return None
+                ):
+                    session.expunge(contract)
+                    make_transient(contract)
+                return contract
 
 
 # MODELS

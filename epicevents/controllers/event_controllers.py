@@ -29,34 +29,56 @@ class EventController(BaseController):
                 return EventReadController()
 
             elif choice == "3":
-                # Modification uniquement si departement == Commercial
                 if employee["department_id"] == COMMERCIAL:
                     return EventUpdateController()
-                else:
-                    view.error_not_have_right()
-                    return EventController()
+                view.error_not_have_right()
+                return EventController()
 
             elif choice == "4":
-                # Suppression uniquement si departement == Admin
                 if employee["department_id"] == ADMIN:
                     return EventDeleteController()
-                else:
-                    view.error_not_have_right()
-                    return EventController()
+                view.error_not_have_right()
+                return EventController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
 
+    def get_client(self):
+        client_manager = ClientManager()
+        client_view = ClientView()
+        clients = client_manager.read()
+        client_view.display_table(clients=clients)
+        client_id = client_view.select_id()
+        return client_manager.get_by_id(client_id=client_id)
+
+    def get_employee(self):
+        employee_manager = EmployeeManager()
+        employee_view = EmployeeView()
+        employees = employee_manager.read()
+        employee_view.display_table(employees=employees)
+        employee_id = employee_view.select_id()
+        return employee_manager.get_by_id(employee_id=employee_id)
+
+    def get_contract(self):
+        contract_manager = ContractManager()
+        contract_view = ContractView()
+        contracts = contract_manager.read()
+        contract_view.display_table(contracts=contracts)
+        contract_id = contract_view.select_id()
+        return contract_manager.get_by_id(contract_id=contract_id)
+
     def get_data(self):
+        contract = self.get_contract()
+        client = self.get_client()
         view.display_title("Create events")
-        name = view.get_name()
+        name = contract.name
         start_date, end_date = view.get_valid_date_range()
-        address = view.get_address()
+        address = client.address
         view.display_title("Attendees")
         attendees = view.get_number()
         notes = view.get_notes()
-        client_id = self.get_client_id()
-        contract_id = self.get_contract_id()
+        client_id = client.id
+        contract_id = contract.id
         return {
             "name": name,
             "start_date": start_date,
@@ -67,27 +89,6 @@ class EventController(BaseController):
             "client_id": client_id,
             "contract_id": contract_id,
         }
-
-    def get_client_id(self):
-        client_manager = ClientManager()
-        client_view = ClientView()
-        clients = client_manager.read()
-        client_view.display_table(clients=clients)
-        return client_view.select_id()
-
-    def get_employee_id(self):
-        employee_manager = EmployeeManager()
-        employee_view = EmployeeView()
-        employees = employee_manager.read()
-        employee_view.display_table(employees=employees)
-        return employee_view.select_id()
-
-    def get_contract_id(self):
-        contract_manager = ContractManager()
-        contract_view = ContractView()
-        contracts = contract_manager.read()
-        contract_view.display_table(contracts=contracts)
-        return contract_view.select_id()
 
 
 class EventCreateController(EventController):
@@ -150,8 +151,7 @@ class EventDeleteController(EventController):
         view.display_table(events=events)
 
         client_id = view.select_id()
-        deleted = manager.delete(client_id=client_id)
-        if deleted:
+        if manager.delete(client_id=client_id):
             view.success_delete()
         else:
             view.error_not_found()

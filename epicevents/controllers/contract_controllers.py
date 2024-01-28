@@ -19,31 +19,25 @@ class ContractController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                # Création uniquement si department = Gestion
                 if employee["department_id"] == GESTION:
                     return ContractCreateController()
-                else:
-                    view.error_not_have_right()
-                    return ContractController()
+                view.error_not_have_right()
+                return ContractController()
 
             elif choice == "2":
                 return ContractReadController()
 
             elif choice == "3":
-                # Modification posswible uniquement si différent de Support
                 if employee["department_id"] != SUPPORT:
                     return ContractUpdateController()
-                else:
-                    view.error_not_have_right()
-                    return ContractController()
+                view.error_not_have_right()
+                return ContractController()
 
             elif choice == "4":
-                # Suppression uniquement si department = Admin
                 if employee["department_id"] == ADMIN:
                     return ContractDeleteController()
-                else:
-                    view.error_not_have_right()
-                    return ContractController()
+                view.error_not_have_right()
+                return ContractController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
@@ -99,10 +93,7 @@ class ContractUpdateController(ContractController):
         view.display_table(contracts=contracts)
         contract_id = view.select_id()
         try:
-            name = manager.get_by_id(contract_id=contract_id)
-
-            # Droits à rajouter sur commercial et gestion
-            if name:
+            if manager.get_by_id(contract_id=contract_id):
                 data = self.get_data()
                 manager.update(contract_id=contract_id, **data)
                 view.success_update()
@@ -122,9 +113,7 @@ class ContractDeleteController(ContractController):
         contracts = manager.read()
         view.display_table(contracts=contracts)
         contract_id = view.select_id()
-        deleted = manager.delete(contract_id=contract_id)
-
-        if deleted:
+        if manager.delete(contract_id=contract_id):
             view.success_delete()
         else:
             view.not_found()

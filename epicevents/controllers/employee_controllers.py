@@ -23,31 +23,25 @@ class EmployeeController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                # Création uniquement si departement == Gestion
                 if employee["department_id"] == GESTION:
                     return EmployeeCreateController()
-                else:
-                    view.error_not_have_right()
-                    return EmployeeController()
+                view.error_not_have_right()
+                return EmployeeController()
 
             elif choice == "2":
                 return EmployeeReadController()
 
             elif choice == "3":
-                # Modification uniquement si departement == Gestion
                 if employee["department_id"] == GESTION:
                     return EmployeeUpdateController()
-                else:
-                    view.error_not_have_right()
-                    return EmployeeController()
+                view.error_not_have_right()
+                return EmployeeController()
 
             elif choice == "4":
-                # Suppression uniquement si departement == Gestion
                 if employee["department_id"] == GESTION:
                     return EmployeeDeleteController()
-                else:
-                    view.error_not_have_right()
-                    return EmployeeController()
+                view.error_not_have_right()
+                return EmployeeController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
@@ -58,7 +52,8 @@ class EmployeeController(BaseController):
         email = view.get_email()
         phone = view.get_phone()
         password = view.encoded_password()
-        department_id = self.get_department_id()
+        department = self.get_department_id()
+        department_id = department.id
         return {
             "username": username,
             "last_name": last_name,
@@ -72,7 +67,14 @@ class EmployeeController(BaseController):
         department_manager = DepartmentManager()
         department_view = DepartmentView()
         departments = department_manager.read()
-        department_view.display_table(departments)
+        department_view.display_table(departments=departments)
+        department_id = view.select_id()
+        department = department_manager.get_by_id(department_id=department_id)
+        return department
+
+    def get_employee_id(self):
+        employees = manager.read()
+        view.display_table(employees=employees)
         return view.select_id()
 
 
@@ -105,14 +107,10 @@ class EmployeeReadController(EmployeeController):
 
 class EmployeeUpdateController(EmployeeController):
     def run(self):
-        employees = manager.read()
-        view.display_table(employees=employees)
-        employee_id = view.select_id()
+        employee_id = self.get_employee_id()
 
         try:
-            employee = manager.get_by_id(employee_id=employee_id)
-
-            if employee:
+            if manager.get_by_id(employee_id=employee_id):
                 employee_data = self.get_data()
                 manager.update(employee_id=employee_id, **employee_data)
                 view.success_update()
@@ -127,12 +125,8 @@ class EmployeeUpdateController(EmployeeController):
 
 class EmployeeDeleteController(EmployeeController):
     def run(self):
-        employees = manager.read()
-        view.display_table(employees=employees)
-        employee_id = view.select_id()
-        deleted = manager.delete(employee_id=employee_id)
-
-        if deleted:
+        employee_id = self.get_employee_id()
+        if manager.delete(employee_id=employee_id):
             view.success_delete()
         else:
             view.not_found()
@@ -145,25 +139,22 @@ class EmployeeLoginController(EmployeeController):
 
         if token != "":
             return home_controllers.HomeController()
-        else:
-            max_attempts = 3
+        max_attempts = 3
 
-            for _ in range(max_attempts):
-                view.display_title("Login")
-                username = view.get_username()
-                employee = manager.get_by_username(username=username)
+        for _ in range(max_attempts):
+            view.display_title("Login")
+            username = view.get_username()
+            if manager.get_by_username(username=username):
+                password_hash = manager.get_password(username=username)
 
-                if employee:
-                    password_hash = manager.get_password(username=username)
+                if view.test_decode_password(password_hash=password_hash):
+                    data = self.get_data_log(username=username)
 
-                    if view.test_decode_password(password_hash=password_hash):
-                        data = self.get_data_log(username=username)
-
-                        for key, value in data.items():
-                            self.write_login_file(key, value)
-                        return home_controllers.HomeController()
-                view.error_not_found()
-            return None
+                    for key, value in data.items():
+                        self.write_login_file(key=key, value=value)
+                    return home_controllers.HomeController()
+            view.error_not_found()
+        return None
 
     def write_login_file(self, key, value):
         if not os.path.exists(FILEPATH):
