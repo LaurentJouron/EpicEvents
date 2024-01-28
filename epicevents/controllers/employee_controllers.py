@@ -144,8 +144,8 @@ class EmployeeLoginController(EmployeeController):
         for _ in range(max_attempts):
             view.display_title("Login")
             username = view.get_username()
-            if manager.get_by_username(username=username):
-                password_hash = manager.get_password(username=username)
+            if employee := manager.get_by_username(username=username):
+                password_hash = employee.password
 
                 if view.test_decode_password(password_hash=password_hash):
                     data = self.get_data_log(username=username)
@@ -194,10 +194,9 @@ class EmployeeLoginController(EmployeeController):
             return json.load(f)["token"]
 
     def get_data_log(self, username):
-        department_id = manager.get_department_id_by_username(
-            username=username
-        )
-        employee_id = manager.get_id_by_username(username=username)
+        employee = manager.get_by_username(username=username)
+        department_id = employee.department_id
+        employee_id = employee.id
         token = self.create_token(username=username)
         return {
             "employee_id": employee_id,

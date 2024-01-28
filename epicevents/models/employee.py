@@ -58,14 +58,6 @@ class EmployeeManager:
                     return False
 
     # REQUESTS
-    def get_by_username(self, username):
-        with Session() as session:
-            with session.begin():
-                return (
-                    session.query(Employee)
-                    .filter(Employee.username == username)
-                    .first()
-                )
 
     def get_by_id(self, employee_id):
         with Session() as session:
@@ -79,7 +71,7 @@ class EmployeeManager:
                     make_transient(employee)
                 return employee
 
-    def get_password(self, username):
+    def get_by_username(self, username):
         with Session() as session:
             with session.begin():
                 if employee := (
@@ -87,41 +79,9 @@ class EmployeeManager:
                     .filter(Employee.username == username)
                     .first()
                 ):
-                    return employee.password
-                return None
-
-    def get_department_id_by_username(self, username):
-        with Session() as session:
-            with session.begin():
-                if employee := (
-                    session.query(Employee)
-                    .filter_by(username=username)
-                    .first()
-                ):
-                    return employee.department_id
-                return None
-
-    def get_id_by_username(self, username):
-        with Session() as session:
-            with session.begin():
-                if employee := (
-                    session.query(Employee)
-                    .filter_by(username=username)
-                    .first()
-                ):
-                    return employee.id
-                return None
-
-    def get_username_and_lastname_by_id(self, employee_id):
-        with Session() as session:
-            with session.begin():
-                if employee := (
-                    session.query(Employee)
-                    .filter_by(employee_id=employee_id)
-                    .first()
-                ):
-                    return f"{employee.username} {employee.last_name}"
-                return None
+                    session.expunge(employee)
+                    make_transient(employee)
+                return employee
 
 
 # MODELS

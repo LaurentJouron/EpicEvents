@@ -104,22 +104,23 @@ class ClientUpdateController(ClientController):
         view.display_table(clients)
         client_id = view.select_id()
         try:
-            commercial = manager.get_commercial_by_id(client_id)
-            if commercial:
-                employee_login = EmployeeLoginController()
-                employee = employee_login.read_login_file()
-                # Modification uniquement si le commercial a créé le client
-                if employee["employee_id"] == commercial:
-                    data = self.get_data()
-                    manager.update(client_id, **data)
-                    view.success_update()
-                    return ClientController()
+            if client := manager.get_by_id(client_id=client_id):
+                commercial = client.employee_id
+                if commercial:
+                    employee_login = EmployeeLoginController()
+                    employee = employee_login.read_login_file()
+                    # Modification uniquement si le commercial a créé le client
+                    if employee["employee_id"] == commercial:
+                        data = self.get_data()
+                        manager.update(client_id, **data)
+                        view.success_update()
+                        return ClientController()
+                    else:
+                        view.error_not_have_right()
+                        return ClientController()
                 else:
-                    view.error_not_have_right()
+                    view.error_not_found()
                     return ClientController()
-            else:
-                view.error_not_found()
-                return ClientController()
 
         except Exception as e:
             logging.exception(f"Unexpected error during client update: {e}")

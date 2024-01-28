@@ -42,19 +42,16 @@ class EventManager:
                 ...
 
     # REQUESTS
-    def get_event_by_start_date(self, start_date):
-        with Session() as session:
-            with session.begin():
-                return (
-                    session.query(Event)
-                    .filter(Event.start_date == start_date)
-                    .first()
-                )
-
     def get_event_by_id(self, event_id):
         with Session() as session:
             with session.begin():
-                return session.query(Event).get(event_id)
+                event = (
+                    session.query(Event).filter(Event.id == event_id).first()
+                )
+                if event:
+                    session.expunge(event)
+                    make_transient(event)
+                return event
 
 
 # MODELS
