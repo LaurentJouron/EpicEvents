@@ -69,6 +69,12 @@ class EmployeeView(BaseView):
 
     # DISPLAY
     def display_title(self, title: str):
+        """Display a formatted title in the console.
+
+        Args:
+            title: The title to display.
+
+        """
         return self._display_title(title=title)
 
     def display_table(self, employees: list["Employee"]):

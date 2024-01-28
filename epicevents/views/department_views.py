@@ -57,7 +57,6 @@ class DepartmentView(BaseView):
         Returns:
             None
         """
-
         table = Table(
             title="Departments", show_header=True, header_style="bold blue"
         )
