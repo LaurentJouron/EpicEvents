@@ -2,7 +2,7 @@ from ..database import Model, Session
 from ..models.client import Client
 
 from sqlalchemy import String, ForeignKey, Table, Column
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, joinedload
 from sqlalchemy.orm.session import make_transient
 from typing import List
 
@@ -64,9 +64,11 @@ class EmployeeManager:
             with session.begin():
                 if employee := (
                     session.query(Employee)
+                    .options(joinedload(Employee.department))
                     .filter(Employee.id == employee_id)
                     .first()
                 ):
+                    session.enable_relationship_loading(employee)
                     session.expunge(employee)
                     make_transient(employee)
                 return employee

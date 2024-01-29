@@ -157,7 +157,6 @@ class EmployeeUpdateController(EmployeeController):
             EmployeeController: The employee controller.
         """
         employee = self.get_employee()
-
         try:
             if manager.get_by_id(employee_id=employee.id):
                 employee_data = self.get_data()
