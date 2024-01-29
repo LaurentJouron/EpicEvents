@@ -85,6 +85,14 @@ class ClientView(BaseView):
         """
         return self._select_id()
 
+    def select_one_to_continue(self):
+        """Select a number from user input.
+
+        Returns:
+            The selected number as a string.
+        """
+        return self._select_one_to_continue()
+
     # DISPLAY
     def display_title(self):
         """Display a formatted title in the console.

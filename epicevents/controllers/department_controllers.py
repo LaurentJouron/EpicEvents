@@ -137,9 +137,12 @@ class DepartmentReadController(DepartmentController):
         Returns:
             The DepartmentController instance
         """
-        departments = manager.read()
-        view.display_table(departments=departments)
-        return DepartmentController()
+        while True:
+            departments = manager.read()
+            view.display_table(departments=departments)
+            continu = view.select_one_to_continue()
+            if continu == "1":
+                return DepartmentController()
 
 
 class DepartmentUpdateController(DepartmentController):

@@ -200,7 +200,7 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
         """
         while True:
             if item := typer.prompt(f"\nPlease enter the {prompt} ").strip():
-                # self._clean_console()
+                self._clean_console()
                 return item
             self._must_be_provided()
             time.sleep(SHORT_SLEEP)
@@ -284,6 +284,14 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
             The selected number as a string.
         """
         return self.__get_answer(prompt="number")
+
+    def _select_one_to_continue(self) -> str:
+        """Select a number 1 from user input.
+
+        Returns:
+            The selected number as a string.
+        """
+        return self.__get_answer(prompt="number 1 to continue")
 
     def _select_id(self) -> int:
         """Select an ID from user input.

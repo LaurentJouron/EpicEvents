@@ -19,31 +19,25 @@ class ClientController(BaseController):
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                # Création uniquement si departement == Commercial
                 if employee["department_id"] == COMMERCIAL:
                     return ClientCreateController()
-                else:
-                    view.error_not_have_right()
-                    return ClientController()
+                view.error_not_have_right()
+                return ClientController()
 
             elif choice == "2":
                 return ClientReadController()
 
             elif choice == "3":
-                # Modification uniquement si département == Commercial
                 if employee["department_id"] == COMMERCIAL:
                     return ClientUpdateController()
-                else:
-                    view.error_not_have_right()
-                    return ClientController()
+                view.error_not_have_right()
+                return ClientController()
 
             elif choice == "4":
-                # Suppression uniquement si departement == Admin
                 if employee["department_id"] == ADMIN:
                     return ClientDeleteController()
-                else:
-                    view.error_not_have_right()
-                    return ClientController()
+                view.error_not_have_right()
+                return ClientController()
 
             elif choice == "5":
                 return home_controllers.HomeController()
@@ -93,9 +87,12 @@ class ClientCreateController(ClientController):
 
 class ClientReadController(ClientController):
     def run(self):
-        clients = manager.read()
-        view.display_table(clients=clients)
-        return ClientController()
+        while True:
+            clients = manager.read()
+            view.display_table(clients=clients)
+            continu = view.select_one_to_continue()
+            if continu == "1":
+                return ClientController()
 
 
 class ClientUpdateController(ClientController):
@@ -105,29 +102,24 @@ class ClientUpdateController(ClientController):
         client_id = view.select_id()
         try:
             if client := manager.get_by_id(client_id=client_id):
-                commercial = client.employee_id
-                if commercial:
+                if commercial := client.employee_id:
                     employee_login = EmployeeLoginController()
                     employee = employee_login.read_login_file()
-                    # Modification uniquement si le commercial a créé le client
                     if employee["employee_id"] == commercial:
                         data = self.get_data()
                         manager.update(client_id, **data)
                         view.success_update()
-                        return ClientController()
                     else:
                         view.error_not_have_right()
-                        return ClientController()
                 else:
                     view.error_not_found()
-                    return ClientController()
-
+                return ClientController()
         except Exception as e:
             logging.exception(f"Unexpected error during client update: {e}")
             view.error_not_found()
             raise
         finally:
-            ClientController()
+            return ClientController()
 
 
 class ClientDeleteController(ClientController):
@@ -136,8 +128,7 @@ class ClientDeleteController(ClientController):
         view.display_table(clients=clients)
 
         client_id = view.select_id()
-        deleted = manager.delete(client_id=client_id)
-        if deleted:
+        if manager.delete(client_id=client_id):
             view.success_delete()
         else:
             view.error_not_found()

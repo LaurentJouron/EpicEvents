@@ -101,6 +101,14 @@ class EventView(BaseView):
             else:
                 self._earlier_invalid_date()
 
+    def select_one_to_continue(self):
+        """Select a number from user input.
+
+        Returns:
+            The selected number as a string.
+        """
+        return self._select_one_to_continue()
+
     # /END_ANSWER
 
     # DISPLAY

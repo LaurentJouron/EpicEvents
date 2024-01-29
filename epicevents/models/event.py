@@ -42,7 +42,7 @@ class EventManager:
                 ...
 
     # REQUESTS
-    def get_event_by_id(self, event_id):
+    def get_by_id(self, event_id):
         with Session() as session:
             with session.begin():
                 event = (

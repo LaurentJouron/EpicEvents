@@ -68,8 +68,20 @@ class EventController(BaseController):
         return contract_manager.get_by_id(contract_id=contract_id)
 
     def get_data(self):
+        employee_login = EmployeeLoginController()
+        employee_log = employee_login.read_login_file()
         contract = self.get_contract()
         client = self.get_client()
+        if (
+            employee_log["department_id"] == COMMERCIAL
+            and employee_log["employee_id"] == client.employee_id
+            and contract.status is True
+        ):
+            return self._extracted_data(contract, client)
+        view.error_not_have_right()
+        return EventController()
+
+    def _extracted_data(self, contract, client):
         view.display_title("Create events")
         name = contract.name
         start_date, end_date = view.get_valid_date_range()
@@ -108,14 +120,17 @@ class EventCreateController(EventController):
             raise
 
         finally:
-            EventController()
+            return EventController()
 
 
 class EventReadController(EventController):
     def run(self):
-        events = manager.read()
-        view.display_table(events=events)
-        return EventController()
+        while True:
+            events = manager.read()
+            view.display_table(events=events)
+            continu = view.select_one_to_continue()
+            if continu == "1":
+                return EventController()
 
 
 class EventUpdateController(EventController):
@@ -142,7 +157,7 @@ class EventUpdateController(EventController):
             view.error_not_found()
             raise
         finally:
-            EventController()
+            return EventController()
 
 
 class EventDeleteController(EventController):

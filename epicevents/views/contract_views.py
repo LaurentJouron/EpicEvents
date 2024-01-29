@@ -91,6 +91,14 @@ class ContractView(BaseView):
             )
         console.print(table)
 
+    def select_one_to_continue(self):
+        """Select a number from user input.
+
+        Returns:
+            The selected number as a string.
+        """
+        return self._select_one_to_continue()
+
     # SUCCESS
     def success_creating(self):
         """Display a success message for creating successfully."""

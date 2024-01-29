@@ -77,14 +77,17 @@ class ContractCreateController(ContractController):
             raise
 
         finally:
-            ContractController()
+            return ContractController()
 
 
 class ContractReadController(ContractController):
     def run(self):
-        contracts = manager.read()
-        view.display_table(contracts=contracts)
-        return ContractController()
+        while True:
+            contracts = manager.read()
+            view.display_table(contracts=contracts)
+            continu = view.select_one_to_continue()
+            if continu == "1":
+                return ContractController()
 
 
 class ContractUpdateController(ContractController):
