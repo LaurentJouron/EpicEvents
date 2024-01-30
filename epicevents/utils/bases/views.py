@@ -59,6 +59,8 @@ class BaseSuccessView(BaseManageConsole):
         Args:
             var: The success message to display.
         """
+        self._clean_console()
+        self.console.rule("[bold green]SUCCESS")
         self.console.print(f"\n✔️ {var}", style="bold green", justify="left")
         time.sleep(SHORT_SLEEP)
         self._clean_console()
@@ -109,6 +111,8 @@ class BaseErrorView(BaseManageConsole):
         Args:
             var: The error message to display.
         """
+        self._clean_console()
+        self.console.rule("[bold red]ERROR")
         self.console.print(f"\n⛔️ {var}", style="bold red", justify="left")
         time.sleep(SHORT_SLEEP)
         self._clean_console()
@@ -199,6 +203,7 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
             The user input as a string.
         """
         while True:
+            self.console.rule(f"[bold blue]{prompt}")
             if item := typer.prompt(f"\nPlease enter the {prompt} ").strip():
                 self._clean_console()
                 return item

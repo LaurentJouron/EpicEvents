@@ -29,7 +29,7 @@ class ReceptionView(BaseView):
         """
         self._clean_console()
         welcome = f" Welcome to {epic_events} "
-        self._display_centered_title(welcome)
+        self._display_centered_title(title=welcome)
 
     def follow_instructions(self):
         """
@@ -42,7 +42,7 @@ class ReceptionView(BaseView):
             None
         """
         instructions = "\nFollow the instructions below "
-        self._display_centered_title(instructions, stars=False)
+        self._display_centered_title(title=instructions, stars=False)
 
 
 class HomeView(BaseView):
@@ -77,7 +77,7 @@ class HomeView(BaseView):
         Returns:
             The user's choice as a string
         """
-        return self._choice_menu("Home menu", menu=self.home_menu)
+        return self._choice_menu(menu_name="Home menu", menu=self.home_menu)
 
     def error_not_have_right(self) -> str:
         """
@@ -143,4 +143,6 @@ class ExitView(BaseView):
         Returns:
             The user's choice as a string
         """
-        return self._choice_menu("Confirm exiting", menu=CONFIRMATION_MENU)
+        return self._choice_menu(
+            menu_name="Confirm exiting", menu=CONFIRMATION_MENU
+        )

@@ -17,7 +17,7 @@ class EventView(BaseView):
         Returns:
             The user's choice as a string.
         """
-        return self._choice_menu("Event menu", menu=MENU)
+        return self._choice_menu(menu_name="Event menu", menu=MENU)
 
     # /END_MENU
 
@@ -87,7 +87,8 @@ class EventView(BaseView):
         Returns a valid date range based on user input.
 
         Returns:
-            A tuple containing the start date and end date of the valid date range.
+            A tuple containing the start date and end date of the valid date
+            range.
 
         Examples:
             >>> get_valid_date_range(self)
@@ -142,8 +143,6 @@ class EventView(BaseView):
         table.add_column("attendees", style="bold")
         table.add_column("notes", style="bold")
         table.add_column("client_id", style="bold")
-        # table.add_column("commercial_id", style="bold")
-        # table.add_column("support_id", style="bold")
         for event in events:
             table.add_row(
                 str(event.id),
@@ -154,8 +153,6 @@ class EventView(BaseView):
                 str(event.attendees),
                 event.notes,
                 str(event.client_id),
-                # str(event.commercial_id),
-                # str(event.support_id),
             )
         console.print(table)
 

@@ -25,7 +25,11 @@ class EmployeeManager:
     def read(self):
         with Session() as session:
             with session.begin():
-                employees = session.query(Employee).all()
+                employees = (
+                    session.query(Employee)
+                    .options(joinedload(Employee.department))
+                    .all()
+                )
                 for employee in employees:
                     session.expunge(employee)
                     make_transient(employee)

@@ -24,7 +24,7 @@ class EmployeeView(BaseView):
         Returns:
             The user's choice as a string.
         """
-        return self._choice_menu("Employee menu", menu=MENU)
+        return self._choice_menu(menu_name="Employee menu", menu=MENU)
 
     # ANSWER
     def get_username(self) -> str:

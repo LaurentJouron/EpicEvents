@@ -18,7 +18,7 @@ class ContractView(BaseView):
         Returns:
             The user's choice as a string.
         """
-        return self._choice_menu("Contract menu", menu=MENU)
+        return self._choice_menu(menu_name="Contract menu", menu=MENU)
 
     # ANSWER
     def get_name(self):

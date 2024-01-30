@@ -26,7 +26,7 @@ class DepartmentView(BaseView):
         Returns:
             The user's choice as a string.
         """
-        return self._choice_menu("Role menu", menu=MENU)
+        return self._choice_menu(menu_name="Department menu", menu=MENU)
 
     # ANSWER
     def get_name(self):

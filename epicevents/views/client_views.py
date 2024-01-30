@@ -18,7 +18,7 @@ class ClientView(BaseView):
         Returns:
             The user's choice as a string.
         """
-        return self._choice_menu("Client menu", menu=MENU)
+        return self._choice_menu(menu_name="Client menu", menu=MENU)
 
     # ANSWER
     def get_compagny_name(self):
@@ -101,7 +101,7 @@ class ClientView(BaseView):
             title: The title to display.
 
         """
-        return self._display_title("Client information")
+        return self._display_title(title="Client information")
 
     def display_table(self, clients):
         """
