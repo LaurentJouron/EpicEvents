@@ -1,5 +1,6 @@
 from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
+from ..models.department import DepartmentManager
 
 from passlib.hash import pbkdf2_sha256
 from rich.table import Table
@@ -104,12 +105,14 @@ class EmployeeView(BaseView):
         table.add_column("phone", style="bold")
         table.add_column("department_id")
         for employee in employees:
+            # manager_department = DepartmentManager()
+            # department = manager_department.get_by_id(employee.department_id)
             table.add_row(
                 str(employee.id),
                 f"{employee.username} {employee.last_name}",
                 employee.email,
                 employee.phone,
-                str(employee.department_id) if employee.department_id else "",
+                # department.name,
             )
         console.print(table)
 

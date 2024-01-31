@@ -92,6 +92,8 @@ class ClientReadController(ClientController):
     def run(self):
         while True:
             clients = manager.read()
+            print(clients)
+            input("rien")
             view.display_table(clients=clients)
             continu = view.select_one_to_continue()
             if continu == "1":

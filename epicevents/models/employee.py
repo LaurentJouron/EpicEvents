@@ -112,7 +112,9 @@ class Employee(Model):
     department_id: Mapped[int] = mapped_column(
         ForeignKey("department.id"), nullable=True
     )
-    department: Mapped["Department"] = relationship(back_populates="employee")
+    department: Mapped["Department"] = relationship(
+        back_populates="employee", lazy="joined"
+    )
 
     client: Mapped[List["Client"]] = relationship(back_populates="employee")
 

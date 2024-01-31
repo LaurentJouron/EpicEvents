@@ -219,7 +219,6 @@ class EmployeeLoginController(EmployeeController):
             username = view.get_username()
             if employee := manager.get_by_username(username=username):
                 password_hash = employee.password
-
                 if view.test_decode_password(password_hash=password_hash):
                     data = self.get_data_log(username=username)
 
