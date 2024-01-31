@@ -28,12 +28,11 @@ class EmployeeController(BaseController):
             home_controllers.HomeController: The next controller to run
             based on user choice.
         """
-        employee_login = EmployeeLoginController()
-        employee = employee_login.read_login_file()
+        department = self.get_user_login_department()
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                if employee["department_id"] == GESTION:
+                if department == GESTION:
                     return EmployeeCreateController()
                 view.error_not_have_right()
                 return EmployeeController()
@@ -42,13 +41,13 @@ class EmployeeController(BaseController):
                 return EmployeeReadController()
 
             elif choice == "3":
-                if employee["department_id"] == GESTION:
+                if department == GESTION:
                     return EmployeeUpdateController()
                 view.error_not_have_right()
                 return EmployeeController()
 
             elif choice == "4":
-                if employee["department_id"] == GESTION:
+                if department == GESTION:
                     return EmployeeDeleteController()
                 view.error_not_have_right()
                 return EmployeeController()
@@ -101,6 +100,17 @@ class EmployeeController(BaseController):
         view.display_table(employees=employees)
         employee_id = view.select_id()
         return manager.get_by_id(employee_id=employee_id)
+
+    def get_user_login_department(self):
+        return self._extracted_user_info_log("department_id")
+
+    def get_user_id_login(self):
+        return self._extracted_user_info_log("employee_id")
+
+    def _extracted_user_info_log(self, info):
+        employee_login = EmployeeLoginController()
+        employee = employee_login.read_login_file()
+        return employee[info]
 
 
 class EmployeeCreateController(EmployeeController):

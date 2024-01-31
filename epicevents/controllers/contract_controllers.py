@@ -2,7 +2,10 @@ from ..utils.bases.controllers import BaseController
 from ..utils.contants import GESTION, SUPPORT, ADMIN
 from ..models import ContractManager
 from ..views import ContractView
-from ..controllers.employee_controllers import EmployeeLoginController
+from ..controllers.employee_controllers import (
+    EmployeeLoginController,
+    EmployeeController,
+)
 from ..controllers import home_controllers
 import logging
 
@@ -14,12 +17,12 @@ manager = ContractManager()
 
 class ContractController(BaseController):
     def run(self):
-        employee_login = EmployeeLoginController()
-        employee = employee_login.read_login_file()
+        employee_controllers = EmployeeController()
+        department = employee_controllers.get_user_login_department()
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                if employee["department_id"] == GESTION:
+                if department == GESTION:
                     return ContractCreateController()
                 view.error_not_have_right()
                 return ContractController()
@@ -28,13 +31,13 @@ class ContractController(BaseController):
                 return ContractReadController()
 
             elif choice == "3":
-                if employee["department_id"] != SUPPORT:
+                if department != SUPPORT:
                     return ContractUpdateController()
                 view.error_not_have_right()
                 return ContractController()
 
             elif choice == "4":
-                if employee["department_id"] == ADMIN:
+                if department == ADMIN:
                     return ContractDeleteController()
                 view.error_not_have_right()
                 return ContractController()

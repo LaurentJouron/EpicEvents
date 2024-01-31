@@ -69,9 +69,9 @@ class HomeController(BaseController):
                 return ContractController()
 
             elif choice == "5":
-                employee_login = EmployeeLoginController()
-                employee = employee_login.read_login_file()
-                if employee["department_id"] == ADMIN:
+                employee_controllers = EmployeeController()
+                department = employee_controllers.get_user_login_department()
+                if department == ADMIN:
                     return DepartmentController()
                 view.error_not_have_right()
                 return HomeController()

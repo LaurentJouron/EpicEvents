@@ -94,8 +94,8 @@ class EmployeeManager:
 employee_event = Table(
     "employee_event",
     Model.metadata,
-    Column("employee_id", ForeignKey("event.id")),
-    Column("event_id", ForeignKey("employee.id")),
+    Column("employee_id", ForeignKey("employee.id")),
+    Column("event_id", ForeignKey("event.id")),
 )
 
 

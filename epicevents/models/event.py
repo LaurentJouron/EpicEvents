@@ -1,6 +1,6 @@
 from ..database import Model, Session
 
-from sqlalchemy import ForeignKey, Date, Text, Integer, String
+from sqlalchemy import ForeignKey, Date, Text, Integer, String, insert
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm.session import make_transient
 
@@ -21,6 +21,10 @@ class EventManager:
                     contract_id=kwargs["contract_id"],
                 )
                 session.add(new_event)
+                employee_event = insert("employee_event").values(
+                    event_id=new_event.id, employee_id=kwargs["employee_id"]
+                )
+                session.execute(employee_event)
 
     def read(self):
         with Session() as session:
@@ -36,10 +40,14 @@ class EventManager:
             with session.begin():
                 ...
 
-    def delete(self):
+    def delete(self, event_id):
         with Session() as session:
             with session.begin():
-                ...
+                if event := session.query(Event).get(event_id):
+                    session.delete(event)
+                    return True
+                else:
+                    return False
 
     # REQUESTS
     def get_by_id(self, event_id):

@@ -6,7 +6,10 @@ from ..views import EventView
 from ..views.client_views import ClientView
 from ..views.employee_views import EmployeeView
 from ..views.contract_views import ContractView
-from ..controllers.employee_controllers import EmployeeLoginController
+from ..controllers.employee_controllers import (
+    EmployeeLoginController,
+    EmployeeController,
+)
 from ..controllers import home_controllers
 import logging
 
@@ -18,24 +21,27 @@ manager = EventManager()
 
 class EventController(BaseController):
     def run(self):
-        employee_login = EmployeeLoginController()
-        employee = employee_login.read_login_file()
+        employee_controllers = EmployeeController()
+        department = employee_controllers.get_user_login_department()
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                return EventCreateController()
+                if department == COMMERCIAL:
+                    return EventCreateController()
+                view.error_not_have_right()
+                return EventController()
 
             elif choice == "2":
                 return EventReadController()
 
             elif choice == "3":
-                if employee["department_id"] == COMMERCIAL:
+                if department != COMMERCIAL:
                     return EventUpdateController()
                 view.error_not_have_right()
                 return EventController()
 
             elif choice == "4":
-                if employee["department_id"] == ADMIN:
+                if department == ADMIN:
                     return EventDeleteController()
                 view.error_not_have_right()
                 return EventController()
@@ -68,13 +74,14 @@ class EventController(BaseController):
         return contract_manager.get_by_id(contract_id=contract_id)
 
     def get_data(self):
-        employee_login = EmployeeLoginController()
-        employee_log = employee_login.read_login_file()
+        employee_controllers = EmployeeController()
+        department_id = employee_controllers.get_user_login_department()
+        employee_id = employee_controllers.get_user_id_login()
         contract = self.get_contract()
         client = self.get_client()
         if (
-            employee_log["department_id"] == COMMERCIAL
-            and employee_log["employee_id"] == client.employee_id
+            department_id == COMMERCIAL
+            and employee_id == client.employee_id
             and contract.status is True
         ):
             return self._extracted_data(contract, client)
@@ -91,6 +98,8 @@ class EventController(BaseController):
         notes = view.get_notes()
         client_id = client.id
         contract_id = contract.id
+        employee_controllers = EmployeeController()
+        employee_id = employee_controllers.get_user_id_login()
         return {
             "name": name,
             "start_date": start_date,
@@ -100,6 +109,7 @@ class EventController(BaseController):
             "notes": notes,
             "client_id": client_id,
             "contract_id": contract_id,
+            "employee_id": employee_id,
         }
 
 
@@ -107,7 +117,9 @@ class EventCreateController(EventController):
     def run(self):
         data = self.get_data()
         try:
-            manager.create(**data)
+            event_id = manager.create(**data)
+            print(event_id)
+            input("rien")
             view.success_creating()
             return EventController()
 
@@ -165,8 +177,8 @@ class EventDeleteController(EventController):
         events = manager.read()
         view.display_table(events=events)
 
-        client_id = view.select_id()
-        if manager.delete(client_id=client_id):
+        event_id = view.select_id()
+        if manager.delete(event_id=event_id):
             view.success_delete()
         else:
             view.error_not_found()

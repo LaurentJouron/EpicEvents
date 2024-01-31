@@ -2,7 +2,10 @@ from ..utils.bases.controllers import BaseController
 from ..utils.contants import COMMERCIAL, ADMIN
 from ..models import ClientManager
 from ..views import ClientView
-from ..controllers.employee_controllers import EmployeeLoginController
+from ..controllers.employee_controllers import (
+    EmployeeLoginController,
+    EmployeeController,
+)
 from ..controllers import home_controllers
 import logging
 
@@ -14,12 +17,12 @@ manager = ClientManager()
 
 class ClientController(BaseController):
     def run(self):
-        employee_login = EmployeeLoginController()
-        employee = employee_login.read_login_file()
+        employee_controllers = EmployeeController()
+        department = employee_controllers.get_user_login_department()
         while True:
             choice = view.menu_choice()
             if choice == "1":
-                if employee["department_id"] == COMMERCIAL:
+                if department == COMMERCIAL:
                     return ClientCreateController()
                 view.error_not_have_right()
                 return ClientController()
@@ -28,13 +31,13 @@ class ClientController(BaseController):
                 return ClientReadController()
 
             elif choice == "3":
-                if employee["department_id"] == COMMERCIAL:
+                if department == COMMERCIAL:
                     return ClientUpdateController()
                 view.error_not_have_right()
                 return ClientController()
 
             elif choice == "4":
-                if employee["department_id"] == ADMIN:
+                if department == ADMIN:
                     return ClientDeleteController()
                 view.error_not_have_right()
                 return ClientController()
