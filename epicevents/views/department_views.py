@@ -1,7 +1,6 @@
 from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
 
-from rich.table import Table
 from rich.console import Console
 
 console = Console()
@@ -52,27 +51,6 @@ class DepartmentView(BaseView):
             The selected number as a string.
         """
         return self._select_one_to_continue()
-
-    # DISPLAY
-    def display_table(self, departments):
-        """
-        Displays a table of departments.
-
-        Args:
-            departments (List[Department]): A list of department objects to
-            display.
-
-        Returns:
-            None
-        """
-        table = Table(
-            title="Departments", show_header=True, header_style="bold blue"
-        )
-        table.add_column("ID", style="dim")
-        table.add_column("name", style="bold")
-        for department in departments:
-            table.add_row(str(department.id), department.name)
-        console.print(table)
 
     # SUCCESS
     def success_creating(self):

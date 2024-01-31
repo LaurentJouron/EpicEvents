@@ -5,6 +5,10 @@ from ..controllers import home_controllers
 import logging
 
 from sqlalchemy.exc import IntegrityError
+from rich.table import Table
+from rich.console import Console
+
+console = Console()
 
 view = DepartmentView()
 manager = DepartmentManager()
@@ -59,6 +63,26 @@ class DepartmentController(BaseController):
         departments = manager.read()
         view.display_table(departments)
         return view.select_id()
+
+    def get_table(self, departments):
+        """
+        Displays a table of departments.
+
+        Args:
+            departments (List[Department]): A list of department objects to
+            display.
+
+        Returns:
+            None
+        """
+        table = Table(
+            title="Departments", show_header=True, header_style="bold blue"
+        )
+        table.add_column("ID", style="dim")
+        table.add_column("Name", style="bold")
+        for department in departments:
+            table.add_row(str(department.id), department.name)
+        console.print(table)
 
 
 class DepartmentCreateController(DepartmentController):
@@ -139,7 +163,7 @@ class DepartmentReadController(DepartmentController):
         """
         while True:
             departments = manager.read()
-            view.display_table(departments=departments)
+            self.get_table(departments=departments)
             continu = view.select_one_to_continue()
             if continu == "1":
                 return DepartmentController()

@@ -1,16 +1,21 @@
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import GESTION, SUPPORT, ADMIN
 from ..models import ContractManager
+from ..models.employee import EmployeeManager
 from ..views import ContractView
+from ..controllers import home_controllers
 from ..controllers.employee_controllers import (
     EmployeeLoginController,
     EmployeeController,
 )
-from ..controllers import home_controllers
 import logging
 
+from rich.table import Table
+from rich.console import Console
 from sqlalchemy.exc import IntegrityError
 
+
+console = Console()
 view = ContractView()
 manager = ContractManager()
 
@@ -60,6 +65,43 @@ class ContractController(BaseController):
             "employee_id": employee_id,
         }
 
+    def get_table(self, contracts):
+        """
+        Displays a table of contracts.
+
+        Args:
+            contracts (List[Contracts]): A list of contracts objects to
+            display.
+
+        Returns:
+            None
+        """
+        table = Table(
+            title="Contract", show_header=True, header_style="bold blue"
+        )
+        table.add_column("ID", style="dim")
+        table.add_column("Name", style="bold")
+        table.add_column("Total amount", style="bold")
+        table.add_column("Pending amount", style="bold")
+        table.add_column("Creation date", style="bold")
+        table.add_column("Status", style="bold")
+        table.add_column("Gestion", style="bold")
+        for contract in contracts:
+            manager_employee = EmployeeManager()
+            employee = manager_employee.get_by_id(
+                employee_id=contract.employee_id
+            )
+            table.add_row(
+                str(contract.id),
+                contract.name,
+                contract.total_amount,
+                contract.pending_amount,
+                str(contract.creation_date),
+                str(contract.status),
+                f"{employee.username} {employee.last_name}",
+            )
+        console.print(table)
+
 
 class ContractCreateController(ContractController):
     def run(self):
@@ -87,7 +129,7 @@ class ContractReadController(ContractController):
     def run(self):
         while True:
             contracts = manager.read()
-            view.display_table(contracts=contracts)
+            self.get_table(contracts=contracts)
             continu = view.select_one_to_continue()
             if continu == "1":
                 return ContractController()
@@ -96,7 +138,7 @@ class ContractReadController(ContractController):
 class ContractUpdateController(ContractController):
     def run(self):
         contracts = manager.read()
-        view.display_table(contracts=contracts)
+        self.get_table(contracts=contracts)
         contract_id = view.select_id()
         try:
             if manager.get_by_id(contract_id=contract_id):
@@ -117,7 +159,7 @@ class ContractUpdateController(ContractController):
 class ContractDeleteController(ContractController):
     def run(self):
         contracts = manager.read()
-        view.display_table(contracts=contracts)
+        self.get_table(contracts=contracts)
         contract_id = view.select_id()
         if manager.delete(contract_id=contract_id):
             view.success_delete()

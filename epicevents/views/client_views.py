@@ -1,7 +1,6 @@
 from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
 
-from rich.table import Table
 from rich.console import Console
 
 console = Console()
@@ -102,44 +101,6 @@ class ClientView(BaseView):
 
         """
         return self._display_title(title="Client information")
-
-    def display_table(self, clients):
-        """
-        Displays a table of clients.
-
-        Args:
-            clients (List[Clients]): A list of client objects to display.
-
-        Returns:
-            None
-        """
-        table = Table(
-            title="Client", show_header=True, header_style="bold blue"
-        )
-        table.add_column("ID", style="dim")
-        table.add_column("compagny", style="bold")
-        table.add_column("full name", style="bold")
-        table.add_column("email", style="bold")
-        table.add_column("phone", style="bold")
-        table.add_column("address", style="bold")
-        table.add_column("information", style="bold")
-        table.add_column("creation", style="bold")
-        table.add_column("updating", style="bold")
-        table.add_column("employee_id", style="bold")
-        for client in clients:
-            table.add_row(
-                str(client.id),
-                client.compagny_name,
-                f"{client.username} {client.last_name}",
-                client.email,
-                client.phone,
-                client.address,
-                client.information,
-                str(client.creation_date),
-                str(client.updating_date),
-                str(client.employee_id),
-            )
-        console.print(table)
 
     # SUCCESS
     def success_creating(self):

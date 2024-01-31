@@ -10,6 +10,10 @@ import os
 
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256
+from rich.table import Table
+from rich.console import Console
+
+console = Console()
 
 
 view = EmployeeView()
@@ -112,6 +116,36 @@ class EmployeeController(BaseController):
         employee = employee_login.read_login_file()
         return employee[info]
 
+    def get_table(self, employees: list["Employee"]):
+        """
+        Displays a table of employees.
+
+        Args:
+            employees (List[Employee]): A list of employee objects to display.
+
+        Returns:
+            None
+        """
+        table = Table(
+            title="Employee", show_header=True, header_style="bold blue"
+        )
+        table.add_column("ID", style="dim")
+        table.add_column("Username", style="bold")
+        table.add_column("Email", style="bold")
+        table.add_column("Phone", style="bold")
+        table.add_column("Department")
+        for employee in employees:
+            manager_department = DepartmentManager()
+            department = manager_department.get_by_id(employee.department_id)
+            table.add_row(
+                str(employee.id),
+                f"{employee.username} {employee.last_name}",
+                employee.email,
+                employee.phone,
+                department.name,
+            )
+        console.print(table)
+
 
 class EmployeeCreateController(EmployeeController):
     """Controller for creating an employee."""
@@ -151,7 +185,7 @@ class EmployeeReadController(EmployeeController):
         """
         while True:
             employees = manager.read()
-            view.display_table(employees=employees)
+            self.get_table(employees=employees)
             continu = view.select_one_to_continue()
             if continu == "1":
                 return EmployeeController()

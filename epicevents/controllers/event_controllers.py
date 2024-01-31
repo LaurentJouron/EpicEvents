@@ -6,15 +6,15 @@ from ..views import EventView
 from ..views.client_views import ClientView
 from ..views.employee_views import EmployeeView
 from ..views.contract_views import ContractView
-from ..controllers.employee_controllers import (
-    EmployeeLoginController,
-    EmployeeController,
-)
 from ..controllers import home_controllers
+from ..controllers.employee_controllers import EmployeeController
 import logging
 
+from rich.table import Table
+from rich.console import Console
 from sqlalchemy.exc import IntegrityError
 
+console = Console()
 view = EventView()
 manager = EventManager()
 
@@ -112,6 +112,42 @@ class EventController(BaseController):
             "employee_id": employee_id,
         }
 
+    def get_table(self, events):
+        """
+        Displays a table of events.
+
+        Args:
+            events (List[Event]): A list of event objects to display.
+
+        Returns:
+            None
+        """
+        table = Table(
+            title="Events", show_header=True, header_style="bold blue"
+        )
+        table.add_column("ID", style="dim")
+        table.add_column("Name", style="bold")
+        table.add_column("Start date", style="bold")
+        table.add_column("End date", style="bold")
+        table.add_column("Address", style="bold")
+        table.add_column("Attendees", style="bold")
+        table.add_column("Notes", style="bold")
+        table.add_column("Client", style="bold")
+        for event in events:
+            manager_client = ClientManager()
+            client = manager_client.get_by_id(client_id=event.client_id)
+            table.add_row(
+                str(event.id),
+                event.name,
+                str(event.start_date),
+                str(event.end_date),
+                event.address,
+                str(event.attendees),
+                event.notes,
+                client.name,
+            )
+        console.print(table)
+
 
 class EventCreateController(EventController):
     def run(self):
@@ -139,7 +175,7 @@ class EventReadController(EventController):
     def run(self):
         while True:
             events = manager.read()
-            view.display_table(events=events)
+            self.get_table(events=events)
             continu = view.select_one_to_continue()
             if continu == "1":
                 return EventController()

@@ -2,7 +2,6 @@ from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
 
 from datetime import datetime
-from rich.table import Table
 from rich.console import Console
 
 
@@ -121,40 +120,6 @@ class EventView(BaseView):
 
         """
         return self._display_title(title=title)
-
-    def display_table(self, events):
-        """
-        Displays a table of events.
-
-        Args:
-            events (List[Event]): A list of event objects to display.
-
-        Returns:
-            None
-        """
-        table = Table(
-            title="Events", show_header=True, header_style="bold blue"
-        )
-        table.add_column("ID", style="dim")
-        table.add_column("name", style="bold")
-        table.add_column("start_date", style="bold")
-        table.add_column("end_date", style="bold")
-        table.add_column("address", style="bold")
-        table.add_column("attendees", style="bold")
-        table.add_column("notes", style="bold")
-        table.add_column("client_id", style="bold")
-        for event in events:
-            table.add_row(
-                str(event.id),
-                event.name,
-                str(event.start_date),
-                str(event.end_date),
-                event.address,
-                str(event.attendees),
-                event.notes,
-                str(event.client_id),
-            )
-        console.print(table)
 
     # /END_DISPLAY
 

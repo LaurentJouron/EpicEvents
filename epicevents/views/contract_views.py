@@ -1,7 +1,6 @@
 from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
 
-from rich.table import Table
 from rich.console import Console
 
 console = Console()
@@ -57,39 +56,6 @@ class ContractView(BaseView):
             The amount as an integer.
         """
         return self._get_amount(type=type)
-
-    def display_table(self, contracts):
-        """
-        Displays a table of contracts.
-
-        Args:
-            contracts (List[Contracts]): A list of contracts objects to
-            display.
-
-        Returns:
-            None
-        """
-        table = Table(
-            title="Contract", show_header=True, header_style="bold blue"
-        )
-        table.add_column("ID", style="dim")
-        table.add_column("name", style="bold")
-        table.add_column("total amount", style="bold")
-        table.add_column("pending amount", style="bold")
-        table.add_column("creation date", style="bold")
-        table.add_column("status", style="bold")
-        table.add_column("employee_id", style="bold")
-        for contract in contracts:
-            table.add_row(
-                str(contract.id),
-                contract.name,
-                contract.total_amount,
-                contract.pending_amount,
-                str(contract.creation_date),
-                str(contract.status),
-                str(contract.employee_id),
-            )
-        console.print(table)
 
     def select_one_to_continue(self):
         """Select a number from user input.

@@ -1,9 +1,7 @@
 from ..utils.bases.views import BaseView
 from ..utils.contants import MENU
-from ..models.department import DepartmentManager
 
 from passlib.hash import pbkdf2_sha256
-from rich.table import Table
 from rich.console import Console
 
 console = Console()
@@ -85,36 +83,6 @@ class EmployeeView(BaseView):
 
         """
         return self._display_title(title=title)
-
-    def display_table(self, employees: list["Employee"]):
-        """
-        Displays a table of employees.
-
-        Args:
-            employees (List[Employee]): A list of employee objects to display.
-
-        Returns:
-            None
-        """
-        table = Table(
-            title="Employee", show_header=True, header_style="bold blue"
-        )
-        table.add_column("ID", style="dim")
-        table.add_column("username", style="bold")
-        table.add_column("email", style="bold")
-        table.add_column("phone", style="bold")
-        table.add_column("department_id")
-        for employee in employees:
-            # manager_department = DepartmentManager()
-            # department = manager_department.get_by_id(employee.department_id)
-            table.add_row(
-                str(employee.id),
-                f"{employee.username} {employee.last_name}",
-                employee.email,
-                employee.phone,
-                # department.name,
-            )
-        console.print(table)
 
     # SUCCESS
     def success_creating(self) -> str:

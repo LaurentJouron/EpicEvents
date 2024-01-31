@@ -1,3 +1,4 @@
+from ..models.employee import EmployeeManager
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import COMMERCIAL, ADMIN
 from ..models import ClientManager
@@ -9,10 +10,14 @@ from ..controllers.employee_controllers import (
 from ..controllers import home_controllers
 import logging
 
+from rich.table import Table
+from rich.console import Console
 from sqlalchemy.exc import IntegrityError
+
 
 view = ClientView()
 manager = ClientManager()
+console = Console()
 
 
 class ClientController(BaseController):
@@ -67,6 +72,48 @@ class ClientController(BaseController):
             "employee_id": employee_id,
         }
 
+    def get_table(self, clients):
+        """
+        Displays a table of clients.
+
+        Args:
+            clients (List[Clients]): A list of client objects to display.
+
+        Returns:
+            None
+        """
+        table = Table(
+            title="Client", show_header=True, header_style="bold blue"
+        )
+        table.add_column("ID", style="dim")
+        table.add_column("Compagny", style="bold")
+        table.add_column("Owner", style="bold")
+        table.add_column("Email", style="bold")
+        table.add_column("Phone", style="bold")
+        table.add_column("Address", style="bold")
+        table.add_column("Information", style="bold")
+        table.add_column("Creation", style="bold")
+        table.add_column("Update", style="bold")
+        table.add_column("Sales", style="bold")
+        for client in clients:
+            manager_employee = EmployeeManager()
+            employee = manager_employee.get_by_id(
+                employee_id=client.employee_id
+            )
+            table.add_row(
+                str(client.id),
+                client.compagny_name,
+                f"{client.username} {client.last_name}",
+                client.email,
+                client.phone,
+                client.address,
+                client.information,
+                str(client.creation_date),
+                str(client.updating_date),
+                f"{employee.username} {employee.last_name}",
+            )
+        console.print(table)
+
 
 class ClientCreateController(ClientController):
     def run(self):
@@ -92,9 +139,7 @@ class ClientReadController(ClientController):
     def run(self):
         while True:
             clients = manager.read()
-            print(clients)
-            input("rien")
-            view.display_table(clients=clients)
+            self.get_table(clients=clients)
             continu = view.select_one_to_continue()
             if continu == "1":
                 return ClientController()
