@@ -69,13 +69,25 @@ class ContractManager:
         with Session() as session:
             with session.begin():
                 if contract := session.query(Contract).get(contract_id):
-                    if kwargs["name"] != contract.name:
+                    if (
+                        kwargs["name"] != contract.name
+                        and kwargs["name"] != ""
+                    ):
                         contract.name = kwargs["name"]
-                    if kwargs["total_amount"] != contract.total_amount:
+                    if (
+                        kwargs["total_amount"] != contract.total_amount
+                        and kwargs["total_amount"] != ""
+                    ):
                         contract.total_amount = kwargs["total_amount"]
-                    if kwargs["pending_amount"] != contract.pending_amount:
+                    if (
+                        kwargs["pending_amount"] != contract.pending_amount
+                        and kwargs["pending_amount"] != ""
+                    ):
                         contract.pending_amount = kwargs["pending_amount"]
-                    if kwargs["employee_id"] != contract.employee_id:
+                    if (
+                        kwargs["employee_id"] != contract.employee_id
+                        and kwargs["employee_id"] != ""
+                    ):
                         contract.employee_id = kwargs["employee_id"]
 
     def delete(self, contract_id):

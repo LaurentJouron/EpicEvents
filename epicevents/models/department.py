@@ -68,7 +68,8 @@ class DepartmentManager:
         with Session() as session:
             with session.begin():
                 if department := session.query(Department).get(department_id):
-                    department.name = new_name
+                    if department.name != new_name and new_name != "":
+                        department.name = new_name
 
     def delete(self, department_id):
         """

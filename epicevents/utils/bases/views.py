@@ -61,7 +61,7 @@ class BaseSuccessView(BaseManageConsole):
         """
         self._clean_console()
         self.console.rule("[bold green]SUCCESS")
-        self.console.print(f"\n✔️ {var}", style="bold green", justify="left")
+        self.console.print(f"\n✔️ {var}", style="bold green", justify="center")
         time.sleep(SHORT_SLEEP)
         self._clean_console()
 
@@ -113,7 +113,7 @@ class BaseErrorView(BaseManageConsole):
         """
         self._clean_console()
         self.console.rule("[bold red]ERROR")
-        self.console.print(f"\n⛔️ {var}", style="bold red", justify="left")
+        self.console.print(f"\n⛔️ {var}", style="bold red", justify="center")
         time.sleep(SHORT_SLEEP)
         self._clean_console()
 

@@ -75,19 +75,40 @@ class ClientManager:
         with Session() as session:
             with session.begin():
                 if client := session.query(Client).get(client_id):
-                    if kwargs["compagny_name"] != client.compagny_name:
+                    if (
+                        kwargs["compagny_name"] != client.compagny_name
+                        and kwargs["compagny_name"] != ""
+                    ):
                         client.compagny_name = kwargs["compagny_name"]
-                    if kwargs["username"] != client.compagny_name:
+                    if (
+                        kwargs["username"] != client.compagny_name
+                        and kwargs["username"] != ""
+                    ):
                         client.username = kwargs["username"]
-                    if kwargs["last_name"] != client.last_name:
+                    if (
+                        kwargs["last_name"] != client.last_name
+                        and kwargs["last_name"] != ""
+                    ):
                         client.last_name = kwargs["last_name"]
-                    if kwargs["email"] != client.email:
+                    if (
+                        kwargs["email"] != client.email
+                        and kwargs["email"] != ""
+                    ):
                         client.email = kwargs["email"]
-                    if kwargs["phone"] != client.phone:
+                    if (
+                        kwargs["phone"] != client.phone
+                        and kwargs["phone"] != ""
+                    ):
                         client.phone = kwargs["phone"]
-                    if kwargs["address"] != client.address:
+                    if (
+                        kwargs["address"] != client.address
+                        and kwargs["address"] != ""
+                    ):
                         client.address = kwargs["address"]
-                    if kwargs["information"] != client.information:
+                    if (
+                        kwargs["information"] != client.information
+                        and kwargs["information"] != ""
+                    ):
                         client.information = kwargs["information"]
                     client.updating_date = date.today()
 

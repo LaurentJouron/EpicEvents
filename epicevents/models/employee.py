@@ -73,17 +73,35 @@ class EmployeeManager:
         with Session() as session:
             with session.begin():
                 if employee := session.query(Employee).get(employee_id):
-                    if kwargs["username"] != employee.username:
+                    if (
+                        kwargs["username"] != employee.username
+                        and kwargs["username"] != ""
+                    ):
                         employee.username = kwargs["username"]
-                    if kwargs["last_name"] != employee.last_name:
+                    if (
+                        kwargs["last_name"] != employee.last_name
+                        and kwargs["last_name"] != ""
+                    ):
                         employee.last_name = kwargs["last_name"]
-                    if kwargs["email"] != employee.email:
+                    if (
+                        kwargs["email"] != employee.email
+                        and kwargs["email"] != ""
+                    ):
                         employee.email = kwargs["email"]
-                    if kwargs["phone"] != employee.phone:
+                    if (
+                        kwargs["phone"] != employee.phone
+                        and kwargs["phone"] != ""
+                    ):
                         employee.phone = kwargs["phone"]
-                    if kwargs["password"] != employee.password:
+                    if (
+                        kwargs["password"] != employee.password
+                        and kwargs["password"] != ""
+                    ):
                         employee.password = kwargs["password"]
-                    if kwargs["department_id"] != employee.department_id:
+                    if (
+                        kwargs["department_id"] != employee.department_id
+                        and kwargs["department_id"] != ""
+                    ):
                         employee.department_id = kwargs["department_id"]
 
     def delete(self, employee_id):
