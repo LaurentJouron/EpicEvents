@@ -14,14 +14,36 @@ from rich.table import Table
 from rich.console import Console
 from sqlalchemy.exc import IntegrityError
 
-
 view = ClientView()
 manager = ClientManager()
 console = Console()
 
 
 class ClientController(BaseController):
+    """
+    Controls the flow of client-related operations.
+
+    Provides methods to create, read, update, and delete client records.
+    Also handles the navigation between different client-related controllers.
+
+    Args:
+        self
+
+    """
+
     def run(self):
+        """
+        Runs the client controller.
+
+        Displays a menu to the user and returns the corresponding controller
+        based on the user's choice.
+
+        Args:
+            self
+
+        Returns:
+            The corresponding controller instance based on the user's choice
+        """
         employee_controllers = EmployeeController()
         department = employee_controllers.get_user_login_department()
         while True:
@@ -51,6 +73,12 @@ class ClientController(BaseController):
                 return home_controllers.HomeController()
 
     def get_data(self):
+        """
+        Retrieves client data from the user.
+
+        Returns:
+            dict: A dictionary containing the client data.
+        """
         view.display_title()
         compagny_name = view.get_compagny_name()
         username = view.get_username()
@@ -116,7 +144,32 @@ class ClientController(BaseController):
 
 
 class ClientCreateController(ClientController):
+    """
+    Controls the flow of creating a client.
+
+    Prompts the user to enter client information.
+    Creates the client using the manager.
+
+    Args:
+        self
+
+    Returns:
+        The ClientController instance
+    """
+
     def run(self):
+        """
+        Runs the client create controller.
+
+        Prompts the user to enter client information.
+        Creates the client using the manager.
+
+        Args:
+            self
+
+        Returns:
+            The ClientController instance
+        """
         data = self.get_data()
         try:
             manager.create(**data)
@@ -136,7 +189,31 @@ class ClientCreateController(ClientController):
 
 
 class ClientReadController(ClientController):
+    """
+    Controls the flow of reading clients.
+
+    Retrieves all client records from the manager and displays them in a table.
+
+    Args:
+        self
+
+    Returns:
+        The ClientController instance
+    """
+
     def run(self):
+        """
+        Runs the client read controller.
+
+        Retrieves all client records from the manager and displays them in a
+        table.
+
+        Args:
+            self
+
+        Returns:
+            The ClientController instance
+        """
         while True:
             clients = manager.read()
             self.get_table(clients=clients)
@@ -146,9 +223,36 @@ class ClientReadController(ClientController):
 
 
 class ClientUpdateController(ClientController):
+    """
+    Controls the flow of updating a client.
+
+    Retrieves client records from the manager and displays them in a table.
+    Prompts the user to select a client ID to update.
+    Updates the client information based on the selected ID.
+
+    Args:
+        self
+
+    Returns:
+        The ClientController instance
+    """
+
     def run(self):
+        """
+        Runs the client update controller.
+
+        Retrieves client records from the manager and displays them in a table.
+        Prompts the user to select a client ID to update.
+        Updates the client information based on the selected ID.
+
+        Args:
+            self
+
+        Returns:
+            The ClientController instance
+        """
         clients = manager.read()
-        view.display_table(clients)
+        self.get_table(clients)
         client_id = view.select_id()
         try:
             if client := manager.get_by_id(client_id=client_id):
@@ -173,9 +277,36 @@ class ClientUpdateController(ClientController):
 
 
 class ClientDeleteController(ClientController):
+    """
+    Controls the flow of deleting a client.
+
+    Retrieves client records from the manager and displays them in a table.
+    Prompts the user to select a client ID to delete.
+    Deletes the client based on the selected ID.
+
+    Args:
+        self
+
+    Returns:
+        The ClientController instance
+    """
+
     def run(self):
+        """
+        Runs the client delete controller.
+
+        Retrieves client records from the manager and displays them in a table.
+        Prompts the user to select a client ID to delete.
+        Deletes the client based on the selected ID.
+
+        Args:
+            self
+
+        Returns:
+            The ClientController instance
+        """
         clients = manager.read()
-        view.display_table(clients=clients)
+        self.get_table(clients=clients)
 
         client_id = view.select_id()
         if manager.delete(client_id=client_id):

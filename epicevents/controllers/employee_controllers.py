@@ -1,9 +1,10 @@
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import FILEPATH, GESTION
+from ..models.employee import Employee
 from ..models import EmployeeManager, DepartmentManager
 from ..views.employee_views import EmployeeView
-from ..views.department_views import DepartmentView
 from ..controllers import home_controllers
+from ..controllers.department_controllers import DepartmentController
 import logging
 import json
 import os
@@ -14,8 +15,6 @@ from rich.table import Table
 from rich.console import Console
 
 console = Console()
-
-
 view = EmployeeView()
 manager = EmployeeManager()
 
@@ -88,10 +87,10 @@ class EmployeeController(BaseController):
             Department: The selected department.
         """
         department_manager = DepartmentManager()
-        department_view = DepartmentView()
+        department_controller = DepartmentController()
         departments = department_manager.read()
-        department_view.display_table(departments=departments)
-        department_id = department_view.select_id()
+        department_controller.get_table(departments=departments)
+        department_id = view.select_id()
         return department_manager.get_by_id(department_id=department_id)
 
     def get_employee(self):
@@ -101,17 +100,38 @@ class EmployeeController(BaseController):
             Employee: The selected employee.
         """
         employees = manager.read()
-        view.display_table(employees=employees)
+        self.get_table(employees=employees)
         employee_id = view.select_id()
         return manager.get_by_id(employee_id=employee_id)
 
     def get_user_login_department(self):
+        """
+        Retrieves the department ID of the logged-in user.
+
+        Returns:
+            The department ID of the logged-in user.
+        """
         return self._extracted_user_info_log("department_id")
 
     def get_user_id_login(self):
+        """
+        Retrieves the ID of the logged-in user.
+
+        Returns:
+            The ID of the logged-in user.
+        """
         return self._extracted_user_info_log("employee_id")
 
     def _extracted_user_info_log(self, info):
+        """
+        Extracts the specified information from the employee login file.
+
+        Args:
+            info: The information to extract from the employee login file.
+
+        Returns:
+            The extracted information.
+        """
         employee_login = EmployeeLoginController()
         employee = employee_login.read_login_file()
         return employee[info]
@@ -145,6 +165,13 @@ class EmployeeController(BaseController):
                 department.name,
             )
         console.print(table)
+
+    def get_employee_event(self, event_id):
+        employee_controllers = EmployeeController()
+        employee_id = employee_controllers.get_user_id_login()
+        manager.create_user_event_relation(
+            employee_id=employee_id, event_id=event_id
+        )
 
 
 class EmployeeCreateController(EmployeeController):

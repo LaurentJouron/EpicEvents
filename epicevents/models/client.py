@@ -9,8 +9,27 @@ from sqlalchemy.orm.session import make_transient
 
 
 class ClientManager:
+    """
+    Manages the CRUD operations for clients.
+
+    Provides methods to create, read, update, and delete client records.
+
+    Args:
+        self
+
+    """
+
     # CRUD
     def create(self, **kwargs):
+        """
+        Creates a new client record.
+
+        Args:
+            **kwargs: Keyword arguments for the client attributes.
+
+        Returns:
+            None
+        """
         with Session() as session:
             with session.begin():
                 new_client = Client(
@@ -28,6 +47,12 @@ class ClientManager:
                 session.add(new_client)
 
     def read(self):
+        """
+        Retrieves all client records.
+
+        Returns:
+            List[Client]: A list of all client records.
+        """
         with Session() as session:
             with session.begin():
                 clients = session.query(Client).all()
@@ -37,6 +62,16 @@ class ClientManager:
                 return clients
 
     def update(self, client_id, **kwargs):
+        """
+        Updates an existing client record.
+
+        Args:
+            client_id: The ID of the client to update.
+            **kwargs: Keyword arguments for the client attributes to update.
+
+        Returns:
+            None
+        """
         with Session() as session:
             with session.begin():
                 if client := session.query(Client).get(client_id):
@@ -57,6 +92,15 @@ class ClientManager:
                     client.updating_date = date.today()
 
     def delete(self, client_id):
+        """
+        Deletes a client record.
+
+        Args:
+            client_id: The ID of the client to delete.
+
+        Returns:
+            bool: True if the client record was deleted, False otherwise.
+        """
         with Session() as session:
             with session.begin():
                 if client := session.query(Client).get(client_id):
@@ -67,6 +111,15 @@ class ClientManager:
 
     # REQUESTS
     def get_by_id(self, client_id):
+        """
+        Retrieves a client record by ID.
+
+        Args:
+            client_id: The ID of the client to retrieve.
+
+        Returns:
+            Client: The client record with the specified ID.
+        """
         with Session() as session:
             with session.begin():
                 client = (
@@ -82,6 +135,26 @@ class ClientManager:
 
 # MODELS
 class Client(Model):
+    """
+    Represents a client.
+
+    Attributes:
+        id (int): The ID of the client.
+        compagny_name (str): The company name of the client.
+        username (str): The username of the client.
+        last_name (str): The last name of the client.
+        email (str): The email address of the client.
+        phone (str): The phone number of the client.
+        address (str): The address of the client.
+        information (str): Additional information about the client.
+        creation_date (Date): The creation date of the client record.
+        updating_date (Date): The updating date of the client record.
+        employee_id (int): The ID of the employee associated with the client.
+        employee (Employee): The employee associated with the client.
+        event (List[Event]): The events associated with the client.
+
+    """
+
     __tablename__ = "client"
 
     id: Mapped[int] = mapped_column(primary_key=True)

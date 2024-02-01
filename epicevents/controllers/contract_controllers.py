@@ -21,7 +21,30 @@ manager = ContractManager()
 
 
 class ContractController(BaseController):
+    """
+    Controls the flow of contract-related operations.
+
+    Provides methods to create, read, update, and delete contract records.
+    Also handles the navigation between different contract-related controllers.
+
+    Args:
+        self
+
+    """
+
     def run(self):
+        """
+        Runs the contract controller.
+
+        Displays a menu to the user and returns the corresponding controller
+        based on the user's choice.
+
+        Args:
+            self
+
+        Returns:
+            The corresponding controller instance based on the user's choice
+        """
         employee_controllers = EmployeeController()
         department = employee_controllers.get_user_login_department()
         while True:
@@ -51,6 +74,12 @@ class ContractController(BaseController):
                 return home_controllers.HomeController()
 
     def get_data(self):
+        """
+        Retrieves contract data from the user.
+
+        Returns:
+            dict: A dictionary containing the contract data.
+        """
         name = view.get_name()
         total_amount = view.get_amount("total")
         pending_amount = view.get_amount("pending")
@@ -70,8 +99,7 @@ class ContractController(BaseController):
         Displays a table of contracts.
 
         Args:
-            contracts (List[Contracts]): A list of contracts objects to
-            display.
+            contracts (List[Contracts]): A list of contract objects to display.
 
         Returns:
             None
@@ -104,7 +132,32 @@ class ContractController(BaseController):
 
 
 class ContractCreateController(ContractController):
+    """
+    Controls the flow of creating a contract.
+
+    Prompts the user to enter contract information.
+    Creates the contract using the manager.
+
+    Args:
+        self
+
+    Returns:
+        The ContractController instance
+    """
+
     def run(self):
+        """
+        Runs the contract create controller.
+
+        Prompts the user to enter contract information.
+        Creates the contract using the manager.
+
+        Args:
+            self
+
+        Returns:
+            The ContractController instance
+        """
         view.display_title("Create contract")
         data = self.get_data()
 
@@ -126,7 +179,32 @@ class ContractCreateController(ContractController):
 
 
 class ContractReadController(ContractController):
+    """
+    Controls the flow of reading contracts.
+
+    Retrieves contract records from the manager and displays them in a table.
+
+    Args:
+        self
+
+    Returns:
+        The ContractController instance
+    """
+
     def run(self):
+        """
+        Runs the contract update controller.
+
+        Retrieves contract records from the manager and displays them in a
+        table.
+        Prompts the user to select a contract ID to update.
+        Updates the contract information based on the selected ID.
+
+        Args:
+            self
+        Returns:
+            The ContractController instance
+        """
         while True:
             contracts = manager.read()
             self.get_table(contracts=contracts)
@@ -136,7 +214,35 @@ class ContractReadController(ContractController):
 
 
 class ContractUpdateController(ContractController):
+    """
+    Controls the flow of updating a contract.
+
+    Retrieves contract records from the manager and displays them in a table.
+    Prompts the user to select a contract ID to update.
+    Updates the contract information based on the selected ID.
+
+    Args:
+        self
+
+    Returns:
+        The ContractController instance
+    """
+
     def run(self):
+        """
+        Runs the contract update controller.
+
+        Retrieves contract records from the manager and displays them in a
+        table.
+        Prompts the user to select a contract ID to update.
+        Updates the contract information based on the selected ID.
+
+        Args:
+            self
+
+        Returns:
+            The ContractController instance
+        """
         contracts = manager.read()
         self.get_table(contracts=contracts)
         contract_id = view.select_id()
@@ -157,7 +263,35 @@ class ContractUpdateController(ContractController):
 
 
 class ContractDeleteController(ContractController):
+    """
+    Controls the flow of deleting a contract.
+
+    Retrieves contract records from the manager and displays them in a table.
+    Prompts the user to select a contract ID to delete.
+    Deletes the contract based on the selected ID.
+
+    Args:
+        self
+
+    Returns:
+        The ContractController instance
+    """
+
     def run(self):
+        """
+        Runs the contract delete controller.
+
+        Retrieves contract records from the manager and displays them in a
+        table.
+        Prompts the user to select a contract ID to delete.
+        Deletes the contract based on the selected ID.
+
+        Args:
+            self
+
+        Returns:
+            The ContractController instance
+        """
         contracts = manager.read()
         self.get_table(contracts=contracts)
         contract_id = view.select_id()

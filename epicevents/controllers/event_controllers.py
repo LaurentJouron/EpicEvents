@@ -1,13 +1,14 @@
 from ..utils.bases.controllers import BaseController
-from ..utils.contants import COMMERCIAL, ADMIN
-from ..models import EventManager, ClientManager, EmployeeManager
+from ..utils.contants import COMMERCIAL, ADMIN, GESTION, SUPPORT
+from ..models.event import EventManager
+from ..models.client import ClientManager
+from ..models.employee import EmployeeManager
 from ..models.contract import ContractManager
 from ..views import EventView
-from ..views.client_views import ClientView
-from ..views.employee_views import EmployeeView
-from ..views.contract_views import ContractView
 from ..controllers import home_controllers
 from ..controllers.employee_controllers import EmployeeController
+from ..controllers.client_controllers import ClientController
+from ..controllers.contract_controllers import ContractController
 import logging
 
 from rich.table import Table
@@ -51,26 +52,26 @@ class EventController(BaseController):
 
     def get_client(self):
         client_manager = ClientManager()
-        client_view = ClientView()
+        client_controller = ClientController()
         clients = client_manager.read()
-        client_view.display_table(clients=clients)
-        client_id = client_view.select_id()
+        client_controller.get_table(clients=clients)
+        client_id = view.select_id()
         return client_manager.get_by_id(client_id=client_id)
 
     def get_employee(self):
         employee_manager = EmployeeManager()
-        employee_view = EmployeeView()
+        employee_controller = EmployeeController()
         employees = employee_manager.read()
-        employee_view.display_table(employees=employees)
-        employee_id = employee_view.select_id()
+        employee_controller.get_table(employees=employees)
+        employee_id = view.select_id()
         return employee_manager.get_by_id(employee_id=employee_id)
 
     def get_contract(self):
         contract_manager = ContractManager()
-        contract_view = ContractView()
+        contract_controller = ContractController()
         contracts = contract_manager.read()
-        contract_view.display_table(contracts=contracts)
-        contract_id = contract_view.select_id()
+        contract_controller.get_table(contracts=contracts)
+        contract_id = view.select_id()
         return contract_manager.get_by_id(contract_id=contract_id)
 
     def get_data(self):
@@ -113,15 +114,6 @@ class EventController(BaseController):
         }
 
     def get_table(self, events):
-        """
-        Displays a table of events.
-
-        Args:
-            events (List[Event]): A list of event objects to display.
-
-        Returns:
-            None
-        """
         table = Table(
             title="Events", show_header=True, header_style="bold blue"
         )
@@ -144,31 +136,38 @@ class EventController(BaseController):
                 event.address,
                 str(event.attendees),
                 event.notes,
-                client.name,
+                client.compagny_name,
             )
         console.print(table)
+
+    def _extracted_employee_event(self, data):
+        event_id = manager.create(**data)
+        employee_controllers = EmployeeController()
+        employee_controllers.get_employee_event(event_id=event_id)
+        view.success_creating()
+        return EventController()
 
 
 class EventCreateController(EventController):
     def run(self):
-        data = self.get_data()
-        try:
-            event_id = manager.create(**data)
-            print(event_id)
-            input("rien")
-            view.success_creating()
-            return EventController()
+        employee_controllers = EmployeeController()
+        department = employee_controllers.get_user_login_department()
+        if department == COMMERCIAL:
+            data = self.get_data()
+            try:
+                return self._extracted_employee_event(data)
+            except IntegrityError as e:
+                logging.error(f"IntegrityError: {e}")
+                return EventController()
 
-        except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
-            return EventController()
+            except Exception as e:
+                logging.exception(f"Unexpected error: {e}")
+                raise
 
-        except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
-            raise
-
-        finally:
-            return EventController()
+            finally:
+                return EventController()
+        view.error_not_have_right()
+        return EventController()
 
 
 class EventReadController(EventController):
@@ -183,39 +182,61 @@ class EventReadController(EventController):
 
 class EventUpdateController(EventController):
     def run(self):
-        contract_id = self.get_contract_id()
-        try:
-            contract = manager.get_status_by_id(contract_id)
+        employee_controllers = EmployeeController()
+        department = employee_controllers.get_user_login_department()
+        if department != COMMERCIAL:
+            if department == SUPPORT:
+                event_id = self._extracted_event_table()
 
-            # Modification possible uniquement pour le commercial
-            if contract["status"] is True:
-                if contract:
+                try:
                     data = self.get_data()
-                    manager.update(contract_id, **data)
+                    manager.update(event_id=event_id, **data)
                     view.success_update()
-                    return EventController()
-                else:
+                except Exception as e:
+                    logging.exception(
+                        f"Unexpected error during client update: {e}"
+                    )
                     view.error_not_found()
-            else:
-                view.error_not_have_right()
-                return EventController()
-
-        except Exception as e:
-            logging.exception(f"Unexpected error during client update: {e}")
-            view.error_not_found()
-            raise
-        finally:
+                    raise
+                finally:
+                    return EventController()
+            if department == GESTION:
+                return self._employee_event_relation(employee_controllers)
+            view.error_not_have_right()
             return EventController()
+        view.error_not_have_right()
+        return EventController()
+
+    def _employee_event_relation(self, employee_controllers):
+        event_id = self._extracted_event_table()
+        employee_manager = EmployeeManager()
+        employees = employee_manager.read()
+        employees = employee_controllers.get_table(employees)
+        employee_id = view.select_id()
+        employee_manager.create_user_event_relation(
+            employee_id=employee_id, event_id=event_id
+        )
+        view.success_update()
+        return EventController()
+
+    def _extracted_event_table(self):
+        events = manager.read()
+        self.get_table(events)
+        return view.select_id()
 
 
 class EventDeleteController(EventController):
     def run(self):
-        events = manager.read()
-        view.display_table(events=events)
-
-        event_id = view.select_id()
-        if manager.delete(event_id=event_id):
-            view.success_delete()
-        else:
-            view.error_not_found()
+        employee_controllers = EmployeeController()
+        department = employee_controllers.get_user_login_department()
+        if department != ADMIN:
+            events = manager.read()
+            self.get_table(events=events)
+            event_id = view.select_id()
+            if manager.delete(event_id=event_id):
+                view.success_delete()
+            else:
+                view.error_not_found()
+            return EventController()
+        view.error_not_have_right()
         return EventController()
