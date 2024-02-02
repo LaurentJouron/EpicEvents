@@ -1,14 +1,15 @@
-from ..models.employee import EmployeeManager
 from ..utils.bases.controllers import BaseController
 from ..utils.contants import COMMERCIAL, ADMIN
+from ..models.employee import EmployeeManager
 from ..models import ClientManager
 from ..views import ClientView
+from ..controllers import home_controllers
 from ..controllers.employee_controllers import (
     EmployeeLoginController,
     EmployeeController,
 )
-from ..controllers import home_controllers
 import logging
+import sentry_sdk
 
 from rich.table import Table
 from rich.console import Console
@@ -177,11 +178,13 @@ class ClientCreateController(ClientController):
             return ClientController()
 
         except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
+            sentry_sdk.capture_message(f"IntegrityError: {e}")
+            sentry_sdk.capture_exception(e)
             return ClientController()
 
         except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
+            sentry_sdk.capture_message(f"Unexpected error: {e}")
+            sentry_sdk.capture_exception(e)
             raise
 
         finally:
@@ -269,7 +272,10 @@ class ClientUpdateController(ClientController):
                     view.error_not_found()
                 return ClientController()
         except Exception as e:
-            logging.exception(f"Unexpected error during client update: {e}")
+            sentry_sdk.capture_message(
+                f"Unexpected error during client update: {e}"
+            )
+            sentry_sdk.capture_exception(e)
             view.error_not_found()
             raise
         finally:
