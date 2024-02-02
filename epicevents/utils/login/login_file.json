@@ -1,5 +1,5 @@
 {
-    "employee_id": 2,
-    "department_id": 3,
-    "token": "$pbkdf2-sha256$29000$REjp/b.3NmaslbK2du7d29v7n7OWkpKyViqldO7d./8fAyBkDIGwds455xyDEAJgLMX43zsHwBjDuPceY8wZYw$x7Ki/PQNstkNordEpNhh8qUiasBBHxGF/h6KFCuRlzQ"
+    "employee_id": 0,
+    "department_id": 0,
+    "token": ""
 }
