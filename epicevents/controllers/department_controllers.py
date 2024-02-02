@@ -3,6 +3,7 @@ from ..models import DepartmentManager
 from ..views import DepartmentView
 from ..controllers import home_controllers
 import logging
+import sentry_sdk
 
 from sqlalchemy.exc import IntegrityError
 from rich.table import Table
@@ -121,11 +122,13 @@ class DepartmentCreateController(DepartmentController):
             return DepartmentController()
 
         except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
+            sentry_sdk.capture_message(f"IntegrityError: {e}")
+            sentry_sdk.capture_exception(e)
             return DepartmentController()
 
         except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
+            sentry_sdk.capture_exception(e)
+            sentry_sdk.capture_message(f"Unexpected error: {e}")
             raise
 
         finally:
@@ -194,7 +197,10 @@ class DepartmentUpdateController(DepartmentController):
                 view.error_not_found()
 
         except Exception as e:
-            logging.exception(f"Unexpected error during role update: {e}")
+            sentry_sdk.capture_message(
+                f"Unexpected error during role update: {e}"
+            )
+            sentry_sdk.capture_exception(e)
         finally:
             return DepartmentController()
 

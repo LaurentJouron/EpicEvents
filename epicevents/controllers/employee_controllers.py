@@ -5,9 +5,9 @@ from ..models import EmployeeManager, DepartmentManager
 from ..views.employee_views import EmployeeView
 from ..controllers import home_controllers
 from ..controllers.department_controllers import DepartmentController
-import logging
 import json
 import os
+import sentry_sdk
 
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256
@@ -191,11 +191,13 @@ class EmployeeCreateController(EmployeeController):
             return EmployeeController()
 
         except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
+            sentry_sdk.capture_message(f"IntegrityError: {e}")
+            sentry_sdk.capture_exception(e)
             return EmployeeController()
 
         except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
+            sentry_sdk.capture_message(f"Unexpected error: {e}")
+            sentry_sdk.capture_exception(e)
             raise
         finally:
             return EmployeeController()
@@ -237,7 +239,10 @@ class EmployeeUpdateController(EmployeeController):
                 view.error_not_found()
 
         except Exception as e:
-            logging.exception(f"Unexpected error during employee update: {e}")
+            sentry_sdk.capture_message(
+                f"Unexpected error during employee update: {e}"
+            )
+            sentry_sdk.capture_exception(e)
         finally:
             return EmployeeController()
 
@@ -306,7 +311,6 @@ class EmployeeLoginController(EmployeeController):
         except json.JSONDecodeError:
             data = {}
         data[key] = value
-
         with open(FILEPATH, "w") as f:
             json.dump(data, f, indent=4)
 

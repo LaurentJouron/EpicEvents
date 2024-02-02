@@ -10,6 +10,7 @@ from ..controllers.employee_controllers import EmployeeController
 from ..controllers.client_controllers import ClientController
 from ..controllers.contract_controllers import ContractController
 import logging
+import sentry_sdk
 
 from rich.table import Table
 from rich.console import Console
@@ -157,11 +158,13 @@ class EventCreateController(EventController):
             try:
                 return self._extracted_employee_event(data)
             except IntegrityError as e:
-                logging.error(f"IntegrityError: {e}")
+                sentry_sdk.capture_message(f"IntegrityError: {e}")
+                sentry_sdk.capture_exception(e)
                 return EventController()
 
             except Exception as e:
-                logging.exception(f"Unexpected error: {e}")
+                sentry_sdk.capture_message(f"Unexpected error: {e}")
+                sentry_sdk.capture_exception(e)
                 raise
 
             finally:
@@ -183,29 +186,37 @@ class EventReadController(EventController):
 class EventUpdateController(EventController):
     def run(self):
         employee_controllers = EmployeeController()
+        manager_employee = EmployeeManager()
         department = employee_controllers.get_user_login_department()
-        if department != COMMERCIAL:
-            if department == SUPPORT:
-                event_id = self._extracted_event_table()
-
+        if department == SUPPORT:
+            events = manager.read()
+            self.get_table(events=events)
+            event_id = view.select_id()
+            employee_id = employee_controllers.get_user_id_login()
+            if manager_employee.get_relation_by_id(
+                employee_id=employee_id, event_id=event_id
+            ):
                 try:
-                    data = self.get_data()
+                    data = self.get_support_modify_data()
                     manager.update(event_id=event_id, **data)
                     view.success_update()
                 except Exception as e:
-                    logging.exception(
+                    sentry_sdk.capture_message(
                         f"Unexpected error during client update: {e}"
                     )
+                    sentry_sdk.capture_exception(e)
                     view.error_not_found()
                     raise
                 finally:
                     return EventController()
-            if department == GESTION:
-                return self._employee_event_relation(employee_controllers)
+            else:
+                view.error_not_have_right()
+                return EventController()
+        elif department == GESTION:
+            return self._employee_event_relation(employee_controllers)
+        else:
             view.error_not_have_right()
             return EventController()
-        view.error_not_have_right()
-        return EventController()
 
     def _employee_event_relation(self, employee_controllers):
         event_id = self._extracted_event_table()
@@ -223,6 +234,40 @@ class EventUpdateController(EventController):
         events = manager.read()
         self.get_table(events)
         return view.select_id()
+
+    def get_support_modify_data(self):
+        employee_controllers = EmployeeController()
+        department_id = employee_controllers.get_user_login_department()
+        contract = self.get_contract()
+        client = self.get_client()
+        if department_id == SUPPORT:
+            return self._extracted_support_modify_data(contract, client)
+        view.error_not_have_right()
+        return EventController()
+
+    def _extracted_support_modify_data(self, contract, client):
+        view.display_title("Modify events")
+        name = contract.name
+        start_date, end_date = view.get_valid_date_range()
+        address = client.address
+        view.display_title("Attendees")
+        attendees = view.get_number()
+        notes = view.get_notes()
+        client_id = client.id
+        contract_id = contract.id
+        employee_controllers = EmployeeController()
+        employee_id = employee_controllers.get_user_id_login()
+        return {
+            "name": name,
+            "start_date": start_date,
+            "end_date": end_date,
+            "address": address,
+            "attendees": attendees,
+            "notes": notes,
+            "client_id": client_id,
+            "contract_id": contract_id,
+            "employee_id": employee_id,
+        }
 
 
 class EventDeleteController(EventController):

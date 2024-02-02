@@ -1,4 +1,5 @@
 from ..database import Model, Session
+from ..models.event import Event
 
 from sqlalchemy import String, ForeignKey, Table, Column, insert
 from sqlalchemy.orm import Mapped, mapped_column, relationship, joinedload
@@ -192,8 +193,12 @@ class EmployeeManager:
             with session.begin():
                 relation = (
                     session.query(employee_event)
-                    .filter(employee_event.employee_id == employee_id)
-                    .filter(employee_event.event_id == event_id)
+                    .join(
+                        Employee, employee_event.c.employee_id == Employee.id
+                    )
+                    .join(Event, employee_event.c.event_id == Event.id)
+                    .filter(Employee.id == employee_id)
+                    .filter(Event.id == event_id)
                     .first()
                 )
                 if relation:
