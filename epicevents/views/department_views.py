@@ -19,9 +19,6 @@ class DepartmentView(BaseView):
     def choice_menu(self):
         """Display a menu and get the user's choice.
 
-        Args:
-            self
-
         Returns:
             The user's choice as a string.
         """

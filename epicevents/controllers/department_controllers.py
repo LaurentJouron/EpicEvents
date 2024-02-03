@@ -2,7 +2,6 @@ from ..utils.bases.controllers import BaseController
 from ..models import DepartmentManager
 from ..views import DepartmentView
 from ..controllers import home_controllers
-import logging
 import sentry_sdk
 
 from sqlalchemy.exc import IntegrityError
@@ -22,9 +21,6 @@ class DepartmentController(BaseController):
     Displays a menu to the user and returns the corresponding controller based
     on the user's choice.
 
-    Args:
-        self
-
     Returns:
         The corresponding controller instance based on the user's choice
     """
@@ -35,9 +31,6 @@ class DepartmentController(BaseController):
 
         Displays a menu to the user and returns the corresponding controller
         based on the user's choice.
-
-        Args:
-            self
 
         Returns:
             The corresponding controller instance based on the user's choice
@@ -71,9 +64,6 @@ class DepartmentController(BaseController):
         Args:
             departments (List[Department]): A list of department objects to
             display.
-
-        Returns:
-            None
         """
         table = Table(
             title="Departments", show_header=True, header_style="bold blue"
@@ -94,9 +84,6 @@ class DepartmentCreateController(DepartmentController):
     Creates the department using the manager.
     Returns the DepartmentController instance.
 
-    Args:
-        self
-
     Returns:
         The DepartmentController instance
     """
@@ -108,9 +95,6 @@ class DepartmentCreateController(DepartmentController):
         Prompts the user to enter the department name.
         Creates the department using the manager.
         Returns the DepartmentController instance.
-
-        Args:
-            self
 
         Returns:
             The DepartmentController instance
@@ -143,9 +127,6 @@ class DepartmentReadController(DepartmentController):
     Reads the departments from the manager and displays them in a table.
     Returns the DepartmentController instance.
 
-    Args:
-        self
-
     Returns:
         The DepartmentController instance
     """
@@ -156,9 +137,6 @@ class DepartmentReadController(DepartmentController):
 
         Reads the departments from the manager and displays them in a table.
         Returns the DepartmentController instance.
-
-        Args:
-            self
 
         Returns:
             The DepartmentController instance
@@ -180,9 +158,6 @@ class DepartmentUpdateController(DepartmentController):
         Prompts the user to select a department ID.
         Updates the department name based on the selected ID.
         Returns the DepartmentController instance.
-
-        Args:
-            self
 
         Returns:
             The DepartmentController instance
@@ -215,9 +190,6 @@ class DepartmentDeleteController(DepartmentController):
     Deletes the department based on the selected ID and returns the
     DepartmentController instance.
 
-    Args:
-        self
-
     Returns:
         The DepartmentController instance
     """
@@ -230,9 +202,6 @@ class DepartmentDeleteController(DepartmentController):
         Prompts the user to select a department ID to delete.
         Deletes the department based on the selected ID.
         Returns the DepartmentController instance.
-
-        Args:
-            self
 
         Returns:
             The DepartmentController instance

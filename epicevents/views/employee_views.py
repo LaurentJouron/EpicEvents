@@ -80,7 +80,6 @@ class EmployeeView(BaseView):
 
         Args:
             title: The title to display.
-
         """
         return self._display_title(title=title)
 
@@ -111,9 +110,6 @@ class EmployeeView(BaseView):
         """
         Encodes a password using PBKDF2 SHA256 algorithm.
 
-        Args:
-            self
-
         Returns:
             str: The encoded password.
         """
@@ -125,7 +121,6 @@ class EmployeeView(BaseView):
         Tests if a password matches a given password hash.
 
         Args:
-            self
             password_hash (str): The password hash to compare against.
 
         Returns:

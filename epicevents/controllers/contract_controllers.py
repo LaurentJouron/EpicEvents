@@ -8,7 +8,7 @@ from ..controllers.employee_controllers import (
     EmployeeLoginController,
     EmployeeController,
 )
-import logging
+import sentry_sdk
 
 from rich.table import Table
 from rich.console import Console
@@ -26,10 +26,6 @@ class ContractController(BaseController):
 
     Provides methods to create, read, update, and delete contract records.
     Also handles the navigation between different contract-related controllers.
-
-    Args:
-        self
-
     """
 
     def run(self):
@@ -38,9 +34,6 @@ class ContractController(BaseController):
 
         Displays a menu to the user and returns the corresponding controller
         based on the user's choice.
-
-        Args:
-            self
 
         Returns:
             The corresponding controller instance based on the user's choice
@@ -100,9 +93,6 @@ class ContractController(BaseController):
 
         Args:
             contracts (List[Contracts]): A list of contract objects to display.
-
-        Returns:
-            None
         """
         table = Table(
             title="Contract", show_header=True, header_style="bold blue"
@@ -138,9 +128,6 @@ class ContractCreateController(ContractController):
     Prompts the user to enter contract information.
     Creates the contract using the manager.
 
-    Args:
-        self
-
     Returns:
         The ContractController instance
     """
@@ -151,9 +138,6 @@ class ContractCreateController(ContractController):
 
         Prompts the user to enter contract information.
         Creates the contract using the manager.
-
-        Args:
-            self
 
         Returns:
             The ContractController instance
@@ -167,11 +151,11 @@ class ContractCreateController(ContractController):
             return ContractController()
 
         except IntegrityError as e:
-            logging.error(f"IntegrityError: {e}")
+            sentry_sdk.capture_exception(e)
             return ContractController()
 
         except Exception as e:
-            logging.exception(f"Unexpected error: {e}")
+            sentry_sdk.capture_exception(e)
             raise
 
         finally:
@@ -183,9 +167,6 @@ class ContractReadController(ContractController):
     Controls the flow of reading contracts.
 
     Retrieves contract records from the manager and displays them in a table.
-
-    Args:
-        self
 
     Returns:
         The ContractController instance
@@ -200,8 +181,6 @@ class ContractReadController(ContractController):
         Prompts the user to select a contract ID to update.
         Updates the contract information based on the selected ID.
 
-        Args:
-            self
         Returns:
             The ContractController instance
         """
@@ -221,9 +200,6 @@ class ContractUpdateController(ContractController):
     Prompts the user to select a contract ID to update.
     Updates the contract information based on the selected ID.
 
-    Args:
-        self
-
     Returns:
         The ContractController instance
     """
@@ -236,9 +212,6 @@ class ContractUpdateController(ContractController):
         table.
         Prompts the user to select a contract ID to update.
         Updates the contract information based on the selected ID.
-
-        Args:
-            self
 
         Returns:
             The ContractController instance
@@ -255,7 +228,10 @@ class ContractUpdateController(ContractController):
             else:
                 view.not_found()
         except Exception as e:
-            logging.exception(f"Unexpected error during contract update: {e}")
+            sentry_sdk.capture_message(
+                f"Unexpected error during client update: {e}"
+            )
+            sentry_sdk.capture_exception(e)
             view.not_found()
             raise
         finally:
@@ -270,9 +246,6 @@ class ContractDeleteController(ContractController):
     Prompts the user to select a contract ID to delete.
     Deletes the contract based on the selected ID.
 
-    Args:
-        self
-
     Returns:
         The ContractController instance
     """
@@ -285,9 +258,6 @@ class ContractDeleteController(ContractController):
         table.
         Prompts the user to select a contract ID to delete.
         Deletes the contract based on the selected ID.
-
-        Args:
-            self
 
         Returns:
             The ContractController instance

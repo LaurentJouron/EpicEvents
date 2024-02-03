@@ -117,7 +117,6 @@ class EventView(BaseView):
 
         Args:
             title: The title to display.
-
         """
         return self._display_title(title=title)
 

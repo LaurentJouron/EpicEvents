@@ -8,7 +8,6 @@ from ..controllers.employee_controllers import (
     EmployeeLoginController,
     EmployeeController,
 )
-import logging
 import sentry_sdk
 
 from rich.table import Table
@@ -26,10 +25,6 @@ class ClientController(BaseController):
 
     Provides methods to create, read, update, and delete client records.
     Also handles the navigation between different client-related controllers.
-
-    Args:
-        self
-
     """
 
     def run(self):
@@ -38,9 +33,6 @@ class ClientController(BaseController):
 
         Displays a menu to the user and returns the corresponding controller
         based on the user's choice.
-
-        Args:
-            self
 
         Returns:
             The corresponding controller instance based on the user's choice
@@ -107,9 +99,6 @@ class ClientController(BaseController):
 
         Args:
             clients (List[Clients]): A list of client objects to display.
-
-        Returns:
-            None
         """
         table = Table(
             title="Client", show_header=True, header_style="bold blue"
@@ -151,9 +140,6 @@ class ClientCreateController(ClientController):
     Prompts the user to enter client information.
     Creates the client using the manager.
 
-    Args:
-        self
-
     Returns:
         The ClientController instance
     """
@@ -164,9 +150,6 @@ class ClientCreateController(ClientController):
 
         Prompts the user to enter client information.
         Creates the client using the manager.
-
-        Args:
-            self
 
         Returns:
             The ClientController instance
@@ -197,9 +180,6 @@ class ClientReadController(ClientController):
 
     Retrieves all client records from the manager and displays them in a table.
 
-    Args:
-        self
-
     Returns:
         The ClientController instance
     """
@@ -210,9 +190,6 @@ class ClientReadController(ClientController):
 
         Retrieves all client records from the manager and displays them in a
         table.
-
-        Args:
-            self
 
         Returns:
             The ClientController instance
@@ -233,9 +210,6 @@ class ClientUpdateController(ClientController):
     Prompts the user to select a client ID to update.
     Updates the client information based on the selected ID.
 
-    Args:
-        self
-
     Returns:
         The ClientController instance
     """
@@ -247,9 +221,6 @@ class ClientUpdateController(ClientController):
         Retrieves client records from the manager and displays them in a table.
         Prompts the user to select a client ID to update.
         Updates the client information based on the selected ID.
-
-        Args:
-            self
 
         Returns:
             The ClientController instance
@@ -290,9 +261,6 @@ class ClientDeleteController(ClientController):
     Prompts the user to select a client ID to delete.
     Deletes the client based on the selected ID.
 
-    Args:
-        self
-
     Returns:
         The ClientController instance
     """
@@ -304,9 +272,6 @@ class ClientDeleteController(ClientController):
         Retrieves client records from the manager and displays them in a table.
         Prompts the user to select a client ID to delete.
         Deletes the client based on the selected ID.
-
-        Args:
-            self
 
         Returns:
             The ClientController instance

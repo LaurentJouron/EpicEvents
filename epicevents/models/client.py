@@ -13,10 +13,6 @@ class ClientManager:
     Manages the CRUD operations for clients.
 
     Provides methods to create, read, update, and delete client records.
-
-    Args:
-        self
-
     """
 
     # CRUD
@@ -26,9 +22,6 @@ class ClientManager:
 
         Args:
             **kwargs: Keyword arguments for the client attributes.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
@@ -68,47 +61,26 @@ class ClientManager:
         Args:
             client_id: The ID of the client to update.
             **kwargs: Keyword arguments for the client attributes to update.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
                 if client := session.query(Client).get(client_id):
-                    if (
-                        kwargs["compagny_name"] != client.compagny_name
-                        and kwargs["compagny_name"] != ""
-                    ):
+                    if kwargs["compagny_name"] not in [
+                        client.compagny_name,
+                        "",
+                    ]:
                         client.compagny_name = kwargs["compagny_name"]
-                    if (
-                        kwargs["username"] != client.compagny_name
-                        and kwargs["username"] != ""
-                    ):
+                    if kwargs["username"] not in [client.compagny_name, ""]:
                         client.username = kwargs["username"]
-                    if (
-                        kwargs["last_name"] != client.last_name
-                        and kwargs["last_name"] != ""
-                    ):
+                    if kwargs["last_name"] not in [client.last_name, ""]:
                         client.last_name = kwargs["last_name"]
-                    if (
-                        kwargs["email"] != client.email
-                        and kwargs["email"] != ""
-                    ):
+                    if kwargs["email"] not in [client.email, ""]:
                         client.email = kwargs["email"]
-                    if (
-                        kwargs["phone"] != client.phone
-                        and kwargs["phone"] != ""
-                    ):
+                    if kwargs["phone"] not in [client.phone, ""]:
                         client.phone = kwargs["phone"]
-                    if (
-                        kwargs["address"] != client.address
-                        and kwargs["address"] != ""
-                    ):
+                    if kwargs["address"] not in [client.address, ""]:
                         client.address = kwargs["address"]
-                    if (
-                        kwargs["information"] != client.information
-                        and kwargs["information"] != ""
-                    ):
+                    if kwargs["information"] not in [client.information, ""]:
                         client.information = kwargs["information"]
                     client.updating_date = date.today()
 

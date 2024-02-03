@@ -13,12 +13,6 @@ class DepartmentManager:
     Provides methods for creating, reading, updating, and deleting departments.
     Also provides methods for retrieving department names based on department
     IDs.
-
-    Args:
-        self
-
-    Returns:
-        None
     """
 
     # CRUD
@@ -28,9 +22,6 @@ class DepartmentManager:
 
         Args:
             name: The name of the department.
-
-        Returns:
-            None
         """
 
         with Session() as session:
@@ -61,14 +52,11 @@ class DepartmentManager:
         Args:
             department_id: The ID of the department to update.
             new_name: The new name for the department.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
                 if department := session.query(Department).get(department_id):
-                    if department.name != new_name and new_name != "":
+                    if department.name != new_name != "":
                         department.name = new_name
 
     def delete(self, department_id):
@@ -78,9 +66,6 @@ class DepartmentManager:
         Args:
             department_id: The ID of the department to update.
             new_name: The new name for the department.
-
-        Returns:
-            None
         """
 
         with Session() as session:

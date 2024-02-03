@@ -14,16 +14,15 @@ class BaseManageConsole:
     as clearing the console and displaying formatted titles.
 
     Methods:
-    - _clean_console(): Clears the console.
-    - _display_title(title): Displays a formatted title in the console.
-
+        - _clean_console(): Clears the console.
+        - _display_title(title): Displays a formatted title in the console.
     """
 
     def _clean_console(self) -> None:
         """Clear the console.
 
         Explanation:
-        Clears the console by calling the clear method of the console object.
+            Clears the console by calling the clear method of the console object.
         """
         self.console.clear()
 
@@ -32,7 +31,6 @@ class BaseManageConsole:
 
         Args:
             title: The title to display.
-
         """
         self.console.rule(f"[bold blue]{title}")
 
@@ -46,11 +44,10 @@ class BaseSuccessView(BaseManageConsole):
     such as creating, updating, and deleting successfully.
 
     Methods:
-    - _success_message(var): Displays a success message in the console.
-    - _success_creating(): Displays a success message for creating successfully.
-    - _success_updated(): Displays a success message for updating successfully.
-    - _success_delete(): Displays a success message for deleting successfully.
-
+        - _success_message(var): Displays a success message in the console.
+        - _success_creating(): Displays a success message for creating successfully.
+        - _success_updated(): Displays a success message for updating successfully.
+        - _success_delete(): Displays a success message for deleting successfully.
     """
 
     def _success_message(self, var: str) -> None:
@@ -87,22 +84,17 @@ class BaseErrorView(BaseManageConsole):
     such as not found, invalid ID, already registered, and aborted deletion.
 
     Methods:
-    - _message_error(var): Displays an error message in the console.
-    - _not_found(): Displays an error message for not found.
-    - _invalid_id(): Displays an error message for invalid ID.
-    - _exist_error(): Displays an error message for already registered.
-    - _delete_aborted(): Displays an error message for aborted deletion.
-    - _later_today(): Displays an error message for end date earlier than
-    start date.
-    - _menu_error(item): Displays an error message for item not in menu.
-    - _must_be_provided(): Displays an error message for a required element
-    not filled in.
-    - _not_have_right(): Displays an error message for lack of rights.
-    - _format_date_error(): Displays an error message for incorrect date
-    format.
-    - _earlier_invalid_date(): Displays an error message for earlier or
-    invalid date.
-
+        - _message_error(var): Displays an error message in the console.
+        - _not_found(): Displays an error message for not found.
+        - _invalid_id(): Displays an error message for invalid ID.
+        - _exist_error(): Displays an error message for already registered.
+        - _delete_aborted(): Displays an error message for aborted deletion.
+        - _later_today(): Displays an error message for end date earlier than start date.
+        - _menu_error(item): Displays an error message for item not in menu.
+        - _must_be_provided(): Displays an error message for a required element not filled in.
+        - _not_have_right(): Displays an error message for lack of rights.
+        - _format_date_error(): Displays an error message for incorrect date format.
+        - _earlier_invalid_date(): Displays an error message for earlier or invalid date.
     """
 
     def __message_error(self, var: str) -> None:
@@ -173,24 +165,21 @@ class BaseAnswerView(BaseSuccessView, BaseErrorView):
     input, and displaying menus in the console.
 
     Methods:
-    - _display_centered_title(title: str, stars: bool = True) -> None: Displays
-    a centered title in the console.
-    - _get_username() -> str: Gets the username from user input.
-    - _get_lastname() -> str: Gets the lastname from user input.
-    - _get_compagny_name() -> str: Gets the company name from user input.
-    - _get_name() -> str: Gets the name from user input.
-    - _get_email() -> str: Gets the email from user input.
-    - _get_address() -> str: Gets the address from user input.
-    - _get_information() -> str: Gets the information from user input.
-    - _get_phone_number() -> str: Gets the phone number from user input.
-    - _get_password() -> str: Gets the password from user input.
-    - _select_number() -> str: Selects a number from user input.
-    - _select_id() -> int: Selects an ID from user input.
-    - _get_amount(type) -> int: Gets the amount for the given type from user
-    input.
-    - _get_date(item) -> str: Gets the date for the given item from user input.
-    - _delete_item() -> None: Deletes an item.
-
+        - _display_centered_title(title: str, stars: bool = True) -> None: Displays a centered title in the console.
+        - _get_username() -> str: Gets the username from user input.
+        - _get_lastname() -> str: Gets the lastname from user input.
+        - _get_compagny_name() -> str: Gets the company name from user input.
+        - _get_name() -> str: Gets the name from user input.
+        - _get_email() -> str: Gets the email from user input.
+        - _get_address() -> str: Gets the address from user input.
+        - _get_information() -> str: Gets the information from user input.
+        - _get_phone_number() -> str: Gets the phone number from user input.
+        - _get_password() -> str: Gets the password from user input.
+        - _select_number() -> str: Selects a number from user input.
+        - _select_id() -> int: Selects an ID from user input.
+        - _get_amount(type) -> int: Gets the amount for the given type from user input.
+        - _get_date(item) -> str: Gets the date for the given item from user input.
+        - _delete_item() -> None: Deletes an item.
     """
 
     def __get_answer(self, prompt: str) -> str:
@@ -349,9 +338,6 @@ class BaseMenu(BaseManageConsole):
         Args:
             title: The title of the menu.
             menu: A dictionary containing the menu options.
-
-        Returns:
-            None.
         """
         self.console.rule(f"[bold blue]{title}")
         for key in menu:
@@ -394,9 +380,6 @@ class BaseView(BaseAnswerView, BaseMenu):
         Args:
             title: The title to be displayed.
             stars: Whether to surround the title with stars.
-
-        Returns:
-            None.
         """
         title_str = f"\n ✨{title}✨ " if stars else title
         self.console.print(title_str, style="bold blue", justify="center")

@@ -11,9 +11,6 @@ class ContractView(BaseView):
     def menu_choice(self):
         """Display a menu and get the user's choice.
 
-        Args:
-            self
-
         Returns:
             The user's choice as a string.
         """
@@ -42,7 +39,6 @@ class ContractView(BaseView):
 
         Args:
             title: The title to display.
-
         """
         return self._display_title(title=title)
 

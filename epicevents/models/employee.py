@@ -25,9 +25,6 @@ class EmployeeManager:
 
         Args:
             **kwargs: Keyword arguments for the employee attributes.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
@@ -67,42 +64,24 @@ class EmployeeManager:
         Args:
             employee_id: The ID of the employee to update.
             **kwargs: Keyword arguments for the employee attributes to update.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
                 if employee := session.query(Employee).get(employee_id):
-                    if (
-                        kwargs["username"] != employee.username
-                        and kwargs["username"] != ""
-                    ):
+                    if kwargs["username"] not in [employee.username, ""]:
                         employee.username = kwargs["username"]
-                    if (
-                        kwargs["last_name"] != employee.last_name
-                        and kwargs["last_name"] != ""
-                    ):
+                    if kwargs["last_name"] not in [employee.last_name, ""]:
                         employee.last_name = kwargs["last_name"]
-                    if (
-                        kwargs["email"] != employee.email
-                        and kwargs["email"] != ""
-                    ):
+                    if kwargs["email"] not in [employee.email, ""]:
                         employee.email = kwargs["email"]
-                    if (
-                        kwargs["phone"] != employee.phone
-                        and kwargs["phone"] != ""
-                    ):
+                    if kwargs["phone"] not in [employee.phone, ""]:
                         employee.phone = kwargs["phone"]
-                    if (
-                        kwargs["password"] != employee.password
-                        and kwargs["password"] != ""
-                    ):
+                    if kwargs["password"] not in [employee.password, ""]:
                         employee.password = kwargs["password"]
-                    if (
-                        kwargs["department_id"] != employee.department_id
-                        and kwargs["department_id"] != ""
-                    ):
+                    if kwargs["department_id"] not in [
+                        employee.department_id,
+                        "",
+                    ]:
                         employee.department_id = kwargs["department_id"]
 
     def delete(self, employee_id):
@@ -176,9 +155,6 @@ class EmployeeManager:
 
         Args:
             **kwargs: Keyword arguments for the employee attributes.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
@@ -191,7 +167,7 @@ class EmployeeManager:
     def get_relation_by_id(self, employee_id, event_id):
         with Session() as session:
             with session.begin():
-                relation = (
+                if (
                     session.query(employee_event)
                     .join(
                         Employee, employee_event.c.employee_id == Employee.id
@@ -200,8 +176,7 @@ class EmployeeManager:
                     .filter(Employee.id == employee_id)
                     .filter(Event.id == event_id)
                     .first()
-                )
-                if relation:
+                ):
                     return True
 
 

@@ -9,7 +9,6 @@ from ..controllers import home_controllers
 from ..controllers.employee_controllers import EmployeeController
 from ..controllers.client_controllers import ClientController
 from ..controllers.contract_controllers import ContractController
-import logging
 import sentry_sdk
 
 from rich.table import Table
@@ -22,7 +21,10 @@ manager = EventManager()
 
 
 class EventController(BaseController):
+    """Controller for managing events."""
+
     def run(self):
+        """Run the event controller."""
         employee_controllers = EmployeeController()
         department = employee_controllers.get_user_login_department()
         while True:
@@ -52,6 +54,12 @@ class EventController(BaseController):
                 return home_controllers.HomeController()
 
     def get_client(self):
+        """
+        Get the client for the event.
+
+        Returns:
+            The client object.
+        """
         client_manager = ClientManager()
         client_controller = ClientController()
         clients = client_manager.read()
@@ -60,6 +68,12 @@ class EventController(BaseController):
         return client_manager.get_by_id(client_id=client_id)
 
     def get_employee(self):
+        """
+        Get the employee for the event.
+
+        Returns:
+            The employee object.
+        """
         employee_manager = EmployeeManager()
         employee_controller = EmployeeController()
         employees = employee_manager.read()
@@ -68,6 +82,12 @@ class EventController(BaseController):
         return employee_manager.get_by_id(employee_id=employee_id)
 
     def get_contract(self):
+        """
+        Get the contract for the event.
+
+        Returns:
+            The contract object.
+        """
         contract_manager = ContractManager()
         contract_controller = ContractController()
         contracts = contract_manager.read()
@@ -76,6 +96,12 @@ class EventController(BaseController):
         return contract_manager.get_by_id(contract_id=contract_id)
 
     def get_data(self):
+        """
+        Get the data for creating an event.
+
+        Returns:
+            The extracted data for creating an event.
+        """
         employee_controllers = EmployeeController()
         department_id = employee_controllers.get_user_login_department()
         employee_id = employee_controllers.get_user_id_login()
@@ -91,6 +117,16 @@ class EventController(BaseController):
         return EventController()
 
     def _extracted_data(self, contract, client):
+        """
+        Extract the data for creating an event.
+
+        Args:
+            contract: The contract object.
+            client: The client object.
+
+        Returns:
+            The extracted data for creating an event.
+        """
         view.display_title("Create events")
         name = contract.name
         start_date, end_date = view.get_valid_date_range()
@@ -115,6 +151,12 @@ class EventController(BaseController):
         }
 
     def get_table(self, events):
+        """
+        Get the table of events.
+
+        Args:
+            events: The list of events.
+        """
         table = Table(
             title="Events", show_header=True, header_style="bold blue"
         )
@@ -142,6 +184,15 @@ class EventController(BaseController):
         console.print(table)
 
     def _extracted_employee_event(self, data):
+        """
+        Extract the employee event.
+
+        Args:
+            data: The data for creating an event.
+
+        Returns:
+            The event controller.
+        """
         event_id = manager.create(**data)
         employee_controllers = EmployeeController()
         employee_controllers.get_employee_event(event_id=event_id)
@@ -150,7 +201,15 @@ class EventController(BaseController):
 
 
 class EventCreateController(EventController):
+    """Controller for creating events."""
+
     def run(self):
+        """
+        Run the event create controller.
+
+        Returns:
+            The event controller.
+        """
         employee_controllers = EmployeeController()
         department = employee_controllers.get_user_login_department()
         if department == COMMERCIAL:
@@ -174,7 +233,15 @@ class EventCreateController(EventController):
 
 
 class EventReadController(EventController):
+    """Controller for reading events."""
+
     def run(self):
+        """
+        Run the event read controller.
+
+        Returns:
+            The event controller.
+        """
         while True:
             events = manager.read()
             self.get_table(events=events)
@@ -184,7 +251,15 @@ class EventReadController(EventController):
 
 
 class EventUpdateController(EventController):
+    """Controller for updating events."""
+
     def run(self):
+        """
+        Run the event update controller.
+
+        Returns:
+            The event controller.
+        """
         employee_controllers = EmployeeController()
         manager_employee = EmployeeManager()
         department = employee_controllers.get_user_login_department()
@@ -219,6 +294,15 @@ class EventUpdateController(EventController):
             return EventController()
 
     def _employee_event_relation(self, employee_controllers):
+        """
+        Extract the employee event relation.
+
+        Args:
+            employee_controllers: The employee controller.
+
+        Returns:
+            The event controller.
+        """
         event_id = self._extracted_event_table()
         employee_manager = EmployeeManager()
         employees = employee_manager.read()
@@ -231,11 +315,23 @@ class EventUpdateController(EventController):
         return EventController()
 
     def _extracted_event_table(self):
+        """
+        Extract the event table.
+
+        Returns:
+            The event ID.
+        """
         events = manager.read()
         self.get_table(events)
         return view.select_id()
 
     def get_support_modify_data(self):
+        """
+        Get the support modify data.
+
+        Returns:
+            The support modify data.
+        """
         employee_controllers = EmployeeController()
         department_id = employee_controllers.get_user_login_department()
         contract = self.get_contract()
@@ -246,6 +342,16 @@ class EventUpdateController(EventController):
         return EventController()
 
     def _extracted_support_modify_data(self, contract, client):
+        """
+        Extract the support modify data.
+
+        Args:
+            contract: The contract object.
+            client: The client object.
+
+        Returns:
+            The support modify data.
+        """
         view.display_title("Modify events")
         name = contract.name
         start_date, end_date = view.get_valid_date_range()
@@ -271,7 +377,15 @@ class EventUpdateController(EventController):
 
 
 class EventDeleteController(EventController):
+    """Controller for deleting events."""
+
     def run(self):
+        """
+        Run the event delete controller.
+
+        Returns:
+            The event controller.
+        """
         employee_controllers = EmployeeController()
         department = employee_controllers.get_user_login_department()
         if department != ADMIN:

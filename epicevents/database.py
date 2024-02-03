@@ -10,4 +10,6 @@ Session = sessionmaker(engine)
 
 
 class Model(DeclarativeBase):
+    """Base model class for database models."""
+
     pass

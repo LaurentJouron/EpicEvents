@@ -22,9 +22,6 @@ class ReceptionController(BaseController):
     Displays a welcome message and instructions to the user.
     Returns the EmployeeLoginController to handle employee login.
 
-    Args:
-        self
-
     Returns:
         The EmployeeLoginController instance
     """
@@ -43,9 +40,6 @@ class HomeController(BaseController):
     Controls the flow of the home view.
     Displays the home menu and handles user choices.
     Returns the corresponding controller based on the user's choice.
-
-    Args:
-        self
 
     Returns:
         The corresponding controller instance based on the user's choice
@@ -87,9 +81,6 @@ class ExitController(BaseController):
     Controls the flow of the exit view.
     Displays an exit message and handles user choices.
     Returns the HomeController or None based on the user's choice.
-
-    Args:
-        self
 
     Returns:
         The HomeController instance or None

@@ -9,38 +9,16 @@ class ReceptionView(BaseView):
     Represents the reception view of the application.
 
     Provides methods to display a welcome message and instructions to the user.
-
-    Args:
-        self
-
-    Returns:
-        None
     """
 
     def welcome(self):
-        """
-        Displays a welcome message to the user.
-
-        Args:
-            self
-
-        Returns:
-            None
-        """
+        """Displays a welcome message to the user."""
         self._clean_console()
         welcome = f" Welcome to {epic_events} "
         self._display_centered_title(title=welcome)
 
     def follow_instructions(self):
-        """
-        Displays instructions to the user.
-
-        Args:
-            self
-
-        Returns:
-            None
-        """
+        """Displays instructions to the user."""
         instructions = "\nFollow the instructions below "
         self._display_centered_title(title=instructions, stars=False)
 
@@ -50,12 +28,6 @@ class HomeView(BaseView):
     Represents the home view of the application.
 
     Provides methods to display the home menu and handle user choices.
-
-    Args:
-        self
-
-    Returns:
-        None
     """
 
     home_menu: dict = {
@@ -71,9 +43,6 @@ class HomeView(BaseView):
         """
         Displays the home menu and prompts the user to make a choice.
 
-        Args:
-            self
-
         Returns:
             The user's choice as a string
         """
@@ -83,9 +52,6 @@ class HomeView(BaseView):
         """
         Displays an error message when the user does not have the right
         permissions.
-
-        Args:
-            self
 
         Returns:
             The error message as a string
@@ -98,23 +64,11 @@ class ExitView(BaseView):
     Represents the exit view of the application.
 
     Provides methods to display an exit message and handle user choices.
-
-    Args:
-        self
-
-    Returns:
-        None
     """
 
     def exit_program(self):
         """
         Displays an exit message to the user.
-
-        Args:
-            self
-
-        Returns:
-            None
         """
         exiting = f" EXIT {epic_events} "
         self.console.print(exiting, style="bold blue", justify="center")
@@ -122,12 +76,6 @@ class ExitView(BaseView):
     def good_by(self):
         """
         Displays a goodbye message to the user.
-
-        Args:
-            self
-
-        Returns:
-            None
         """
         phrase = f"Goodbye! Thank you for using {epic_events}"
         self._display_centered_title(title=phrase, stars=False)
@@ -136,9 +84,6 @@ class ExitView(BaseView):
         """
         Displays a confirmation menu for exiting and prompts the user
         to make a choice.
-
-        Args:
-            self
 
         Returns:
             The user's choice as a string

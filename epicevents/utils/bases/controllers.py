@@ -8,11 +8,8 @@ class BaseController:
     controllers.
 
     Methods:
-    - action(): Raises a NotImplementedError. Subclasses should override this
-    method to define their specific action.
-    - run(): Executes the action method of the controller and returns the
-    result.
-
+        - action(): Raises a NotImplementedError. Subclasses should override this method to define their specific action.
+        - run(): Executes the action method of the controller and returns the result.
     """
 
     def __init__(self, **kwargs):
@@ -23,9 +20,7 @@ class BaseController:
         Raises a NotImplementedError.
 
         Explanation:
-        This method should be overridden by subclasses to define the specific
-        action of the controller.
-
+        This method should be overridden by subclasses to define the specific action of the controller.
         """
         raise NotImplementedError
 
@@ -35,6 +30,5 @@ class BaseController:
 
         Returns:
         The result of the action method.
-
         """
         return self.action()

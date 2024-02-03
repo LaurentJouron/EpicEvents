@@ -142,9 +142,6 @@ class EmployeeController(BaseController):
 
         Args:
             employees (List[Employee]): A list of employee objects to display.
-
-        Returns:
-            None
         """
         table = Table(
             title="Employee", show_header=True, header_style="bold blue"
@@ -383,11 +380,7 @@ class EmployeeLogoutController(EmployeeController):
     """Controller for employee logout."""
 
     def run(self):
-        """Run the employee logout controller.
-
-        Returns:
-            None
-        """
+        """Run the employee logout controller."""
         with open(FILEPATH, "w") as f:
             return json.dump(
                 {

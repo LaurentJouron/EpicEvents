@@ -11,10 +11,6 @@ class ContractManager:
     Manages the CRUD operations for contracts.
 
     Provides methods to create, read, update, and delete contract records.
-
-    Args:
-        self
-
     """
 
     # CRUD
@@ -24,9 +20,6 @@ class ContractManager:
 
         Args:
             **kwargs: Keyword arguments for the contract attributes.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
@@ -62,32 +55,23 @@ class ContractManager:
         Args:
             contract_id: The ID of the contract to update.
             **kwargs: Keyword arguments for the contract attributes to update.
-
-        Returns:
-            None
         """
         with Session() as session:
             with session.begin():
                 if contract := session.query(Contract).get(contract_id):
-                    if (
-                        kwargs["name"] != contract.name
-                        and kwargs["name"] != ""
-                    ):
+                    if kwargs["name"] not in [contract.name, ""]:
                         contract.name = kwargs["name"]
-                    if (
-                        kwargs["total_amount"] != contract.total_amount
-                        and kwargs["total_amount"] != ""
-                    ):
+                    if kwargs["total_amount"] not in [
+                        contract.total_amount,
+                        "",
+                    ]:
                         contract.total_amount = kwargs["total_amount"]
-                    if (
-                        kwargs["pending_amount"] != contract.pending_amount
-                        and kwargs["pending_amount"] != ""
-                    ):
+                    if kwargs["pending_amount"] not in [
+                        contract.pending_amount,
+                        "",
+                    ]:
                         contract.pending_amount = kwargs["pending_amount"]
-                    if (
-                        kwargs["employee_id"] != contract.employee_id
-                        and kwargs["employee_id"] != ""
-                    ):
+                    if kwargs["employee_id"] not in [contract.employee_id, ""]:
                         contract.employee_id = kwargs["employee_id"]
 
     def delete(self, contract_id):
@@ -146,7 +130,6 @@ class Contract(Model):
         employee_id (int): The ID of the employee associated with the contract.
         employee (Employee): The employee associated with the contract.
         event (Event): The event associated with the contract.
-
     """
 
     __tablename__ = "contract"
