@@ -17,15 +17,24 @@
 </p>
 
 ### ``--- Explication en français ---``
-___________
+_______________________
 
 Cet exercice a été réalisé dans le cadre d'une formation 
-___________
+_______________________
 
 <h1 align="center">But de l'application</h1>
 
+<p>
+  L'application CRM (Customer Relationship Management) d'Epic Events a pour objectif d'améliorer la gestion de l'entreprise qui organise divers événements. Le logiciel vise à centraliser et traiter les données clients et événements tout en facilitant la communication interne entre les différents départements.
+</p>
+<p>
+  Les entités principales sont les clients, les contrats et les événements. Les besoins spécifiques des équipes (gestion, commerciale, support) sont définis, couvrant la création, la mise à jour et la suppression d'entités, ainsi que des fonctionnalités de filtrage et d'association entre elles.
+</p>
+<p>
+  En résumé, l'application CRM vise à optimiser la gestion des clients, contrats et événements pour Epic Events, avec des fonctionnalités spécifiques adaptées aux besoins des différents départements de l'entreprise.
+</p>
 
-___________
+_______________________
 
 <h1 align="center">Langage et bibliothèques</h1>
 
@@ -44,7 +53,7 @@ ___________
 </table>
 
 
-___________
+_______________________
 
 <h1 align="center">EDI</h1>
 
@@ -63,7 +72,7 @@ ___________
   </tr>
 </table>
 
-___________
+_______________________
 
 <h1 align="center">Installation du site </h1>
 
@@ -87,18 +96,19 @@ Activer l'environnement de travail (environnement virtuel) avec
 Lancez l'application avec cette commande
   * ``python -m epicevents``
 
-___________
 
+_______________________
 
-<h1 align="center">Détails urilisateurs</h1>
+<h1 align="center">Détails utilisateurs</h1>
 
-* 3 rôles ont étés créés.
-* Des collaborateurs ont étés crées pour chacun de ces rôles. Pour se connecter avec leur profil, il faut saisir leur prenom et mot de passe: TEST .
-* Les collaborateurs ont créés des évènements (clients, contrats et evenements) selon leur possibilitée et le besoin de la société.
+* 3 départements ont étés créés (Commercial, Gestion et support).
+* Des collaborateurs ont étés crées pour chacun de ces départements. Pour se connecter avec leur profil, il faut saisir leur prenom et mot de passe: TEST (le même mot de passe pour tout les utilisateurs).
+* Les collaborateurs ont créés des évènements (clients, contrats et évènements) selon leur possibilitée et le besoin de la société.
+
+_______________________
+
 <h4>Les chiffres devant correspondent à l'ID dans la base de donnée.</h4>
-
-___
-<h3 align="center">1: Commercial</h3>
+<h3 align="center">1: Commercial (avec leur clients)</h3>
 
   * ``3: Louis``
     * ``1: Orange``
@@ -115,8 +125,7 @@ ___
     * ``8: Java``
     * ``9: SQL``
 
-___
-<h3 align="center">2: Gestion</h3>
+<h3 align="center">2: Gestion (avec les contrats)</h3>
 
   * ``1: Laurent``
     * ``1: Orange end of year party``
@@ -133,33 +142,21 @@ ___
     * ``8: Java end of year party``
     * ``9: SQL end of year party``
 
-___
+_______________________
+
 <h3 align="center">3: Support</h3>
 
   * ``2: Antoine``
   * ``5: Stephane``
   * ``8: Gilles``
 
-___________
+_______________________
+
+<h1 align="center">Epic events Sentry</h1>
 
 
-<h1 align="center">Epic events coverage test </h1>
 
-Pour voir les tests dans le terminal
-  * ``pytest``
-
-Pour voir le détails des tests dans le terminal
-  * ``pytest -vvv``
-
-Pour mesurer la couverture de test d'un projet:
-  * ``pytest --cov=. tests/``
-
-Pour générer un rapport HTML automatiquement :
-  * ``pytest --cov=. --cov-report html``
-  
-    Ouvrez le dossier htmlcov et lancer index.html dans un navigateur.
-
-___________
+_______________________
 
 <h1 align="center">Auteur et collaborateurs</h1>
 
