@@ -12,6 +12,7 @@ rich = "*"
 jwt = "*"
 pyjwt = {extras = ["crypto"], version = "*"}
 sentry-sdk = "*"
+pytest = "*"
 
 [dev-packages]
 
