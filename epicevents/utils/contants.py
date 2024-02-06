@@ -23,6 +23,9 @@ MENU: dict = {
 }
 
 FILEPATH = "epicevents/utils/login/login_file.json"
+SENTRY_DSN = (
+    "https://44c71e14b86c0aafc7e4d7d2cdf4e7d6@us.sentry.io/4506677090189312"
+)
 
 ADMIN: int = 0
 COMMERCIAL: int = 1

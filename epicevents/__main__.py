@@ -1,11 +1,15 @@
 from .database import Model, engine
+from .utils.contants import SENTRY_DSN
 from .views.home_views import ExitView
 from .controllers import ReceptionController
 import sentry_sdk
+import logging
+from sentry_sdk.integrations.logging import LoggingIntegration
 import typer
 
 
 exit_view = ExitView()
+logging.basicConfig(level=logging.INFO)
 
 
 def main():
@@ -25,9 +29,15 @@ def main():
         Goodbye! Thank you for using EpicEvents.
     """
     sentry_sdk.init(
-        dsn="https://44c71e14b86c0aafc7e4d7d2cdf4e7d6@us.sentry.io/4506677090189312",
+        dsn=SENTRY_DSN,
         traces_sample_rate=1.0,
         profiles_sample_rate=1.0,
+        enable_tracing=True,
+        debug=False,
+        environment="development",
+        integrations=[
+            LoggingIntegration(level=logging.INFO, event_level=logging.INFO),
+        ],
     )
     Model.metadata.create_all(engine)
     controller = ReceptionController()
