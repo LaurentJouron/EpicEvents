@@ -108,54 +108,83 @@ _______________________
 _______________________
 
 <h4>Les chiffres devant correspondent à l'ID dans la base de donnée.</h4>
-<h3 align="center">1: Commercial (avec leur clients)</h3>
+<h3 align="center">1: Commercial (avec leur clients, puis les events)</h3>
 
   * ``3: Louis``
     * ``1: Orange``
+        * ``1: Orange end of year party``
     * ``2: Free``
+        * ``2: Free end of year party``
     * ``3: Google``
+        * ``3: Google end of year party``
 
   * ``6: Virginie``
     * ``4: Ubuntu``
+        * ``4: Ubuntu end of year party``
     * ``5: Windows``
+        * ``5: Windows end of year party``
     * ``6: Apple``
+        * ``6: Apple end of year party``
 
   * ``9: Thierno``
     * ``7: Python``
+        * ``7: Python end of year party``
     * ``8: Java``
+        * ``8: Java end of year party``
     * ``9: SQL``
+        * ``9: SQL end of year party``
 
-<h3 align="center">2: Gestion (avec les contrats)</h3>
+<h3 align="center">2: Gestion (avec les contrats et les attributions)</h3>
 
   * ``1: Laurent``
     * ``1: Orange end of year party``
+        * ``1: Orange to Antoine``
     * ``2: Free end of year party``
+        * ``2: Free to Stephane``
     * ``3: Google end of year party``
+        * ``3: Google to Gilles``
 
   * ``4: Maxime``
     * ``4: Ubuntu end of year party``
+        * ``4: Ubuntu to Antoine``
     * ``5: Windows end of year party``
+        * ``5: Windows to Stephane``
     * ``6: Apple end of year party``
+        * ``6: Apple to Gilles``
 
   * ``7: Frederic``
     * ``7: Python end of year party``
+        * ``7: Python to Antoine``
     * ``8: Java end of year party``
+        * ``8: Java to Stephane``
+    * ``9: SQL end of year party``
+        * ``9: Apple to Gilles``
+
+_______________________
+
+<h3 align="center">3: Support (avec les évènements)</h3>
+
+  * ``2: Antoine``
+    * ``1: Orange end of year party``
+    * ``4: Ubuntu end of year party``
+    * ``7: Python end of year party``
+
+  * ``5: Stephane``
+    * ``2: Free end of year party``
+    * ``5: Windows end of year party``
+    * ``8: Java end of year party``
+
+  * ``8: Gilles``
+    * ``3: Google end of year party``
+    * ``6: Apple end of year party``
     * ``9: SQL end of year party``
 
 _______________________
 
-<h3 align="center">3: Support</h3>
-
-  * ``2: Antoine``
-  * ``5: Stephane``
-  * ``8: Gilles``
-
-_______________________
-
-<h1 align="center">Epic events Sentry</h1>
-
-
-
+<h1 align="center">Sentry</h1>
+<p>
+  Sentry est une plateforme de gestion des erreurs qui permet de capturer, suivre et résoudre les erreurs et les exceptions dans EpicEvents. Elle fournit des informations détaillées sur les erreurs, les variables locales et les informations sur l'environnement d'exécution. Cela permet aux développeurs de diagnostiquer et de résoudre rapidement les problèmes d'EpicEvents.
+</p>
 _______________________
 
 <h1 align="center">Auteur et collaborateurs</h1>

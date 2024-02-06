@@ -276,10 +276,9 @@ class EmployeeLoginController(EmployeeController):
 
         if token != "":
             employee = self.read_login_file()
-            logger = logging.getLogger(
+            logging.getLogger(
                 'manager.get_by_id(employee_id=employee["employee_id"])'
             )
-            logger.error("Log")
             return home_controllers.HomeController()
         max_attempts = 3
 
@@ -294,10 +293,9 @@ class EmployeeLoginController(EmployeeController):
                     for key, value in data.items():
                         self.write_login_file(key=key, value=value)
                         employee = self.read_login_file()
-                        logger = logging.getLogger(
+                        logging.getLogger(
                             'manager.get_by_id(employee_id=employee["employee_id"])'
                         )
-                        logger.error("Log")
                     return home_controllers.HomeController()
             view.error_not_found()
         return None
