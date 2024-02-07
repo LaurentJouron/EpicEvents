@@ -13,6 +13,8 @@ jwt = "*"
 pyjwt = {extras = ["crypto"], version = "*"}
 sentry-sdk = "*"
 pytest = "*"
+pytest-cov = "*"
+coverage = "*"
 
 [dev-packages]
 
